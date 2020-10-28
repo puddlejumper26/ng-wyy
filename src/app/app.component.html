@@ -1,1 +1,61 @@
-<button nz-button nzType="primary">button</button>
+<div id="app">
+    <nz-layout class="layout">
+        <nz-header class="header">
+
+            <div class="wrap">
+                <div class="left">
+                    <h1>Music</h1>
+                    <ul nz-menu nzTheme="dark" nzMode="horizontal">
+                        <li nz-menu-item>Discover</li>
+                        <li nz-menu-item>List</li>
+                    </ul>
+                </div>
+
+                <div class="right">
+                    <!-- Search -->
+                    <div class="search">
+                        <!-- here the suffixIconSearch must be with ng-template -->
+                        <nz-input-group [nzSuffix]="suffixIconSearch">
+                            <input type="text" nz-input placeholder="List/Singer/Song">
+                        </nz-input-group>
+                        <!-- to display the search icon -->
+                        <ng-template #suffixIconSearch>
+                            <i nz-icon type="search"></i>
+                        </ng-template>
+                    </div>
+
+                    <div class="member">
+                        <div class="no-login">
+                            <ul nz-menu nzTheme="dark" nzMode="horizontal">
+                                <li nz-submenu>
+                                    <div title>
+                                        <span>Log In</span>
+                                        <i nz-icon type="down" nzTheme="outline"></i>
+                                    </div>
+                                    <ul>
+                                        <li nz-menu-item>
+                                            <i nz-icon type="mobil" nzTheme="outline"></i>
+                                            Modile Login
+                                        </li>
+                                        <li nz-menu-item>
+                                            <i nz-icon type="user-add" nzTheme="outline"></i>
+                                            Registration
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nz-header>
+
+        <nz-content class="content">
+            <router-outlet></router-outlet>
+        </nz-content>
+
+        <nz-footer class="footer">
+            Ant Design ©2019 Implemented by Angular @ Puddlejumper26 | 2020
+        </nz-footer>
+    </nz-layout>
+</div>
