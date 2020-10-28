@@ -12,6 +12,10 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 # Angular API
 - @SkipSelf() - CoreModule
 
+# Netease Cloud Music API
+- [Install](https://github.com/puddlejumper26/ng-wyy/issues/2)
+- [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
+- [](https://github.com/puddlejumper26/ng-wyy/issues/4)
 
 # Notes
 - [Notes](https://github.com/puddlejumper26/ng-wyy/issues/1)
