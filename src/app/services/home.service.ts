@@ -1,6 +1,6 @@
 import { Banner } from './data-types/common.types';
-import { ServicesModule } from './services.module';
-import { Injectable } from '@angular/core';
+import { API_CONFIG, ServicesModule } from './services.module';
+import { Inject, Injectable } from '@angular/core';
 import { map } from 'rxjs/internal/operators';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -15,10 +15,11 @@ import { HttpClient } from '@angular/common/http';
 })
 export class HomeService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, @Inject(API_CONFIG) private uri: string) { }
 
   getBanner(): Observable<Banner[]>{
-    return this.http.get('http://localhost:3000/banner')
+    return this.http.get(this.uri + 'banner')
+    // return this.http.get('http://localhost:3000/banner') 上一行就把前缀抽取出来了
                 .pipe(map((res : {banners: Banner[]}) => res.banners))
     // 为什么要用map操作符，因为要返回一个Banner的数组，所以要对数据指明类型
     // banners, check localhost:3000/banner 数据是包含是 banners 数组里的
