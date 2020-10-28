@@ -1,21 +1,58 @@
 <h1 align='center'>Ng - WYY</h1>
 
-# Description
+# 1.0 Description
 This is the Angular App Simulation of Netease Cloud Music, original please click [here](https://music.163.com/).
 
-# Tech Stack
+# 2.0 Tech Stack
 - Angular 8.3.0
-- Ng-Zorro-Antd (Ant Design of Angular)https://ng.ant.design/docs/introduce/zh
-- Minireset.css npm install minireset.css
+- Ng-Zorro-Antd (Ant Design of Angular)
+  - https://ng.ant.design/docs/introduce/zh
+- Minireset.css
+  - npm install minireset.css
+- Netease Cloud Music API (Node.js API service)
+  - https://github.com/Binaryify/NeteaseCloudMusicApi
+  - [Install](https://github.com/puddlejumper26/ng-wyy/issues/2)
 
 
-# Angular API
-- @SkipSelf() - CoreModule
+# 3.0 How to Use this APP
+- Start Netease Cloud Music as Server
+- Run `node .\app.js`
+- open `localhost:3000` would see the data
+- Run `ng serve`
+- open `localhost:4200` would see the app
 
-# Netease Cloud Music API
-- [Install](https://github.com/puddlejumper26/ng-wyy/issues/2)
+
+# 4.0 applied APIs
+
+## 4.1 Angular API
+- @SkipSelf() - core.module.ts
+  - https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/core/core.module.ts
+- changeDetection:ChangeDetectionStrategy.OnPush - Carousel - wy-carousel.component.ts
+
+## 4.2 Netease Cloud Music API
+- Start this API
+```ts
+node .\app.js
+```
+
+## 4.3 Ant Design Angular API
+- [nzDotRender] - Carousel
+- (nzBeforeChange) - Carousel
+- next(), pre() - Carousel
+
+
+# 5.0 Components
+
+## 5.1 Carousel
 - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
-- [](https://github.com/puddlejumper26/ng-wyy/issues/4)
+
+
+
+# 6.0 Final Demo
+
+## 6.1 Homepage
+## 6.2 Login
+## 6.3
 
 # Notes
 - [Notes](https://github.com/puddlejumper26/ng-wyy/issues/1)

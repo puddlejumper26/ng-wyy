@@ -1,12 +1,18 @@
 <div class="home">
-    <div class="carousel wrap">
+    <app-wy-carousel #wyCarousel [activeIndex]="carouselActiveIndex" (changeSlide)="onChangeSlide($event)">
         <!-- set auto play and fade in and fade out effects -->
-        <nz-carousel nzAutoPlay nzEffect="fade">
+        <!-- https://ng.ant.design/components/carousel/zh  (nzBeforeChange)切换面板的回调		-->
+        <nz-carousel
+            nzAutoPlay
+            nzEffect="fade"
+            [nzDotRender]="wyCarousel.dotRef"
+            (nzBeforeChange)="onBeforeChange($event)">
+
             <div class="carousel-item" nz-carousel-content *ngFor="let item of banners">
                 <a [href]="item.url" target="_blank" class="banner-item">
                     <img [src]="item.imageUrl">
                 </a>
             </div>
         </nz-carousel>
-    </div>
+    </app-wy-carousel>
 </div>
