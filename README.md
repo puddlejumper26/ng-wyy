@@ -9,6 +9,10 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 - Minireset.css npm install minireset.css
 
 
+# Angular API
+- @SkipSelf() - CoreModule
+
+
 # Notes
 - [Notes](https://github.com/puddlejumper26/ng-wyy/issues/1)
 
