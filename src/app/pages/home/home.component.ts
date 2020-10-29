@@ -11,18 +11,40 @@ export class HomeComponent implements OnInit {
 
   carouselActiveIndex = 0;
   banners = [];
+  sheets = [];
+  tags = [];
 
   @ViewChild(NzCarouselComponent, {static: true}) private nzCarousel: NzCarouselComponent;
 
   constructor(private homeServer: HomeService) {
+    this.getBanners();
+    this.getHotTags();
+  }
+
+  ngOnInit() {
+  }
+
+  // running the Carousel
+  private getBanners(){
     this.homeServer.getBanner().subscribe(banners => {
       // console.log('Banners', banners);
       // here must the data is obtained, then we could use this data for the Carousel
       this.banners = banners;
     })
-   }
+  }
 
-  ngOnInit() {
+  //Obtain the Hottags
+  private getHotTags(){
+    this.homeServer.getHotTags().subscribe(tags => {
+      this.tags = tags;
+    })
+  }
+
+  // Obtain Personalized Sheet List
+  private getPersonalizedSheetList(){
+    this.homeServer.getPersonalSheetList().subscribe(sheets => {
+      this.sheets = sheets;
+    })
   }
 
   onBeforeChange({to}){

@@ -25,9 +25,9 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 # 4.0 applied APIs
 
 ## 4.1 Angular API
-- @SkipSelf() - core.module.ts
-  - https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/core/core.module.ts
-- changeDetection:ChangeDetectionStrategy.OnPush - Carousel - wy-carousel.component.ts
+- @SkipSelf() - [core.module.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/core/core.module.ts)
+- changeDetection:ChangeDetectionStrategy.OnPush - Carousel - [wy-carousel.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/components/wy-carousel/wy-carousel.component.ts)
+- @Injectable({ providedIn: ServicesModule }) - [home.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/home.service.ts)
 
 ## 4.2 Netease Cloud Music API
 - Start this API
@@ -36,15 +36,22 @@ node .\app.js
 ```
 
 ## 4.3 Ant Design Angular API
-- [nzDotRender] - Carousel
-- (nzBeforeChange) - Carousel
-- next(), pre() - Carousel
+- [nzDotRender] - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
+- (nzBeforeChange) - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
+- next(), pre() - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
 
 
 # 5.0 Components
 
 ## 5.1 Carousel
+- API
+  - localhost:3000/banner
 - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
+
+## 5.2
+- API
+  - localhost:3000/playlist/hot
+  - http://localhost:3000/personalized
 
 
 
