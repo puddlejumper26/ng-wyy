@@ -29,20 +29,22 @@
                                 <a>热门推荐</a>
                             </h2>
                             <nav>
-                                <a>华语</a>
-                                <a>华语</a>
-                                <a>华语</a>
+                                <a *ngFor="let item of hotTags">{{item.name}}</a>
                             </nav>
                         </div>
                         <a>
                             更多
-                            <i nz-icon type="arrow-right" theme="outline"></i>
+                            <i nz-icon nzType="right" nzTheme="outline"></i>
                         </a>
                     </div>
 
                     <div class="down">
-                        歌单
-
+                        <div class="down-wrap">
+                            <app-single-sheet
+                                class="sheet-item"
+                                *ngFor="let item of songSheetLists"
+                                [sheet]="item"></app-single-sheet>
+                        </div>
                     </div>
                 </div>
             </div>

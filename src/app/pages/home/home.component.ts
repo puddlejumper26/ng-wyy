@@ -11,14 +11,15 @@ export class HomeComponent implements OnInit {
 
   carouselActiveIndex = 0;
   banners = [];
-  sheets = [];
-  tags = [];
+  songSheetLists = [];
+  hotTags = [];
 
   @ViewChild(NzCarouselComponent, {static: true}) private nzCarousel: NzCarouselComponent;
 
   constructor(private homeServer: HomeService) {
     this.getBanners();
     this.getHotTags();
+    this.getPersonalizedSheetList();
   }
 
   ngOnInit() {
@@ -36,14 +37,14 @@ export class HomeComponent implements OnInit {
   //Obtain the Hottags
   private getHotTags(){
     this.homeServer.getHotTags().subscribe(tags => {
-      this.tags = tags;
+      this.hotTags = tags;
     })
   }
 
   // Obtain Personalized Sheet List
   private getPersonalizedSheetList(){
     this.homeServer.getPersonalSheetList().subscribe(sheets => {
-      this.sheets = sheets;
+      this.songSheetLists = sheets;
     })
   }
 
