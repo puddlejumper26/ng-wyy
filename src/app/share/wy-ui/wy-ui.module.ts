@@ -7,6 +7,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SingleSheetComponent } from './single-sheet/single-sheet.component';
+import { WyPlayerModule } from './wy-player/wy-player.module';
 
 
 @NgModule({
@@ -16,11 +17,13 @@ import { SingleSheetComponent } from './single-sheet/single-sheet.component';
   ],
   imports: [
     BrowserModule,
-    CommonModule
+    CommonModule,
+    WyPlayerModule,
   ],
   exports: [
     PlayCountPipe,
     SingleSheetComponent,
+    WyPlayerModule,
   ]
 })
 export class WyUiModule { }

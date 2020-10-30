@@ -31,9 +31,9 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 - `changeDetection:ChangeDetectionStrategy.OnPush` - Carousel - [wy-carousel.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/components/wy-carousel/wy-carousel.component.ts)
 - `@Injectable({ providedIn: ServicesModule })` - [home.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/home.service.ts)
 - `HttpParams` - [singer.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/singer.service.ts)
-- `Resolve` - [home-resolve.service.ts]
-- `forkJoin` - [home-resolve.service.ts]
-- `first` - [home-resolve.service.ts]
+- `Resolve` - [home-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home-resolve.service.ts)
+- `forkJoin` - [home-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home-resolve.service.ts)
+- `first` - [home-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home-resolve.service.ts)
 
 ## 4.2 Netease Cloud Music API
 - Start this API
@@ -89,6 +89,9 @@ node .\app.js
 
 ## 5.5 Resolve
 - [home-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/issues/6)
+
+## 5.6 Home page bottom section - player
+
 
 # 6.0 Final Demo
 
