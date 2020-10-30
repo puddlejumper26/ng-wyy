@@ -17,20 +17,23 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 # 3.0 How to Use this APP
 - Start Netease Cloud Music as Server, this should be a separate folder
 - Run `node .\app.js`
-- open `localhost:3000` would see the data
+- Open `localhost:3000` would see the data
 - Under angular folger Run `ng serve`
-- open `localhost:4200` would see the app
+- Open `localhost:4200` would see the app
 - Functions
   - login, play music, drag the
 
 
-# 4.0 applied APIs
+# 4.0 Applied APIs
 
-## 4.1 Angular API
+## 4.1 Angular / rxjs API
 - `@SkipSelf()` - [core.module.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/core/core.module.ts)
 - `changeDetection:ChangeDetectionStrategy.OnPush` - Carousel - [wy-carousel.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/components/wy-carousel/wy-carousel.component.ts)
 - `@Injectable({ providedIn: ServicesModule })` - [home.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/home.service.ts)
 - `HttpParams` - [singer.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/singer.service.ts)
+- `Resolve` - [home-resolve.service.ts]
+- `forkJoin` - [home-resolve.service.ts]
+- `first` - [home-resolve.service.ts]
 
 ## 4.2 Netease Cloud Music API
 - Start this API
@@ -81,10 +84,11 @@ node .\app.js
   - /artist/list
 
 ## 5.4 Home page right section - Login part
-
 - components / services / directives / etc.
   - `member-card.component`
 
+## 5.5 Resolve
+- [home-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/issues/6)
 
 # 6.0 Final Demo
 
