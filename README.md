@@ -27,10 +27,10 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 # 4.0 applied APIs
 
 ## 4.1 Angular API
-- @SkipSelf() - [core.module.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/core/core.module.ts)
-- changeDetection:ChangeDetectionStrategy.OnPush - Carousel - [wy-carousel.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/components/wy-carousel/wy-carousel.component.ts)
-- @Injectable({ providedIn: ServicesModule }) - [home.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/home.service.ts)
-- HttpParams - [singer.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/singer.service.ts)
+- `@SkipSelf()` - [core.module.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/core/core.module.ts)
+- `changeDetection:ChangeDetectionStrategy.OnPush` - Carousel - [wy-carousel.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/components/wy-carousel/wy-carousel.component.ts)
+- `@Injectable({ providedIn: ServicesModule })` - [home.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/home.service.ts)
+- `HttpParams` - [singer.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/singer.service.ts)
 
 ## 4.2 Netease Cloud Music API
 - Start this API
@@ -39,13 +39,13 @@ node .\app.js
 ```
 
 ## 4.3 Ant Design Angular API
-- [nzDotRender] - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
-- (nzBeforeChange) - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
-- next(), pre() - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
+- `[nzDotRender]` - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
+- `(nzBeforeChange)` - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
+- `next()`, `pre()` - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
 
 
 ## 4.4 Node.js
-- queryString - Object Serialization 对象序列化-[singer.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/singer.service.ts)
+- `queryString` - Object Serialization 对象序列化-[singer.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/singer.service.ts)
 
 # 5.0 Compositions
 
@@ -80,8 +80,10 @@ node .\app.js
 - InterfaceAddress
   - /artist/list
 
-## 5.4 Home page right section -
+## 5.4 Home page right section - Login part
 
+- components / services / directives / etc.
+  - `member-card.component`
 
 
 # 6.0 Final Demo
