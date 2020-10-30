@@ -1,5 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
-
+/**
+ *  to simplied displayed number
+ *  e.g.  1232000 -> 123万
+ */
 @Pipe({
   name: 'playCount'
 })

@@ -15,11 +15,13 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 
 
 # 3.0 How to Use this APP
-- Start Netease Cloud Music as Server
+- Start Netease Cloud Music as Server, this should be a separate folder
 - Run `node .\app.js`
 - open `localhost:3000` would see the data
-- Run `ng serve`
+- Under angular folger Run `ng serve`
 - open `localhost:4200` would see the app
+- Functions
+  - login, play music, drag the
 
 
 # 4.0 applied APIs
@@ -28,6 +30,7 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 - @SkipSelf() - [core.module.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/core/core.module.ts)
 - changeDetection:ChangeDetectionStrategy.OnPush - Carousel - [wy-carousel.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/components/wy-carousel/wy-carousel.component.ts)
 - @Injectable({ providedIn: ServicesModule }) - [home.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/home.service.ts)
+- HttpParams - [singer.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/singer.service.ts)
 
 ## 4.2 Netease Cloud Music API
 - Start this API
@@ -41,17 +44,43 @@ node .\app.js
 - next(), pre() - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
 
 
-# 5.0 Components
+## 4.4 Node.js
+- queryString - Object Serialization 对象序列化-[singer.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/singer.service.ts)
 
-## 5.1 Carousel
-- API
-  - localhost:3000/banner
+# 5.0 Compositions
+
+## 5.1 Carousel part
 - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
+- components / services / directives / etc.
+  - `home.service` (obtain data from API, send with observables)
+  - `commmon.type` (define data type)
+  - `wy-carousel.copmponent`
+  - `home.component` (subscribe data from service, send to template)
+- InterfaceAddress
+  - /banner
 
-## 5.2
-- API
-  - localhost:3000/playlist/hot
-  - http://localhost:3000/personalized
+## 5.2 Home page main section - Hottags and SongSheetList
+- [HotTags and SongSheetList](https://github.com/puddlejumper26/ng-wyy/issues/4)
+- components / services / directives / etc.
+  - `home.service`   (obtain data from API, send with observables)
+  - `commmon.type`   (define data type)
+  - `single-sheet.component`
+  - `home.component`  (subscribe data from service, send to template)
+  - `play-count.pipe`
+- InterfaceAddress
+  - /playlist/hot
+  - /personalized
+
+## 5.3 Home page right section - Singer List
+- [SingerList](https://github.com/puddlejumper26/ng-wyy/issues/5)
+- components / services / directives / etc.
+  - `singer.service` (obtain data from API, send with observables)
+  - `commmon.type` (define data type)
+  - `home.component` (subscribe data from service, send to template)
+- InterfaceAddress
+  - /artist/list
+
+## 5.4 Home page right section -
 
 
 

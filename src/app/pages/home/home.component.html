@@ -52,7 +52,27 @@
 
 
             <!-- 右边的歌手等 -->
-            <div class="right"></div>
+            <div class="right">
+                <h3>登录</h3>
+
+                <div class="settled-singer">
+                    <div class="tit"><b>入驻歌手</b></div>
+                    <div class="list">
+                        <div class="card">
+                            <div *ngFor="let singer of singers">
+                                <div class="pic">
+                                    <!-- <img src="{{singer.picUrl}}" alt=""> -->
+                                    <img [src]="singer.picUrl" [alt]="singer.name">
+                                </div>
+                                <div class="txt">
+                                    <b class="ellipsis">{{singer.name}}</b>
+                                    <span>专辑数量{{singer.albumSize}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
