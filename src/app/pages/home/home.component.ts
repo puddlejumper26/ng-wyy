@@ -48,9 +48,8 @@ export class HomeComponent implements OnInit {
 
   onPlaySheet(id: number){
     // console.log(11111, id);
-    this.sheetServe.getSongSheetDetail(id).subscribe(res => {
-      // console.log(111, res);
-
+    this.sheetServe.playSheet(id).subscribe(res => {
+      console.log(111, res);
     })
   }
 }
