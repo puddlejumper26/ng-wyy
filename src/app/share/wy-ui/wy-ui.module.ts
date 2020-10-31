@@ -9,11 +9,11 @@ import { CommonModule } from '@angular/common';
 import { SingleSheetComponent } from './single-sheet/single-sheet.component';
 import { WyPlayerModule } from './wy-player/wy-player.module';
 
-
 @NgModule({
   declarations: [
     PlayCountPipe,
-    SingleSheetComponent
+    SingleSheetComponent,
+
   ],
   imports: [
     BrowserModule,

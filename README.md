@@ -36,6 +36,8 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 - `first()` - rxjs - [home-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home-resolve.service.ts)
 - `pluck()` - rxjs - [sheet.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/sheet.service.ts)
 - `switchMap() - rxjs - [sheet.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/sheet.service.ts)
+- `encapsulation: ViewEncapsulation.None` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
+
 
 ## 4.2 Netease Cloud Music API
 - Start this API
@@ -96,8 +98,8 @@ node .\app.js
   - `home-resovle.service.ts`
 
 
-## 5.6 Home page bottom section - player
-- [Song List](https://github.com/puddlejumper26/ng-wyy/issues/7)
+## 5.6 Home page bottom section - player - function
+- [Song List - functions](https://github.com/puddlejumper26/ng-wyy/issues/7)
 - components / services / directives / etc.
   - `wy-player`
   - `comment.type`
@@ -108,6 +110,15 @@ node .\app.js
 
 - InterfaceAddress
   - /playlist/detail
+  - /song/url
+
+## 5.7 Home page bottom section - player - Slider Bar 滑块组件
+- [Slider Bar](https://github.com/puddlejumper26/ng-wyy/issues/8)
+- components / services / directives / etc.
+  - `wy-slider.component`
+  - `wy-slider-track.component`
+  - `wy-slider-handle.component`
+
 
 # 6.0 Final Demo
 

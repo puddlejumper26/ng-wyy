@@ -20,9 +20,9 @@
 
             <div class="play">
                 <!-- 就是歌曲和歌手名字 -->
-                <div class="words clearfix" [hidden]="true">
-                    <p class="ellipsis">歌名</p>
-                    <ul class="songs clearfix">
+                <div class="words clearfix hide">
+                    <p class="ellipsis margin-bottom-none">歌名</p>
+                    <ul class="songs clearfix margin-bottom-none">
                         <li>
                             <a>Singer 1</a>
                         </li>
@@ -32,7 +32,7 @@
                 <!-- 进度条 -->
                 <div class="bar">
                     <div class="slider-wrap">
-                        <div>进度条</div>
+                        <app-wy-slider></app-wy-slider>
                     </div>
                     <!-- 歌曲的时间 -->
                     <span class="time">

@@ -46,6 +46,9 @@ export class HomeComponent implements OnInit {
     this.nzCarousel[type]();
   }
 
+  /**
+   * This would be used in the template, therefore template would obatin a complete song information and play address
+   */
   onPlaySheet(id: number){
     // console.log(11111, id);
     this.sheetServe.playSheet(id).subscribe(res => {

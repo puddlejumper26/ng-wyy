@@ -25,6 +25,7 @@ export class SongService {
                 .pipe(map((res : {data: SongUrl[]}) => res.data))
   }
 
+  // parameter could be one single sone, could a songs array
   // 参数是 单个的一首歌，也可以是歌曲组成的数组, 因为可以播放一个歌单，也可能是播放一首歌
   getSongList(songs: Song | Song[]): Observable<Song[]>{
     //  先不管传入是什么格式，都转换成数组
@@ -40,6 +41,10 @@ export class SongService {
         observer.next(this.generateSongList(songArr, urls))
       });
     })
+
+    // Here is the simplied method, without creating a flow
+    // 这里是简化的方法，不用创建流
+    // return this.getSongUrl(ids).pipe(map(urls => this.generateSongList(songArr, urls)))
   }
 
   // 拼接的方法 ， 注意这里返回的是普通的 一个 Song[]， 而getSongList 返回的是一个 Observable
