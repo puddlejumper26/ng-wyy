@@ -9,7 +9,7 @@
                 <span>{{sheet.playCount | playCount}}</span>
             </div>
             <!-- Play button -->
-            <i nz-icon nzType="play-circle" nzTheme="twotone"></i>
+            <i nz-icon style="z-index: 999; color:aliceblue" nzType="play-circle" nzTheme="outline" (click)="playSheet(sheet.id)"></i>
         </div>
     </a>
     <span class="dec">{{sheet.name}}</span>

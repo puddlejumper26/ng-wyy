@@ -43,7 +43,8 @@
                             <app-single-sheet
                                 class="sheet-item"
                                 *ngFor="let item of songSheetLists"
-                                [sheet]="item"></app-single-sheet>
+                                [sheet]="item"
+                                (onPlay)="onPlaySheet($event)"></app-single-sheet>
                         </div>
                     </div>
                 </div>

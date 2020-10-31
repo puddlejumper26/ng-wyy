@@ -3,7 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { NzCarouselComponent } from 'ng-zorro-antd';
 import { map } from 'rxjs/internal/operators';
 
-import { Banner, Singer, HotTag, SongSheet } from './../../services/data-types/common.types';
+import { Banner, Singer, HotTag, SongSheet, Song } from './../../services/data-types/common.types';
+import { SheetService } from './../../services/sheet.service';
 
 @Component({
   selector: 'app-home',
@@ -18,10 +19,11 @@ export class HomeComponent implements OnInit {
   singers: Singer []
   hotTags: HotTag [];
   songSheetLists: SongSheet [];
+  playList: Song[];
 
   @ViewChild(NzCarouselComponent, {static: true}) private nzCarousel: NzCarouselComponent;
 
-  constructor( private route: ActivatedRoute ){
+  constructor( private route: ActivatedRoute, private sheetServe: SheetService){
     //这里使用了 解构， 注意要用 ()， ([banners, hotTags, songSheetList, singers])
     this.route.data.pipe(map(res => res.homeDatas)).subscribe(
       ([banners, hotTags, songSheetList, singers])=> {
@@ -33,7 +35,28 @@ export class HomeComponent implements OnInit {
     )
   }
 
-  // constructor(
+  ngOnInit(){}
+
+  onBeforeChange({to}){
+    // 每次切换的时候，更新这个carouselActiveIndex的值
+    this.carouselActiveIndex = to;
+  }
+
+  onChangeSlide(type: "pre"|"next"){
+    this.nzCarousel[type]();
+  }
+
+  onPlaySheet(id: number){
+    // console.log(11111, id);
+    this.sheetServe.getSongSheetDetail(id).subscribe(res => {
+      // console.log(111, res);
+
+    })
+  }
+}
+
+
+ // constructor(
   //   private HomeServe: HomeService,
   //   private singerServe: SingerService,) {
   //     this.getBanners();
@@ -72,15 +95,3 @@ export class HomeComponent implements OnInit {
   //     this.songSheetLists = sheets;
   //   })
   // }
-
-  ngOnInit(){}
-
-  onBeforeChange({to}){
-    // 每次切换的时候，更新这个carouselActiveIndex的值
-    this.carouselActiveIndex = to;
-  }
-
-  onChangeSlide(type: "pre"|"next"){
-    this.nzCarousel[type]();
-  }
-}
