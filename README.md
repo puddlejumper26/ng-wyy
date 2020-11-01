@@ -25,7 +25,7 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 
 # 4.0 Applied APIs
 
-## 4.1 Angular / rxjs API
+## 4.1 Angular / rxjs / Web APIs
 - `@SkipSelf()` - <u>angular</u> - [core.module.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/core/core.module.ts)
 - `changeDetection:ChangeDetectionStrategy.OnPush` - <u>angular</u> - [wy-carousel.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/components/wy-carousel/wy-carousel.component.ts)
 - `@Injectable({ providedIn: ServicesModule })` - <u>angular</u> - [home.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/home.service.ts)
@@ -37,7 +37,11 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 - `pluck()` - <u>rxjs</u> - [sheet.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/sheet.service.ts)
 - `switchMap()` - <u>rxjs</u> - [sheet.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/sheet.service.ts)
 - `encapsulation: ViewEncapsulation.None` - <u>angular</u> - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
-
+- `SimpleChanges` - <u>angular</u> - [wy-slider-handle.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-handle.component.ts)
+- `ElementRef` - <u>angular</u> - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
+- `HTMLDivElement` - Web - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
+- `fromEvent` - rxjs - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
+- `TouchEvent` & `MouseEvent` - Web - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 
 ## 4.2 Netease Cloud Music API
 - Start this API
@@ -118,6 +122,7 @@ node .\app.js
   - `wy-slider.component`
   - `wy-slider-track.component`
   - `wy-slider-handle.component`
+  - `wy-slider-types.ts`
 
 
 # 6.0 Final Demo
