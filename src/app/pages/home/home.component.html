@@ -1,16 +1,24 @@
 <div class="home">
-    <app-wy-carousel #wyCarousel [activeIndex]="carouselActiveIndex" (changeSlide)="onChangeSlide($event)">
+    <app-wy-carousel
+        #wyCarousel
+        [activeIndex]="carouselActiveIndex"
+        (changeSlide)="onChangeSlide($event)"
+    >
         <!-- set auto play and fade in and fade out effects -->
         <!-- https://ng.ant.design/components/carousel/zh  (nzBeforeChange)切换面板的回调		-->
         <nz-carousel
             nzAutoPlay
             nzEffect="fade"
             [nzDotRender]="wyCarousel.dotRef"
-            (nzBeforeChange)="onBeforeChange($event)">
-
-            <div class="carousel-item" nz-carousel-content *ngFor="let item of banners">
+            (nzBeforeChange)="onBeforeChange($event)"
+        >
+            <div
+                class="carousel-item"
+                nz-carousel-content
+                *ngFor="let item of banners"
+            >
                 <a [href]="item.url" target="_blank" class="banner-item">
-                    <img [src]="item.imageUrl">
+                    <img [src]="item.imageUrl" />
                 </a>
             </div>
         </nz-carousel>
@@ -29,7 +37,9 @@
                                 <a>热门推荐</a>
                             </h2>
                             <nav>
-                                <a *ngFor="let item of hotTags">{{item.name}}</a>
+                                <a *ngFor="let item of hotTags">{{
+                                    item.name
+                                }}</a>
                             </nav>
                         </div>
                         <a>
@@ -44,13 +54,12 @@
                                 class="sheet-item"
                                 *ngFor="let item of songSheetLists"
                                 [sheet]="item"
-                                (onPlay)="onPlaySheet($event)"></app-single-sheet>
+                                (onPlay)="onPlaySheet($event)"
+                            ></app-single-sheet>
                         </div>
                     </div>
                 </div>
             </div>
-
-
 
             <!-- 右边的歌手等 -->
             <div class="right">
@@ -63,11 +72,14 @@
                             <div *ngFor="let singer of singers">
                                 <div class="pic">
                                     <!-- <img src="{{singer.picUrl}}" alt=""> -->
-                                    <img [src]="singer.picUrl" [alt]="singer.name">
+                                    <img
+                                        [src]="singer.picUrl"
+                                        [alt]="singer.name"
+                                    />
                                 </div>
                                 <div class="txt">
-                                    <b class="ellipsis">{{singer.name}}</b>
-                                    <span>专辑数量{{singer.albumSize}}</span>
+                                    <b class="ellipsis">{{ singer.name }}</b>
+                                    <span>专辑数量{{ singer.albumSize }}</span>
                                 </div>
                             </div>
                         </div>

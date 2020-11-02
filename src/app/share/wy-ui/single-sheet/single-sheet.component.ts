@@ -1,23 +1,28 @@
-import { SongSheet } from './../../../services/data-types/common.types';
-import { ChangeDetectionStrategy, Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { SongSheet } from "./../../../services/data-types/common.types";
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Input,
+    OnInit,
+    Output,
+    EventEmitter,
+} from "@angular/core";
 
 @Component({
-  selector: 'app-single-sheet',
-  templateUrl: './single-sheet.component.html',
-  styleUrls: ['./single-sheet.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: "app-single-sheet",
+    templateUrl: "./single-sheet.component.html",
+    styleUrls: ["./single-sheet.component.less"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SingleSheetComponent implements OnInit {
+    @Input() sheet: SongSheet;
+    @Output() onPlay = new EventEmitter<number>();
 
-  @Input() sheet: SongSheet;
-  @Output() onPlay = new EventEmitter<number>();
+    constructor() {}
 
-  constructor() { }
+    ngOnInit() {}
 
-  ngOnInit() {
-  }
-
-  playSheet(id: number){
-    this.onPlay.emit(id);
-  }
+    playSheet(id: number) {
+        this.onPlay.emit(id);
+    }
 }

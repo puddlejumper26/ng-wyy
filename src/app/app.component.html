@@ -1,7 +1,6 @@
 <div id="app">
     <nz-layout class="layout">
         <nz-header class="header">
-
             <div class="wrap">
                 <div class="left">
                     <h1>Music</h1>
@@ -16,7 +15,11 @@
                     <div class="search">
                         <!-- here the suffixIconSearch must be with ng-template -->
                         <nz-input-group [nzSuffix]="suffixIconSearch">
-                            <input type="text" nz-input placeholder="List/Singer/Song">
+                            <input
+                                type="text"
+                                nz-input
+                                placeholder="List/Singer/Song"
+                            />
                         </nz-input-group>
                         <!-- to display the search icon -->
                         <ng-template #suffixIconSearch>
@@ -30,15 +33,27 @@
                                 <li nz-submenu>
                                     <div title>
                                         <span>登录</span>
-                                        <i nz-icon nzType="down" nzTheme="outline"></i>
+                                        <i
+                                            nz-icon
+                                            nzType="down"
+                                            nzTheme="outline"
+                                        ></i>
                                     </div>
                                     <ul>
                                         <li nz-menu-item>
-                                            <i nz-icon nzType="mobile" nzTheme="outline"></i>
+                                            <i
+                                                nz-icon
+                                                nzType="mobile"
+                                                nzTheme="outline"
+                                            ></i>
                                             手机登录
                                         </li>
                                         <li nz-menu-item>
-                                            <i nz-icon nzType="user-add" nzTheme="outline"></i>
+                                            <i
+                                                nz-icon
+                                                nzType="user-add"
+                                                nzTheme="outline"
+                                            ></i>
                                             注册
                                         </li>
                                     </ul>

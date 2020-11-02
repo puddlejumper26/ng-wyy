@@ -1,18 +1,18 @@
 <ng-container>
     <a class="cover">
         <!-- Cover Picture -->
-        <img [src]="sheet.picUrl" [alt]="sheet.name">
+        <img [src]="sheet.picUrl" [alt]="sheet.name" />
         <div class="bottom">
             <div class="num">
                 <i class="icon erji"></i>
                 <!-- 播放量 -->
-                <span>{{sheet.playCount | playCount}}</span>
+                <span>{{ sheet.playCount | playCount }}</span>
             </div>
             <!-- Play button -->
             <i class="icon erji" (click)="playSheet(sheet.id)"></i>
         </div>
     </a>
-    <span class="dec">{{sheet.name}}</span>
+    <span class="dec">{{ sheet.name }}</span>
     <!-- <i nz-icon nzType="step-forward" nzTheme="outline"></i> -->
     <!-- <i nz-icon style="z-index: 999; color:aliceblue" nzType="play-circle" nzTheme="outline" (click)="playSheet(sheet.id)">P</i> -->
 </ng-container>

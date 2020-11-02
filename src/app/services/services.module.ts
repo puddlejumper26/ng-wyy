@@ -1,7 +1,7 @@
-import { InjectionToken, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { InjectionToken, NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
 
-export const API_CONFIG = new InjectionToken('ApiConfigToken');
+export const API_CONFIG = new InjectionToken("ApiConfigToken");
 // 这里的ApiConfigToken是 任意的一个 参数， 作为这个 token 的标识
 // 这里的Token 的作用
 // Angular自身提供的服务，都有一个 token， 以及这个token 对应的值 (useValue)
@@ -11,12 +11,8 @@ export const API_CONFIG = new InjectionToken('ApiConfigToken');
 // 其他文件使用的时候需要再 constructor 中 @Inject
 
 @NgModule({
-  declarations: [],
-  imports: [
-    CommonModule
-  ],
-  providers: [
-    { provide: API_CONFIG, useValue: 'http://localhost:3000/' }
-  ]
+    declarations: [],
+    imports: [CommonModule],
+    providers: [{ provide: API_CONFIG, useValue: "http://localhost:3000/" }],
 })
-export class ServicesModule { }
+export class ServicesModule {}

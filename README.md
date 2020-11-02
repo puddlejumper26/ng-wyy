@@ -16,10 +16,11 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 
 # 3.0 How to Use this APP
 - Start Netease Cloud Music as Server, this should be a separate folder
-- Run `node ./app.js`
-- Open `localhost:3000` would see the data
-- Under angular folger Run `ng serve`
-- Open `localhost:4200` would see the app
+  - download or clone this https://github.com/Binaryify/NeteaseCloudMusicApi to local
+  - inside of this folder Run `node ./app.js`
+  - Open `localhost:3000` would see the data
+- Under Angular App folder Run `ng serve`
+  - Open `localhost:4200` would see the app
 - Functions
   - login, play music, draging effects on sliders(vertical and horizontal)
 
@@ -51,13 +52,13 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 - `distinctUntilChanged()` & `takeUntil()` - [rxjs] - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 - `merge()` - [rxjs] - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 
--`map()` - [rxjs] - [home.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home.component.ts) | [home.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/home.service.ts) | [sheet.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/sheet.service.ts) | [singer.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/singer.service.ts) | [song.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/song.service.ts) | [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
+- `map()` - [rxjs] - [home.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home.component.ts) | [home.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/home.service.ts) | [sheet.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/sheet.service.ts) | [singer.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/singer.service.ts) | [song.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/song.service.ts) | [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 - `pipe()` - [rxjs] - [home-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home-resolve.service.ts) | [home.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home.component.ts) | [home.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/home.service.ts) | [sheet.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/sheet.service.ts) | [singer.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/singer.service.ts) | [song.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/song.service.ts) | [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 
 ### 4.1.3 Web
 - `HTMLDivElement` - [Web] - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
-- `TouchEvent` (`touchstart`, `touchmove`,`touchend`) & `MouseEvent` (`mousedown`, `mouseup`, `mousemove`) - [Web] - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
-- `stopPropagation()` & `preventDefault()` - [Web] - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
+- `TouchEvent` (`touchstart`, `touchmove`,`touchend`) & `MouseEvent` (`mousedown`, `mouseup`, `mousemove`) - [Web] - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts) | [wy-slider-types.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-types.ts)
+- `stopPropagation()` & `preventDefault()` - [Web] - [array.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-helper.ts)
 - `Event` - [Web] - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 -
 
@@ -71,6 +72,7 @@ node .\app.js
 - `[nzDotRender]` - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
 - `(nzBeforeChange)` - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
 - `next()`, `pre()` - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
+- `getElementOffset` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 
 
 ## 4.4 Node.js
@@ -141,6 +143,8 @@ node .\app.js
   - `wy-slider-track.component`
   - `wy-slider-handle.component`
   - `wy-slider-types.ts`
+  - `wy-slider-helper.ts`
+  - `array.ts`
 
 
 # 6.0 Final Demo
