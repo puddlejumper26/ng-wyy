@@ -9,7 +9,6 @@ import {
     ViewChild,
     ViewEncapsulation,
 } from "@angular/core";
-import { getElementOffset } from "ng-zorro-antd";
 import { fromEvent, merge, Observable } from "rxjs";
 import {
     distinctUntilChanged,
@@ -20,7 +19,8 @@ import {
     tap,
 } from "rxjs/internal/operators";
 import { inArray } from "src/app/utils/array";
-import { sliderEvent } from "./wy-slider-helper";
+import { limitNumberInRange } from 'src/app/utils/number';
+import { getElementOffset, sliderEvent } from "./wy-slider-helper";
 import { SliderEventObserverConfig } from "./wy-slider-types";
 
 @Component({
@@ -172,21 +172,34 @@ export class WySliderComponent implements OnInit {
     }
 
     // 参数是 number， 是因为拿到的是一个位置
-    private onDragStart(value: number) {}
+    private onDragStart(value: number) {
+        console.log(111111, value);
+    }
     private onDragMove(value: number) {}
     private onDragEnd() {}
 
-    // position / slider component length = (val - min)/(max-min)    移动的位置 / 滑块组件总长 === (val - 最小值) / (值得范围) 以此来求得 val
+    // position / slider component length = (val - min)/(max-min)
+    // 滑块当前位置 / 滑块组件总长 === (val - 最小值) / (值得范围) 以此来求得 val
     // min and max are the @Input wyMin and wyMax above, for the user to set
     // slider component length is based on the dom of this component, wySlider
-    private findClosestValue(val: number): number {
+    private findClosestValue(position: number): number {
         // obtain slider length
         const sliderLength = this.getSliderLength();
 
         // obtain slider (left, top) position 滑块(左,上）端点位置
         const sliderStart = this.getSliderStartPosition();
 
-        return null;
+        // obtain position / slider component length 但是下面这一行没法用在垂直情况下
+        // 查看 https://github.com/puddlejumper26/ng-wyy/issues/8
+        // 因为这个时候的 sliderStart 是从 A点开始，而垂直的状况下，这个是顶点，而实际需要的应该是这个时候的B点
+        // 所以这时候的 公式 求出来的就是   CA/BA 而我们需要的是 BC/BA
+        // 因为这里的ratio 的值得范围就是 位于 0-1 之间，所以可以引用 limitNumberInRange
+        const ratio = limitNumberInRange((position - sliderStart) / sliderLength, 0, 1);
+        // 所以这里调整一下
+        const ratioTrue = this.wyVertical ? 1 - ratio : ratio;
+
+        // val === ratio * (max-min) + min
+        return ratio * (this.wyMax - this.wyMin) + this.wyMin;
     }
 
     private getSliderLength() {

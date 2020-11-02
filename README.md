@@ -58,9 +58,11 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 ### 4.1.3 Web
 - `HTMLDivElement` - [Web] - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 - `TouchEvent` (`touchstart`, `touchmove`,`touchend`) & `MouseEvent` (`mousedown`, `mouseup`, `mousemove`) - [Web] - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts) | [wy-slider-types.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-types.ts)
-- `stopPropagation()` & `preventDefault()` - [Web] - [array.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-helper.ts)
+- `stopPropagation()` & `preventDefault()` - [Web] - [wy-slider-helper.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-helper.ts)
+- `getClientRects()` & `getBoundingClientRect()`  - [Web] - [wy-slider-helper.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-helper.ts)
+- `ownerDocument` & `defaultView` - [Web] - [wy-slider-helper.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-helper.ts)
 - `Event` - [Web] - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
--
+
 
 ## 4.2 Netease Cloud Music API
 - Start this API
@@ -72,7 +74,7 @@ node .\app.js
 - `[nzDotRender]` - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
 - `(nzBeforeChange)` - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
 - `next()`, `pre()` - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
-- `getElementOffset` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
+
 
 
 ## 4.4 Node.js
