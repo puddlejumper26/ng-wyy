@@ -41,6 +41,7 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 - `SimpleChanges` - [angular] - [wy-slider-handle.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-handle.component.ts)
 - `ElementRef` - [angular] - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 - `DOCUMENT` - [angular] - [wy-slider-helper.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-helper.ts) | [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
+- `ChangeDetectorRef` &  `markForCheck()` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 
 ### 4.1.2 rxjs
 
@@ -67,7 +68,7 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 ## 4.2 Netease Cloud Music API
 - Start this API
 ```ts
-node .\app.js
+node ./app.js
 ```
 
 ## 4.3 Ant Design Angular API
@@ -147,6 +148,8 @@ node .\app.js
   - `wy-slider-types.ts`
   - `wy-slider-helper.ts`
   - `array.ts`
+  - `number.ts`
+  - `common.types.ts`
 
 
 # 6.0 Final Demo

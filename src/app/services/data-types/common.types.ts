@@ -43,3 +43,5 @@ export type SongUrl = {
     id: number;
     url: string;
 };
+
+export type SliderValue = number | null;

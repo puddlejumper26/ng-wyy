@@ -1,6 +1,7 @@
 import { DOCUMENT } from "@angular/common";
 import {
     ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     ElementRef,
     Inject,
@@ -18,8 +19,9 @@ import {
     takeUntil,
     tap,
 } from "rxjs/internal/operators";
+import { SliderValue } from "src/app/services/data-types/common.types";
 import { inArray } from "src/app/utils/array";
-import { limitNumberInRange } from 'src/app/utils/number';
+import { getPercent, limitNumberInRange } from "src/app/utils/number";
 import { getElementOffset, sliderEvent } from "./wy-slider-helper";
 import { SliderEventObserverConfig } from "./wy-slider-types";
 
@@ -30,6 +32,8 @@ import { SliderEventObserverConfig } from "./wy-slider-types";
     // make the style could be used into the children components, work as globle style rules
     // https://angular.cn/guide/component-styles#view-encapsulation
     encapsulation: ViewEncapsulation.None,
+    //如果下面的 @Input 属性不发生变化，那么就不会检测更新，所以这里的部分代码需要手动检测
+    //拖动滑块时， 下面定义的value 值是不会变化的
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WySliderComponent implements OnInit {
@@ -38,8 +42,8 @@ export class WySliderComponent implements OnInit {
      *  therefore we need to monitor the template, obtain the dom of this template
      *
      *  method 1  inject  -> private el: ElementRef  inside the constructor
-     *
      *  method 2  inside template <#wySlider>
+     *
      *             inside ts
      *                      @ViewChild('wySlider') private wySlider: ElementRef
      */
@@ -47,6 +51,10 @@ export class WySliderComponent implements OnInit {
     // https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLDivElement
     // 提供了一些特殊属性（它也继承了通常的 HTMLElement 接口）来操作 <div> 元素。
     private sliderDom: HTMLDivElement;
+    private isDragging = false;
+
+    offset: SliderValue = null;
+    value: SliderValue = null;
 
     private dragStart$: Observable<number>;
     private dragMove$: Observable<number>;
@@ -58,7 +66,10 @@ export class WySliderComponent implements OnInit {
 
     @ViewChild("wySlider", { static: true }) private wySlider: ElementRef;
 
-    constructor(@Inject(DOCUMENT) private doc: Document) {}
+    constructor(
+        @Inject(DOCUMENT) private doc: Document,
+        private cdr: ChangeDetectorRef // 进行手动 更新检测 这里的 ChangeDetectorRef 是一个类，下面使用其的 markForCheck()
+    ) {}
 
     ngOnInit() {
         // console.log(1111, this.wySlider.nativeElement);
@@ -174,9 +185,56 @@ export class WySliderComponent implements OnInit {
     // 参数是 number， 是因为拿到的是一个位置
     private onDragStart(value: number) {
         console.log(111111, value);
+        //需要绑定 move 和 end 事件
+        this.toggleDragMoving(true);
+        this.setValue(value); // 这样鼠标点击到进度条的任何一点， handle都会移动过去
     }
-    private onDragMove(value: number) {}
-    private onDragEnd() {}
+    private onDragMove(value: number) {
+        if (this.isDragging) {
+            this.setValue(value); //传入 value
+            //手动更新检测 When a view uses the OnPush (checkOnce) change detection strategy, explicitly marks the view as changed so that it can be checked again.
+            this.cdr.markForCheck();
+        }
+    }
+    private onDragEnd() {
+        this.toggleDragMoving(false);
+        this.cdr.markForCheck(); //手动变更检测
+    }
+
+    // to save the value
+    private setValue(value: SliderValue) {
+        this.value = value;
+        //保存好还要更新 dom， 就是 滑块和 进度条的位置
+        this.updateTrackAndHandles();
+    }
+
+    // 通过value 值 来改变 dom上的变化
+    // 主要就是改变 wy-slider-track 中的 wyLength属性
+    //          和 wy-slider-handle 中的 wyOffset 属性
+    // 这两个属性也是绑定在 wy-slider.component.html中的
+    private updateTrackAndHandles() {
+        // offset 就是 把 value的值转换成 dom 所需要的百分比
+        this.offset = this.getValueToOffset(this.value);
+        // 这里dom 发生变化 还是要手动检测
+        this.cdr.markForCheck();
+    }
+
+    // 转换 value  to offset 根据传入的值 求出 dom 上 移动所需要的百分比
+    private getValueToOffset(value: SliderValue): SliderValue {
+        return getPercent(this.wyMin, this.wyMax, value);
+    }
+
+    //如果正在移动，用一个变量标识一下
+    private toggleDragMoving(movable: boolean) {
+        this.isDragging = movable;
+        if (movable) {
+            this.subscribeDrag(["move", "end"]); //绑定 move 和 end 事件
+        } else {
+            this.unSubscribeDrag(["move", "end"]); //如果没有移动，就解绑
+        }
+    }
+
+    private unSubscribeDrag(event: string[]) {}
 
     // position / slider component length = (val - min)/(max-min)
     // 滑块当前位置 / 滑块组件总长 === (val - 最小值) / (值得范围) 以此来求得 val
@@ -194,7 +252,11 @@ export class WySliderComponent implements OnInit {
         // 因为这个时候的 sliderStart 是从 A点开始，而垂直的状况下，这个是顶点，而实际需要的应该是这个时候的B点
         // 所以这时候的 公式 求出来的就是   CA/BA 而我们需要的是 BC/BA
         // 因为这里的ratio 的值得范围就是 位于 0-1 之间，所以可以引用 limitNumberInRange
-        const ratio = limitNumberInRange((position - sliderStart) / sliderLength, 0, 1);
+        const ratio = limitNumberInRange(
+            (position - sliderStart) / sliderLength,
+            0,
+            1
+        );
         // 所以这里调整一下
         const ratioTrue = this.wyVertical ? 1 - ratio : ratio;
 
