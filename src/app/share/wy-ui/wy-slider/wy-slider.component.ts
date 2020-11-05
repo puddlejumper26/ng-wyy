@@ -81,6 +81,8 @@ export class WySliderComponent
     private dragEnd_: Subscription | null;
 
     @Input() wyVertical = false; // default is horizontal direction
+    @Input() bufferOffset: SliderValue = 0; // 用户传进来的值 默认是0
+    @Input() wy
     @Input() wyMin = 0;
     @Input() wyMax = 100;
 
