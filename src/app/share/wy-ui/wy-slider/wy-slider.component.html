@@ -1,4 +1,4 @@
-<div class="wy-slider" #wySlider>
+<div class="wy-slider" #wySlider [class.wy-slider-vertical]="wyVertical">
     <!-- 进度条 -->
     <app-wy-slider-track [wyVertical]="wyVertical" [wyLength]="offset"></app-wy-slider-track>
     <!-- 滑块按钮 -->

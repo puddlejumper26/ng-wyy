@@ -331,7 +331,7 @@ export class WySliderComponent
         const ratioTrue = this.wyVertical ? 1 - ratio : ratio;
 
         // val === ratio * (max-min) + min
-        return ratio * (this.wyMax - this.wyMin) + this.wyMin;
+        return ratioTrue * (this.wyMax - this.wyMin) + this.wyMin;
     }
 
     private getSliderLength() {
