@@ -12,7 +12,7 @@ import {
     ViewChild,
     ViewEncapsulation,
 } from "@angular/core";
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { fromEvent, merge, Observable, Subscriber, Subscription } from "rxjs";
 import {
     distinctUntilChanged,
@@ -39,16 +39,18 @@ import { SliderEventObserverConfig } from "./wy-slider-types";
     //拖动滑块时， 下面定义的value 值是不会变化的
     changeDetection: ChangeDetectionStrategy.OnPush,
     // 注入一个 token  和 实现最后面的 ControlValueAccessor接口的三个方法 一起
-    providers: [{
-        provide: NG_VALUE_ACCESSOR,
-        //forward 允许我们应用一个尚未定义的类
-        useExisting: forwardRef(() => WySliderComponent),
-        // multi 说明有多个依赖
-        multi: true
-    }]
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            //forward 允许我们应用一个尚未定义的类
+            useExisting: forwardRef(() => WySliderComponent),
+            // multi 说明有多个依赖
+            multi: true,
+        },
+    ],
 })
-export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccessor {
-
+export class WySliderComponent
+    implements OnInit, OnDestroy, ControlValueAccessor {
     /**
      *  Here we need to control the slider handle and check the slider track
      *  therefore we need to monitor the template, obtain the dom of this template
@@ -241,22 +243,25 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
 
     // to save the value , 因为如果从外面传入一个值得话，需要控制合法性，所以需要 needCheck
     private setValue(value: SliderValue, needCheck = false) {
-        if(needCheck) {
-            if(this.isDragging) return;    //如果在拖拽过程中，就直接 return 了
-            this.value = this.formatValue(value);   //把不合法的值变成合法的值
+        if (needCheck) {
+            if (this.isDragging) return; //如果在拖拽过程中，就直接 return 了
+            this.value = this.formatValue(value); //把不合法的值变成合法的值
             this.updateTrackAndHandles();
-        }else if (!this.valuesEqual(this.value, value)) {         // 在拖动的过程中，会有值是相同的情况，下面来判断一下 新旧值是否相等
+        } else if (!this.valuesEqual(this.value, value)) {
+            // 在拖动的过程中，会有值是相同的情况，下面来判断一下 新旧值是否相等
             this.value = value;
             //保存好还要更新 dom， 就是 滑块和 进度条的位置
             this.updateTrackAndHandles();
+            // 触发 最后的 接口的方法
+            this.onValueChange(this.value);
         }
     }
 
     private formatValue(value: SliderValue): SliderValue {
         let res = value;
-        if(this.assertValueValid(value)){
+        if (this.assertValueValid(value)) {
             res = this.wyMin;
-        }else{
+        } else {
             res = limitNumberInRange(value, this.wyMin, this.wyMax);
         }
         return res;
@@ -264,9 +269,8 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
 
     // 判断是否是 NaN
     private assertValueValid(value: SliderValue): boolean {
-        return isNaN(typeof value !== 'number' ? parseFloat(value) : value);
+        return isNaN(typeof value !== "number" ? parseFloat(value) : value);
     }
-
 
     private valuesEqual(valA: SliderValue, valB: SliderValue) {
         if (typeof valA !== typeof valB) {
@@ -341,12 +345,10 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
         return this.wyVertical ? offset.top : offset.left;
     }
 
+    private onValueChange(value: SliderValue): void {}
 
-    private onValueChange(value: SliderValue): void {
-    }
-
-    private onTouched(): void{}
-     /**
+    private onTouched(): void {}
+    /**
      *    ControlValueAccessor
      * Defines an interface that acts as a bridge between the Angular forms API and a native element in the DOM.
      *
@@ -360,11 +362,11 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
         this.setValue(value, true); //这里true 说明是合法的
     }
     // 发射change事件, 但组件内部通过拖拽改变了值，就需要把事件发射出去
-    registerOnChange(fn: (value: SliderValue) => void): void{
+    registerOnChange(fn: (value: SliderValue) => void): void {
         this.onValueChange = fn;
     }
     // 发射touch事件
-    registerOnTouched(fn: ()=> void): void{
+    registerOnTouched(fn: () => void): void {
         this.onTouched = fn;
     }
 
