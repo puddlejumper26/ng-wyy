@@ -42,6 +42,7 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 - `ElementRef` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 - `DOCUMENT` - [wy-slider-helper.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-helper.ts) | [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 - `ChangeDetectorRef` &  `markForCheck()` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
+- `ControlValueAccessor` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 
 ### 4.1.2 rxjs
 
@@ -75,7 +76,7 @@ node ./app.js
 - `[nzDotRender]` - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
 - `(nzBeforeChange)` - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
 - `next()`, `pre()` - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
-
+- `[ngModel]` - [Slider Bar](https://github.com/puddlejumper26/ng-wyy/issues/8)
 
 
 ## 4.4 Node.js

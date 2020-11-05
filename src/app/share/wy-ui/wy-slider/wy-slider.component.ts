@@ -4,6 +4,7 @@ import {
     ChangeDetectorRef,
     Component,
     ElementRef,
+    forwardRef,
     Inject,
     Input,
     OnDestroy,
@@ -11,6 +12,7 @@ import {
     ViewChild,
     ViewEncapsulation,
 } from "@angular/core";
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { fromEvent, merge, Observable, Subscriber, Subscription } from "rxjs";
 import {
     distinctUntilChanged,
@@ -36,8 +38,17 @@ import { SliderEventObserverConfig } from "./wy-slider-types";
     //如果下面的 @Input 属性不发生变化，那么就不会检测更新，所以这里的部分代码需要手动检测
     //拖动滑块时， 下面定义的value 值是不会变化的
     changeDetection: ChangeDetectionStrategy.OnPush,
+    // 注入一个 token  和 实现最后面的 ControlValueAccessor接口的三个方法 一起
+    providers: [{
+        provide: NG_VALUE_ACCESSOR,
+        //forward 允许我们应用一个尚未定义的类
+        useExisting: forwardRef(() => WySliderComponent),
+        // multi 说明有多个依赖
+        multi: true
+    }]
 })
-export class WySliderComponent implements OnInit, OnDestroy {
+export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccessor {
+
     /**
      *  Here we need to control the slider handle and check the slider track
      *  therefore we need to monitor the template, obtain the dom of this template
@@ -228,15 +239,34 @@ export class WySliderComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck(); //手动变更检测
     }
 
-    // to save the value
-    private setValue(value: SliderValue) {
-        // 在拖动的过程中，会有值是相同的情况，下面来判断一下 新旧值是否相等
-        if (!this.valuesEqual(this.value, value)) {
+    // to save the value , 因为如果从外面传入一个值得话，需要控制合法性，所以需要 needCheck
+    private setValue(value: SliderValue, needCheck = false) {
+        if(needCheck) {
+            if(this.isDragging) return;    //如果在拖拽过程中，就直接 return 了
+            this.value = this.formatValue(value);   //把不合法的值变成合法的值
+            this.updateTrackAndHandles();
+        }else if (!this.valuesEqual(this.value, value)) {         // 在拖动的过程中，会有值是相同的情况，下面来判断一下 新旧值是否相等
             this.value = value;
             //保存好还要更新 dom， 就是 滑块和 进度条的位置
             this.updateTrackAndHandles();
         }
     }
+
+    private formatValue(value: SliderValue): SliderValue {
+        let res = value;
+        if(this.assertValueValid(value)){
+            res = this.wyMin;
+        }else{
+            res = limitNumberInRange(value, this.wyMin, this.wyMax);
+        }
+        return res;
+    }
+
+    // 判断是否是 NaN
+    private assertValueValid(value: SliderValue): boolean {
+        return isNaN(typeof value !== 'number' ? parseFloat(value) : value);
+    }
+
 
     private valuesEqual(valA: SliderValue, valB: SliderValue) {
         if (typeof valA !== typeof valB) {
@@ -309,6 +339,33 @@ export class WySliderComponent implements OnInit, OnDestroy {
     private getSliderStartPosition(): number {
         const offset = getElementOffset(this.sliderDom);
         return this.wyVertical ? offset.top : offset.left;
+    }
+
+
+    private onValueChange(value: SliderValue): void {
+    }
+
+    private onTouched(): void{}
+     /**
+     *    ControlValueAccessor
+     * Defines an interface that acts as a bridge between the Angular forms API and a native element in the DOM.
+     *
+     *    实现自定义表单的接口
+     *
+     *    这里要和最前面 定义的   providers 一起
+     */
+
+    // 赋值 , 读到值然后赋值
+    writeValue(value: SliderValue): void {
+        this.setValue(value, true); //这里true 说明是合法的
+    }
+    // 发射change事件, 但组件内部通过拖拽改变了值，就需要把事件发射出去
+    registerOnChange(fn: (value: SliderValue) => void): void{
+        this.onValueChange = fn;
+    }
+    // 发射touch事件
+    registerOnTouched(fn: ()=> void): void{
+        this.onTouched = fn;
     }
 
     ngOnDestroy() {
