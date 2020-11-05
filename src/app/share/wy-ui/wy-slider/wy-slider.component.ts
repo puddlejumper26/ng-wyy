@@ -6,11 +6,12 @@ import {
     ElementRef,
     Inject,
     Input,
+    OnDestroy,
     OnInit,
     ViewChild,
     ViewEncapsulation,
 } from "@angular/core";
-import { fromEvent, merge, Observable } from "rxjs";
+import { fromEvent, merge, Observable, Subscriber, Subscription } from "rxjs";
 import {
     distinctUntilChanged,
     filter,
@@ -36,7 +37,7 @@ import { SliderEventObserverConfig } from "./wy-slider-types";
     //拖动滑块时， 下面定义的value 值是不会变化的
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WySliderComponent implements OnInit {
+export class WySliderComponent implements OnInit, OnDestroy {
     /**
      *  Here we need to control the slider handle and check the slider track
      *  therefore we need to monitor the template, obtain the dom of this template
@@ -56,9 +57,15 @@ export class WySliderComponent implements OnInit {
     offset: SliderValue = null;
     value: SliderValue = null;
 
+    // 绑定流
     private dragStart$: Observable<number>;
     private dragMove$: Observable<number>;
     private dragEnd$: Observable<Event>;
+
+    //取消订阅
+    private dragStart_: Subscription | null;
+    private dragMove_: Subscription | null;
+    private dragEnd_: Subscription | null;
 
     @Input() wyVertical = false; // default is horizontal direction
     @Input() wyMin = 0;
@@ -167,18 +174,38 @@ export class WySliderComponent implements OnInit {
     } // end of function createDraggingObservables
 
     //参数为数组，是因为需要能够同时订阅多个事件
-    private subscribeDrag(events: string[]) {
+    private subscribeDrag(events: string[] = ["start", "move", "end"]) {
         // if(events.indexOf('start') !== -1 && this.dragStart$){
         //   this.dragStart$.subscribe(this.onDragStart.bind(this));
         // };
-        if ((inArray(events, "start"), this.dragStart$)) {
-            this.dragStart$.subscribe(this.onDragStart.bind(this));
+        if (inArray(events, "start") && this.dragStart$ && !this.dragStart_) {
+            this.dragStart_ = this.dragStart$.subscribe(
+                this.onDragStart.bind(this)
+            );
         }
-        if ((inArray(events, "move"), this.dragMove$)) {
-            this.dragMove$.subscribe(this.onDragMove.bind(this));
+        if (inArray(events, "move") && this.dragMove$ && !this.dragMove_) {
+            this.dragMove_ = this.dragMove$.subscribe(
+                this.onDragMove.bind(this)
+            );
         }
-        if ((inArray(events, "end"), this.dragEnd$)) {
-            this.dragEnd$.subscribe(this.onDragEnd.bind(this));
+        if ((inArray(events, "end"), this.dragEnd$ && !this.dragEnd_)) {
+            this.dragEnd_ = this.dragEnd$.subscribe(this.onDragEnd.bind(this));
+        }
+    }
+
+    // 解绑上面  subscribeDrag的 订阅的流 , 除了在  toggleDragMoving 中 会解绑，还有就是 销毁的时候
+    private unSubscribeDrag(events: string[] = ["start", "move", "end"]) {
+        if (inArray(events, "start") && this.dragStart_) {
+            this.dragStart_.unsubscribe();
+            this.dragStart_ = null;
+        }
+        if (inArray(events, "move") && this.dragMove_) {
+            this.dragMove_.unsubscribe();
+            this.dragMove_ = null;
+        }
+        if ((inArray(events, "end"), this.dragEnd_)) {
+            this.dragEnd_.unsubscribe();
+            this.dragEnd_ = null;
         }
     }
 
@@ -203,9 +230,20 @@ export class WySliderComponent implements OnInit {
 
     // to save the value
     private setValue(value: SliderValue) {
-        this.value = value;
-        //保存好还要更新 dom， 就是 滑块和 进度条的位置
-        this.updateTrackAndHandles();
+        // 在拖动的过程中，会有值是相同的情况，下面来判断一下 新旧值是否相等
+        if (!this.valuesEqual(this.value, value)) {
+            this.value = value;
+            //保存好还要更新 dom， 就是 滑块和 进度条的位置
+            this.updateTrackAndHandles();
+        }
+    }
+
+    private valuesEqual(valA: SliderValue, valB: SliderValue) {
+        if (typeof valA !== typeof valB) {
+            // here is more strict, first to compare the type
+            return false;
+        }
+        return valA === valB; // here to compare the value
     }
 
     // 通过value 值 来改变 dom上的变化
@@ -233,8 +271,6 @@ export class WySliderComponent implements OnInit {
             this.unSubscribeDrag(["move", "end"]); //如果没有移动，就解绑
         }
     }
-
-    private unSubscribeDrag(event: string[]) {}
 
     // position / slider component length = (val - min)/(max-min)
     // 滑块当前位置 / 滑块组件总长 === (val - 最小值) / (值得范围) 以此来求得 val
@@ -273,6 +309,10 @@ export class WySliderComponent implements OnInit {
     private getSliderStartPosition(): number {
         const offset = getElementOffset(this.sliderDom);
         return this.wyVertical ? offset.top : offset.left;
+    }
+
+    ngOnDestroy() {
+        this.unSubscribeDrag();
     }
 }
 
