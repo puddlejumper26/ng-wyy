@@ -7,6 +7,7 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 - Angular 8.3.0 & Typescript
 - Ng-Zorro-Antd (Ant Design of Angular)
   - https://ng.ant.design/docs/introduce/en
+- NGRX - framework for building reactive applications in Angular 状态管理
 - Minireset.css
   - npm install minireset.css
 - Netease Cloud Music API (Node.js API service)
@@ -65,12 +66,11 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 - `ownerDocument` & `defaultView` - [wy-slider-helper.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-helper.ts)
 - `Event` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 
+## 4.2 NGRX
+- `createReducer` & `Action`- [player.reducer.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/store/reducer/play.reducer.ts)
+- `createAction` & `props` - [player.actions.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/store/actions/player.actions.ts)
 
-## 4.2 Netease Cloud Music API
-- Start this API
-```ts
-node ./app.js
-```
+
 
 ## 4.3 Ant Design Angular API
 - `[nzDotRender]` - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
@@ -78,9 +78,14 @@ node ./app.js
 - `next()`, `pre()` - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
 - `[ngModel]` - [Slider Bar](https://github.com/puddlejumper26/ng-wyy/issues/8)
 
-
 ## 4.4 Node.js
 - `queryString` - Object Serialization 对象序列化-[singer.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/singer.service.ts)
+
+## 4.5 Netease Cloud Music API
+- Start this API
+```ts
+node ./app.js
+```
 
 # 5.0 Compositions
 
@@ -140,7 +145,7 @@ node ./app.js
   - /playlist/detail
   - /song/url
 
-## 5.7 Home page bottom section - player - Slider Bar 滑块组件
+## 5.7 Home page bottom section - Player - Slider Bar 滑块组件
 - [Slider Bar](https://github.com/puddlejumper26/ng-wyy/issues/8)
 - components / services / directives / etc.
   - `wy-slider.component`
@@ -151,6 +156,15 @@ node ./app.js
   - `array.ts`
   - `number.ts`
   - `common.types.ts`
+
+## 5.8 Home page bottom section - Player - play, next, previous, volumn | NGRX 应用
+- [play, next, previous, volumn | NGRX 应用 ](https://github.com/puddlejumper26/ng-wyy/issues/9)
+- components / services / directives / etc.
+  - `index.ts`
+  - `player.reducer.ts`
+  - `player-type.ts`
+  - `player.actions.ts`
+
 
 
 # 6.0 Final Demo
