@@ -6,6 +6,7 @@ import { registerLocaleData } from "@angular/common";
 import zh from "@angular/common/locales/zh";
 import { NZ_I18N, zh_CN } from "ng-zorro-antd";
 
+import { AppStoreModule } from './../store/index';
 import { AppRoutingModule } from "../app-routing.module";
 import { PagesModule } from "../pages/pages.module";
 import { ServicesModule } from "./../services/services.module";
@@ -16,13 +17,14 @@ registerLocaleData(zh);
 @NgModule({
     declarations: [],
     imports: [
+        AppRoutingModule, /*put at the end in order for the app running*/,
+        AppStoreModule,
         BrowserAnimationsModule,
         BrowserModule,
         HttpClientModule,
         PagesModule,
         ServicesModule,
         ShareModule,
-        AppRoutingModule /*put at the end in order for the app running*/,
     ],
     exports: [ShareModule, AppRoutingModule],
     providers: [{ provide: NZ_I18N, useValue: zh_CN }],
