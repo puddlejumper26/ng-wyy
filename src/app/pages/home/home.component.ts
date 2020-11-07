@@ -1,10 +1,11 @@
-import { SetPlayList, SetCurrentIndex, SetSongList } from './../../store/actions/player.actions';
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Store } from '@ngrx/store';
 import { NzCarouselComponent } from "ng-zorro-antd";
 import { map } from "rxjs/internal/operators";
+
 import { AppStoreModule } from 'src/app/store';
+import { SetPlayList, SetCurrentIndex, SetSongList } from './../../store/actions/player.actions';
 
 import {
     Banner,

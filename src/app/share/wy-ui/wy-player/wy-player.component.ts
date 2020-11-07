@@ -1,10 +1,17 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { select, Store } from '@ngrx/store';
+import { select, Store } from "@ngrx/store";
 
-import { PlayMode } from './player-type';
-import { Song } from './../../../services/data-types/common.types';
-import { getPlayList, getCurrentIndex, getSongList, getPlayer, getPlayMode, getCurrentSong } from './../../../store/selectors/player.selector';
-import { AppStoreModule } from './../../../store/index';
+import { PlayMode } from "./player-type";
+import { Song } from "./../../../services/data-types/common.types";
+import {
+    getPlayList,
+    getCurrentIndex,
+    getSongList,
+    getPlayer,
+    getPlayMode,
+    getCurrentSong,
+} from "./../../../store/selectors/player.selector";
+import { AppStoreModule } from "./../../../store/index";
 
 @Component({
     selector: "app-wy-player",
@@ -12,14 +19,13 @@ import { AppStoreModule } from './../../../store/index';
     styleUrls: ["./wy-player.component.less"],
 })
 export class WyPlayerComponent implements OnInit {
-
     songList: Song[];
     playList: Song[];
     currentIndex: number;
     currentSong: Song;
 
     sliderValue = 35; //一开始handle 也就是圆点的位置
-    bufferOffset = 70;  //一开始 灰色缓冲的位置
+    bufferOffset = 70; //一开始 灰色缓冲的位置
 
     /**
      *        注意这里的绑定的方式， 只有 audioEl才能调动 play() 方法进行播放，
@@ -30,20 +36,27 @@ export class WyPlayerComponent implements OnInit {
                     }
                 就会得到 WyPlayerComponent.html:63 ERROR TypeError: this.audio.play is not a function
      */
-    @ViewChild('audio', { static: true}) private audio: ElementRef;
-    private audioEl: HTMLAudioElement;   // 原生的 DOM 对象
+    @ViewChild("audio", { static: true }) private audio: ElementRef;
+    private audioEl: HTMLAudioElement; // 原生的 DOM 对象
 
-    constructor(
-        private store$: Store<AppStoreModule>
-    ) {
+    constructor(private store$: Store<AppStoreModule>) {
         const appStore$ = this.store$.pipe(select(getPlayer));
 
-        appStore$.pipe(select(getSongList)).subscribe( list => this.watchList(list, 'songList'));
-        appStore$.pipe(select(getPlayList)).subscribe( list => this.watchList(list, 'playList'));
-        appStore$.pipe(select(getCurrentIndex)).subscribe( index => this.watchCurrentIndex(index));
-        appStore$.pipe(select(getPlayMode)).subscribe(mode => this.watchPlayMode(mode));
-        appStore$.pipe(select(getCurrentSong)).subscribe(song => this.watchCurrentSong(song));
-
+        appStore$
+            .pipe(select(getSongList))
+            .subscribe((list) => this.watchList(list, "songList"));
+        appStore$
+            .pipe(select(getPlayList))
+            .subscribe((list) => this.watchList(list, "playList"));
+        appStore$
+            .pipe(select(getCurrentIndex))
+            .subscribe((index) => this.watchCurrentIndex(index));
+        appStore$
+            .pipe(select(getPlayMode))
+            .subscribe((mode) => this.watchPlayMode(mode));
+        appStore$
+            .pipe(select(getCurrentSong))
+            .subscribe((song) => this.watchCurrentSong(song));
 
         /**
          *         // following is not working under @ngrx/store-devtool@8.6.0 only for 8.3.0
@@ -89,11 +102,16 @@ export class WyPlayerComponent implements OnInit {
         this.currentSong = song;
     }
 
-    onCanPlay(){
+    onCanPlay() {
         this.play();
     }
 
-    private play(){
+    private play() {
         this.audioEl.play();
+    }
+
+    // 取值器
+    get picUrl(): string {
+        return this.currentSong ? this.currentSong.al.picUrl : '//s4.music.126.net/style/web2/img/default/default_album.jpg';
     }
 }

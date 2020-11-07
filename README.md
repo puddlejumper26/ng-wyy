@@ -70,7 +70,7 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 ## 4.2 NgRx
 - `createReducer` & `Action`- [player.reducer.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/store/reducer/play.reducer.ts)
 - `createAction` & `props` - [player.actions.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/store/actions/player.actions.ts)
-- `createSelector`   - [player.selector.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/store/selectors/player.selector.ts)
+- `createSelector` | `createFeatureSelector`  - [player.selector.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/store/selectors/player.selector.ts)
 - `Store` | `select` - [wy-player.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
 
 
@@ -165,14 +165,15 @@ node ./app.js
 - components / services / directives / etc.
   - Settings
   - `index.ts`
-  - `player.reducer.ts`
+  - `player.actions.ts` | `player.reducer.ts` | `player.selector.ts`
   - `player-type.ts`
-  - `player.actions.ts`
-  - `player.selector.ts`
   -
   - Playing music
   - `home.component.ts`
-  - `wy-player.component.ts`
+  - `wy-player.component.ts` | `wy-player.component.html`
+  -
+  - Displaying pic, time, etc on the bottom slider bar
+  -
 
 
 
