@@ -9,5 +9,6 @@ import { NgZorroAntdModule } from "ng-zorro-antd";
 @NgModule({
     imports: [CommonModule, FormsModule, NgZorroAntdModule, WyUiModule],
     exports: [CommonModule, FormsModule, NgZorroAntdModule, WyUiModule],
+    declarations: [],
 })
 export class ShareModule {}

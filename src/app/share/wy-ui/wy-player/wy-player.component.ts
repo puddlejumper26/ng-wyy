@@ -19,13 +19,20 @@ import { AppStoreModule } from "./../../../store/index";
     styleUrls: ["./wy-player.component.less"],
 })
 export class WyPlayerComponent implements OnInit {
+
+    sliderValue = 35; //一开始handle 也就是圆点的位置
+    bufferOffset = 70; //一开始 灰色缓冲的位置
+
     songList: Song[];
     playList: Song[];
     currentIndex: number;
     currentSong: Song;
 
-    sliderValue = 35; //一开始handle 也就是圆点的位置
-    bufferOffset = 70; //一开始 灰色缓冲的位置
+    //歌曲播放总时长
+    duration: number;
+    //歌曲当下播放的时间
+    currentTime: number;
+
 
     /**
      *        注意这里的绑定的方式， 只有 audioEl才能调动 play() 方法进行播放，
@@ -99,7 +106,11 @@ export class WyPlayerComponent implements OnInit {
     }
     private watchCurrentSong(song: Song) {
         // console.log(4444, song);   //一开始是空的 undefined，点击播放之后才会有信息
-        this.currentSong = song;
+        // 先判断 song 是否存在， 不然直接写 运行时 会出现 song不存在的情况，然后报错
+        if(song){
+            this.currentSong = song;
+            this.duration = song.dt / 1000;     //dt 就是播放的时长，毫秒/1000 换算成秒，可以通过 log song 来看
+        }
     }
 
     onCanPlay() {
@@ -113,5 +124,10 @@ export class WyPlayerComponent implements OnInit {
     // 取值器
     get picUrl(): string {
         return this.currentSong ? this.currentSong.al.picUrl : '//s4.music.126.net/style/web2/img/default/default_album.jpg';
+    }
+
+    onTimeUpdate(e: Event){
+        // console.log(11111, (<HTMLAudioElement>e.target).currentTime); //这地方需要进行断言，不然 currentTime属性不存在
+        this.currentTime = (<HTMLAudioElement>e.target).currentTime;  // 这里取到的时间是 秒 ，注意和总时长 毫秒之间的统一
     }
 }

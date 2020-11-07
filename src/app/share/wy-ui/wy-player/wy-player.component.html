@@ -36,7 +36,7 @@
                         <app-wy-slider [bufferOffset]="bufferOffset" [(ngModel)]='sliderValue'></app-wy-slider>
                     </div>
                     <!-- 歌曲的时间 -->
-                    <span class="time"> <em>02:11</em> / 04:35 </span>
+                    <span class="time"> <em>{{currentTime | formatTime}} </em> / {{duration | formatTime}} </span>
                 </div>
             </div>
 
@@ -62,9 +62,11 @@
     </div>
 
     <!-- Add audio to play songs -->
+    <!-- 当currentTime更新时会触发timeupdate事件, 用来更新上面当前播放的秒数 -->
     <audio
         #audio
         [src]="currentSong?.url"
         (canplay)="onCanPlay()"
+        (timeupdate) ="onTimeUpdate($event)"
     ></audio>
 </div>

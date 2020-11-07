@@ -64,8 +64,9 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 - `stopPropagation()` & `preventDefault()` - [wy-slider-helper.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-helper.ts)
 - `getClientRects()` & `getBoundingClientRect()`  - [wy-slider-helper.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-helper.ts)
 - `ownerDocument` & `defaultView` - [wy-slider-helper.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-helper.ts)
-- `Event` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
-- `canPlay` | `HTMLAudioElement` | `play()` - [wy-player.component.ts / html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
+- `Event` - [wy-slider-types.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-types.ts) | [wy-player.component.ts / html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
+- `canPlay` | `timeupdate` - [wy-player.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.html)
+-  `HTMLAudioElement` | `play()` - [wy-player.component.ts / html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
 
 ## 4.2 NgRx
 - `createReducer` & `Action`- [player.reducer.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/store/reducer/play.reducer.ts)
