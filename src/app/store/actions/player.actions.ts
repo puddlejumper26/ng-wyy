@@ -8,8 +8,13 @@ import { Song } from './../../services/data-types/common.types';
 // 第一个参数是一个标识符，用来语义化这个是在干什么
 //在player模块下设置播放状态
 // props 用来接收一个对象 是一个 key string ，values any的对象
+// export const SetPlaying = createAction('[player] Set playing', props<{ playing: boolean}>());
+// export const SetPlayList = createAction('[player] Set playList', props<{ list: Song[]}>());
+// export const SetSongList = createAction('[player] Set songList', props<{ list: Song[]}>());
+// export const SetPlayMode = createAction('[player] Set playMode', props<{ mode: PlayMode}>());
+// export const SetCurrentIndex = createAction('[player] Set currentIndex', props<{ index: number}>());
 export const SetPlaying = createAction('[player] Set playing', props<{ playing: boolean}>());
-export const SetPlayList = createAction('[player] Set playList', props<{ list: Song[]}>());
-export const SetSongList = createAction('[player] Set songList', props<{ list: Song[]}>());
-export const SetPlayMode = createAction('[player] Set playMode', props<{ mode: PlayMode}>());
-export const SetCurrentIndex = createAction('[player] Set currentIndex', props<{ index: number}>());
+export const SetPlayList = createAction('[player] Set playList', props<{ playList: Song[]}>());
+export const SetSongList = createAction('[player] Set songList', props<{ songList: Song[]}>());
+export const SetPlayMode = createAction('[player] Set playMode', props<{ playMode: PlayMode}>());
+export const SetCurrentIndex = createAction('[player] Set currentIndex', props<{ currentIndex: number}>());

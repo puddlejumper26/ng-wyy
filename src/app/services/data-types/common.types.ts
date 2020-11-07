@@ -27,6 +27,7 @@ export type Song = {
     dt: number; // play time
     id: number;
     name: string;
+    url: string;
 };
 
 // 歌单数据类型

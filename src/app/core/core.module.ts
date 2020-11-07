@@ -24,7 +24,8 @@ registerLocaleData(zh);
         ServicesModule,
         ShareModule,
         AppStoreModule,
-        AppRoutingModule, /*put at the end in order for the app running*/
+
+        AppRoutingModule, /* !!!!! put at the end in order for the app running !!!!!*/
     ],
     exports: [ShareModule, AppRoutingModule],
     providers: [{ provide: NZ_I18N, useValue: zh_CN }],

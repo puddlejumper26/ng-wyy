@@ -9,13 +9,14 @@ import { environment } from '../environments/environment';
 
 @NgModule({
     declarations: [AppComponent],
-    imports: [CoreModule, StoreModule.forRoot(reducers, {
-      metaReducers,
-      runtimeChecks: {
-        strictStateImmutability: true,
-        strictActionImmutability: true
-      }
-    }), StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })],
+    imports: [CoreModule],
+    // imports: [CoreModule, StoreModule.forRoot(reducers, {
+    //   metaReducers,
+    //   runtimeChecks: {
+    //     strictStateImmutability: true,
+    //     strictActionImmutability: true
+    //   }
+    // }), StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

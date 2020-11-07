@@ -34,11 +34,16 @@ const reducer = createReducer(
     initialState,
     // on是注册一系列动作的, 第二格参数是一个函数，接收一个state，返回一个新的state
     //执行 SetPlaying 这个动作之后，修改state数据，返回一个新的state状态，这样就不会和引用类型的冲突
+    // on(SetPlaying, (state, {playing}) => ({ ...state, playing})),
+    // on(SetPlayList, (state, {list}) => ({ ...state, playList: list})),  //值是 list
+    // on(SetSongList, (state, {list}) => ({ ...state, songList: list})),
+    // on(SetPlayMode, (state, {mode}) => ({ ...state, playMode: mode})),
+    // on(SetCurrentIndex, (state, {index}) => ({ ...state, currentIndex: index})),
     on(SetPlaying, (state, {playing}) => ({ ...state, playing})),
-    on(SetPlayList, (state, {list}) => ({ ...state, playList: list})),  //值是 list
-    on(SetSongList, (state, {list}) => ({ ...state, songList: list})),
-    on(SetPlayMode, (state, {mode}) => ({ ...state, playMode: mode})),
-    on(SetCurrentIndex, (state, {index}) => ({ ...state, currentIndex: index})),
+    on(SetPlayList, (state, {playList}) => ({ ...state, playList})),  //值是 list
+    on(SetSongList, (state, {songList}) => ({ ...state, songList})),
+    on(SetPlayMode, (state, {playMode}) => ({ ...state, playMode})),
+    on(SetCurrentIndex, (state, {currentIndex}) => ({ ...state, currentIndex})),
 )
 
 //https://next.ngrx.io/guide/store/

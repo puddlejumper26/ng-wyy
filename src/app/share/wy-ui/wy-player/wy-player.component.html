@@ -58,4 +58,11 @@
             </div>
         </div>
     </div>
+
+    <!-- Add audio to play songs -->
+    <audio
+        #audio
+        [src]="currentSong?.url"
+        (canplay)="onCanPlay()"
+    ></audio>
 </div>

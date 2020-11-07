@@ -1,9 +1,14 @@
-import { createSelector } from '@ngrx/store';
-import { PlayState } from './../reducers/player.reducer';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { PlayState } from '../reducers/player.reducer';
 
 
 // 首先要拿到 state 里的所有的数据
 const selectPlayerStates = (state: PlayState) => state;
+
+// 使用这个方法来拿到 'player' 是因为@ngrx/store-devtool@8.6.0
+//  注意 这里的 'player' 要和 index.ts 中的 StoreModule.forRoot({ player: playerReducer} 中的参数保持一致
+export const getPlayer = createFeatureSelector<PlayState>('player');
+
 // 第二个参数是一个函数，获取playing数据的selector
 export const getPlaying = createSelector(selectPlayerStates, (state: PlayState) => state.playing);
 export const getPlayList = createSelector(selectPlayerStates, (state: PlayState) => state.playList);

@@ -65,11 +65,13 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 - `getClientRects()` & `getBoundingClientRect()`  - [wy-slider-helper.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-helper.ts)
 - `ownerDocument` & `defaultView` - [wy-slider-helper.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-helper.ts)
 - `Event` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
+- `canPlay` | `HTMLAudioElement` | `play()` - [wy-player.component.ts / html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
 
-## 4.2 NGRX
+## 4.2 NgRx
 - `createReducer` & `Action`- [player.reducer.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/store/reducer/play.reducer.ts)
 - `createAction` & `props` - [player.actions.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/store/actions/player.actions.ts)
 - `createSelector`   - [player.selector.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/store/selectors/player.selector.ts)
+- `Store` | `select` - [wy-player.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
 
 
 
@@ -161,10 +163,16 @@ node ./app.js
 ## 5.8 Home page bottom section - Player - play, next, previous, volumn | NGRX 应用
 - [play, next, previous, volumn | NGRX 应用 ](https://github.com/puddlejumper26/ng-wyy/issues/9)
 - components / services / directives / etc.
+  - Settings
   - `index.ts`
   - `player.reducer.ts`
   - `player-type.ts`
   - `player.actions.ts`
+  - `player.selector.ts`
+  -
+  - Playing music
+  - `home.component.ts`
+  - `wy-player.component.ts`
 
 
 

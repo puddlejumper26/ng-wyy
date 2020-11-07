@@ -1,7 +1,10 @@
+import { SetPlayList, SetCurrentIndex, SetSongList } from './../../store/actions/player.actions';
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { Store } from '@ngrx/store';
 import { NzCarouselComponent } from "ng-zorro-antd";
 import { map } from "rxjs/internal/operators";
+import { AppStoreModule } from 'src/app/store';
 
 import {
     Banner,
@@ -11,6 +14,7 @@ import {
     Song,
 } from "./../../services/data-types/common.types";
 import { SheetService } from "./../../services/sheet.service";
+import { playerReducer } from 'src/app/store/reducers/player.reducer';
 
 @Component({
     selector: "app-home",
@@ -31,7 +35,8 @@ export class HomeComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
-        private sheetServe: SheetService
+        private sheetServe: SheetService,
+        private store$: Store<AppStoreModule>, // Observable
     ) {
         //这里使用了 解构， 注意要用 ()， ([banners, hotTags, songSheetList, singers])
         this.route.data
@@ -60,8 +65,20 @@ export class HomeComponent implements OnInit {
      */
     onPlaySheet(id: number) {
         // console.log(11111, id);
-        this.sheetServe.playSheet(id).subscribe((res) => {
-            console.log(111, res);
+        this.sheetServe.playSheet(id).subscribe((list) => {
+            // console.log(111, list);
+
+            // 播放歌曲，需要执行 player.reducer.ts中的 playList, songList currentIndex
+            //结束下面的三行 设定代码， 之后 reducer 里面的 那三个值就会改变， 分别会返回一个新的 state
+            // 这时候刷新页面，控制台看 redux 标签，可以看见下面的状态，可以发现 state的值已经发生了改变
+            // 接下来就要在 wy-player 中监听 三个值的变化
+
+            // this.store$.dispatch(SetSongList({ list: list}));
+            // this.store$.dispatch(SetPlayList({ list: list}));
+            // this.store$.dispatch(SetCurrentIndex({ index: 0}));
+            this.store$.dispatch(SetSongList({ songList: list}));
+            this.store$.dispatch(SetPlayList({ playList: list}));
+            this.store$.dispatch(SetCurrentIndex({ currentIndex: 0})); // default to play the first song
         });
     }
 }

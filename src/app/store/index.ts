@@ -5,14 +5,15 @@ import { StoreModule } from '@ngrx/store';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-
-
+// /**
+//  *           需要导入到 CoreModule 中
+//  */
 @NgModule({
   declarations: [],
   imports: [
-    CommonModule,
+    // CommonModule,
     //https://next.ngrx.io/guide/store/configuration/runtime-checks#configuring-runtime-checks
-    StoreModule.forRoot({ play: playerReducer}, {
+    StoreModule.forRoot({ player: playerReducer}, {
       //检测这些操作是否合法
       runtimeChecks: {
         strictStateImmutability: true,
@@ -29,7 +30,6 @@ import { CommonModule } from '@angular/common';
   ]
 })
 export class AppStoreModule { }
-
 
 /**
  @NgModule({
