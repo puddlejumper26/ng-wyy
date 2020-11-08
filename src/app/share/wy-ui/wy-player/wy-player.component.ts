@@ -20,8 +20,8 @@ import { Song } from "./../../../services/data-types/common.types";
     styleUrls: ["./wy-player.component.less"],
 })
 export class WyPlayerComponent implements OnInit {
-    sliderValue = 35; //一开始handle 也就是圆点的位置
-    bufferOffset = 70; //一开始 灰色缓冲的位置
+    percent = 0; //一开始handle 也就是圆点的位置
+    bufferPercent = 0; //一开始 灰色缓冲的位置
 
     songList: Song[];
     playList: Song[];
@@ -117,6 +117,15 @@ export class WyPlayerComponent implements OnInit {
         }
     }
 
+    onPercentChange(per) {
+        // console.log(1111, per);
+        // this.audioEl.currentTime = this.duration * (per / 100);
+        if (this.currentSong) { // 没有这里的判断，就会出现一拖动滑块，console里面会报错，因为currentTime 没有
+            const currentTime =  this.duration * (per / 100);
+            this.audioEl.currentTime = currentTime;
+          }
+    }
+
     onCanPlay() {
         this.songReady = true; // means now song could be played
         this.play(); // then play
@@ -196,5 +205,13 @@ export class WyPlayerComponent implements OnInit {
     onTimeUpdate(e: Event) {
         // console.log(11111, (<HTMLAudioElement>e.target).currentTime); //这地方需要进行断言，不然 currentTime属性不存在
         this.currentTime = (<HTMLAudioElement>e.target).currentTime; // 这里取到的时间是 秒 ，注意和总时长 毫秒之间的统一
+        this.percent = (this.currentTime / this.duration)*100; //move the slider according to the play time
+
+        const buffered = this.audioEl.buffered; //buffered 返回一个 timeRanges Gets a collection of buffered time ranges.
+        // buffered.end(0); // 缓冲区域结束的位置，也是一个时间
+
+        if(buffered.length && this.bufferPercent < 100){
+            this.bufferPercent = (buffered.end(0) / this.duration) * 100;
+        }
     }
 }

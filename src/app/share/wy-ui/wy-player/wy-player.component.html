@@ -33,7 +33,10 @@
                 <!-- 进度条 -->
                 <div class="bar">
                     <div class="slider-wrap">
-                        <app-wy-slider [bufferOffset]="bufferOffset" [(ngModel)]='sliderValue'></app-wy-slider>
+                        <!-- ngModelChange 会返回滚动条 的 百分比  下面直接用 ngModelChange会导致推动滑块的时候会即时跳到滑块所在的位置播放，效果不好-->
+                        <!-- 所以通过wyOnAfterChange来改善,这样在拖动滑块的时候，播放不会停止，只有当鼠标拖动结束的时候，才开始按照这个结束的位置开始更新播放 -->
+                        <!-- <app-wy-slider [bufferOffset]="bufferPercent" [(ngModel)]='percent' (ngModelChange)="onPercentChange($event)"></app-wy-slider> -->
+                        <app-wy-slider [bufferOffset]="bufferPercent" [(ngModel)]='percent' (wyOnAfterChange)="onPercentChange($event)"></app-wy-slider>
                     </div>
                     <!-- 歌曲的时间 -->
                     <span class="time"> <em>{{currentTime | formatTime}} </em> / {{duration | formatTime}} </span>

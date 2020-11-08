@@ -4,11 +4,13 @@ import {
     ChangeDetectorRef,
     Component,
     ElementRef,
+    EventEmitter,
     forwardRef,
     Inject,
     Input,
     OnDestroy,
     OnInit,
+    Output,
     ViewChild,
     ViewEncapsulation,
 } from "@angular/core";
@@ -85,6 +87,8 @@ export class WySliderComponent
     @Input() wy
     @Input() wyMin = 0;
     @Input() wyMax = 100;
+
+    @Output() wyOnAfterChange = new EventEmitter<SliderValue>();
 
     @ViewChild("wySlider", { static: true }) private wySlider: ElementRef;
 
@@ -226,7 +230,7 @@ export class WySliderComponent
 
     // 参数是 number， 是因为拿到的是一个位置
     private onDragStart(value: number) {
-        console.log(111111, value);
+        // console.log(111111, value);
         //需要绑定 move 和 end 事件
         this.toggleDragMoving(true);
         this.setValue(value); // 这样鼠标点击到进度条的任何一点， handle都会移动过去
@@ -238,7 +242,9 @@ export class WySliderComponent
             this.cdr.markForCheck();
         }
     }
+    // 在 onDragEnd的時候 需要改變歌曲的進度，参考onPercentChange（wy-player.component.ts）
     private onDragEnd() {
+        this.wyOnAfterChange.emit(this.value); //这里发射这个值，这样 和 wy-player.component.html中进行绑定
         this.toggleDragMoving(false);
         this.cdr.markForCheck(); //手动变更检测
     }
