@@ -1,4 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { DOCUMENT } from '@angular/common';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 
 import { AppStoreModule } from "./../../../store/index";
@@ -13,6 +14,7 @@ import {
 import { PlayMode } from "./player-type";
 import { SetCurrentIndex } from "./../../../store/actions/player.actions";
 import { Song } from "./../../../services/data-types/common.types";
+import { fromEvent, Subscription } from 'rxjs';
 
 @Component({
     selector: "app-wy-player",
@@ -37,6 +39,15 @@ export class WyPlayerComponent implements OnInit {
     playing = false;
     // 是否可以播放，默认不可以
     songReady = false;
+    // volumn
+    volumn = 60;
+    // whether to show volumn panel
+    showVolumnPanel = false;
+    // 是否点击的是音量面板的本身
+    selfClick = false;
+
+    // 绑定 Window 的 click 事件的
+    private winClick: Subscription;
 
     /**
      *        注意这里的绑定的方式， 只有 audioEl才能调动 play() 方法进行播放，
@@ -50,7 +61,10 @@ export class WyPlayerComponent implements OnInit {
     @ViewChild("audio", { static: true }) private audio: ElementRef;
     private audioEl: HTMLAudioElement; // 原生的 DOM 对象
 
-    constructor(private store$: Store<AppStoreModule>) {
+    constructor(
+        private store$: Store<AppStoreModule>,
+        @Inject(DOCUMENT) private doc: Document
+    ) {
         const appStore$ = this.store$.pipe(select(getPlayer));
 
         appStore$
@@ -117,13 +131,55 @@ export class WyPlayerComponent implements OnInit {
         }
     }
 
-    onPercentChange(per) {
+    onPercentChange(per: number) {
         // console.log(1111, per);
         // this.audioEl.currentTime = this.duration * (per / 100);
         if (this.currentSong) { // 没有这里的判断，就会出现一拖动滑块，console里面会报错，因为currentTime 没有
             const currentTime =  this.duration * (per / 100);
             this.audioEl.currentTime = currentTime;
           }
+    }
+
+    // 实时改变音量的大小
+    onVolumnChange(per: number){
+        this.audioEl.volume = per / 100;
+    }
+
+    // 点击播放器外部，隐藏音量控制， 点击播放器，不隐藏
+    toggleVolPanel(evt: MouseEvent){
+        evt.stopPropagation(); // stop bubbling
+        this.togglePanel()
+    }
+
+    togglePanel(){
+        this.showVolumnPanel = !this.showVolumnPanel; // click the 音量按钮 - 显示、隐藏
+        if(this.showVolumnPanel){
+            this.bindDocumentClickListener();
+        }else{
+            this.unbindDocumentClickListener();
+        }
+    }
+
+     //如果音量面板存在, 就绑定一个全局的click事件，在事件内部，判断selfClick是否存在
+    private bindDocumentClickListener(){
+        if(!this.winClick){
+            //赋值，在document 上绑定一个 click事件
+            this.winClick = fromEvent(this.doc, 'click').subscribe(()=>{
+                if(!this.selfClick){  //说明点击了播放器以外的部分
+                    this.showVolumnPanel = false;
+                    this.unbindDocumentClickListener();
+                }
+                this.selfClick = false;
+            })
+        }
+    }
+
+    //否则就解绑这个事件
+    private unbindDocumentClickListener(){
+        if(this.winClick){
+            this.winClick.unsubscribe();
+            this.winClick = null;
+        }
     }
 
     onCanPlay() {
