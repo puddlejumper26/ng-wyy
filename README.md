@@ -66,7 +66,7 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 - `ownerDocument` & `defaultView` - [wy-slider-helper.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-helper.ts)
 - `Event` - [wy-slider-types.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-types.ts) | [wy-player.component.ts / html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
 - `canPlay` | `timeupdate` - [wy-player.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.html)
--  `HTMLAudioElement` | `play()` - [wy-player.component.ts / html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
+-  `HTMLAudioElement` | `play()` | `pause()` | `currentTime`- [wy-player.component.ts / html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
 
 ## 4.2 NgRx
 - `createReducer` & `Action`- [player.reducer.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/store/reducer/play.reducer.ts)
@@ -174,8 +174,11 @@ node ./app.js
   - `wy-player.component.ts` | `wy-player.component.html`
   -
   - Displaying pic, time, etc on the bottom slider bar
+  - `format-time.pipe.ts`
+  - `wy-player.component.html` | `wy-player.component.ts` | `wy-player.module.ts`
   -
-
+  - Next, Previous, Play, Pause button
+  - `wy-player.component.ts` | `wy-player.component.html`
 
 
 # 6.0 Final Demo

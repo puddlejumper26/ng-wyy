@@ -1,8 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 
-import { PlayMode } from "./player-type";
-import { Song } from "./../../../services/data-types/common.types";
+import { AppStoreModule } from "./../../../store/index";
 import {
     getPlayList,
     getCurrentIndex,
@@ -11,7 +10,9 @@ import {
     getPlayMode,
     getCurrentSong,
 } from "./../../../store/selectors/player.selector";
-import { AppStoreModule } from "./../../../store/index";
+import { PlayMode } from "./player-type";
+import { SetCurrentIndex } from "./../../../store/actions/player.actions";
+import { Song } from "./../../../services/data-types/common.types";
 
 @Component({
     selector: "app-wy-player",
@@ -19,7 +20,6 @@ import { AppStoreModule } from "./../../../store/index";
     styleUrls: ["./wy-player.component.less"],
 })
 export class WyPlayerComponent implements OnInit {
-
     sliderValue = 35; //一开始handle 也就是圆点的位置
     bufferOffset = 70; //一开始 灰色缓冲的位置
 
@@ -33,6 +33,10 @@ export class WyPlayerComponent implements OnInit {
     //歌曲当下播放的时间
     currentTime: number;
 
+    // 播放状态，是否在播放，默认没有  , 注意 在 reducer中还有一个 playing， 不要混淆
+    playing = false;
+    // 是否可以播放，默认不可以
+    songReady = false;
 
     /**
      *        注意这里的绑定的方式， 只有 audioEl才能调动 play() 方法进行播放，
@@ -107,27 +111,90 @@ export class WyPlayerComponent implements OnInit {
     private watchCurrentSong(song: Song) {
         // console.log(4444, song);   //一开始是空的 undefined，点击播放之后才会有信息
         // 先判断 song 是否存在， 不然直接写 运行时 会出现 song不存在的情况，然后报错
-        if(song){
+        if (song) {
             this.currentSong = song;
-            this.duration = song.dt / 1000;     //dt 就是播放的时长，毫秒/1000 换算成秒，可以通过 log song 来看
+            this.duration = song.dt / 1000; //dt 就是播放的时长，毫秒/1000 换算成秒，可以通过 log song 来看
         }
     }
 
     onCanPlay() {
+        this.songReady = true; // means now song could be played
+        this.play(); // then play
+    }
+
+    // Play or Pause music
+    onToggle() {
+        // home.component.ts中set list，但是并不是现在就播放 ,
+        if (!this.currentSong) {
+            if (this.playList.length) {
+                // 并且播放列表不为空
+                // this.store$.dispatch(SetCurrentIndex({ currentIndex: 0 })); //播放第一首歌
+                // this.songReady = false;
+                this.updateIndex(0); //播放第一首歌
+            }
+        } else {
+            // home.component.ts中set list 并且播放
+            if (this.songReady) {
+                this.playing = !this.playing;
+                if (this.playing) {
+                    this.audioEl.play();
+                } else {
+                    this.audioEl.pause();
+                }
+            }
+        }
+    }
+
+    // play previous song
+    onPrev(index: number) {
+        if (!this.songReady) return;
+        if (this.playList.length === 1) {
+            this.loop();
+        } else {
+            // 如果小于等于0，就播放播放列表中的最后一首
+            const newIndex = index <= 0 ? this.playList.length - 1 : index;
+            this.updateIndex(newIndex);
+        }
+    }
+
+    // play next song
+    onNext(index: number) {
+        if (!this.songReady) return;
+        if (this.playList.length === 1) {
+            this.loop();
+        } else {
+            // 如果大于播放列表，就播放第一首歌曲
+            const newIndex = index >= this.playList.length ? 0 : index;
+            this.updateIndex(newIndex);
+        }
+    }
+
+    // loop the song
+    private loop() {
+        this.audioEl.currentTime = 0;
         this.play();
+    }
+
+    private updateIndex(index: number) {
+        // 更新索引
+        this.store$.dispatch(SetCurrentIndex({ currentIndex: index })); //播放第index首歌
+        this.songReady = false;
     }
 
     private play() {
         this.audioEl.play();
+        this.playing = true; // means now is playing, is a status
     }
 
     // 取值器
     get picUrl(): string {
-        return this.currentSong ? this.currentSong.al.picUrl : '//s4.music.126.net/style/web2/img/default/default_album.jpg';
+        return this.currentSong
+            ? this.currentSong.al.picUrl
+            : "//s4.music.126.net/style/web2/img/default/default_album.jpg";
     }
 
-    onTimeUpdate(e: Event){
+    onTimeUpdate(e: Event) {
         // console.log(11111, (<HTMLAudioElement>e.target).currentTime); //这地方需要进行断言，不然 currentTime属性不存在
-        this.currentTime = (<HTMLAudioElement>e.target).currentTime;  // 这里取到的时间是 秒 ，注意和总时长 毫秒之间的统一
+        this.currentTime = (<HTMLAudioElement>e.target).currentTime; // 这里取到的时间是 秒 ，注意和总时长 毫秒之间的统一
     }
 }
