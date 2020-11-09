@@ -193,10 +193,14 @@ node ./app.js
 
 ## 5.9 Home page bottom section - Playlist and lyrics
   - components / services / directives / etc.
+  - Playlist
   - `wy-player-panel.component`
   - `wy-player.component.`
+  - `npm install @better-scroll/core --save`
   - ` ng g c share/wy-ui/wy-player/wy-scroll -s -t -c=OnPush -v=None`  - 内联样式，OnPush策略，视图封装
   - `wy-scroll.component`
+  - `npm install @better-scroll/scroll-bar --save` && `npm install @better-scroll/mouse-wheel --save`
+  -
 
 
 # 6.0 Final Demo

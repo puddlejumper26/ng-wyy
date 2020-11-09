@@ -13,6 +13,15 @@ import {
     Output,
 } from "@angular/core";
 import BScroll from "@better-scroll/core";
+import ScrollBar from "@better-scroll/scroll-bar";
+import MouseWheel from '@better-scroll/mouse-wheel';
+
+//https://better-scroll.github.io/docs/en-US/plugins/scroll-bar.html#usage
+// 在 ngAfterViewInit 中 初始化
+BScroll.use(ScrollBar);
+
+//https://better-scroll.github.io/docs/en-US/plugins/mouse-wheel.html#basic-usage
+BScroll.use(MouseWheel);
 
 @Component({
     selector: "app-wy-scroll",
@@ -33,9 +42,7 @@ import BScroll from "@better-scroll/core";
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class WyScrollComponent implements OnInit, AfterViewInit, OnChanges {
-
     @Input() data: any[];
     @Input() refreshDelay = 50; //延迟50毫秒刷新
 
@@ -51,25 +58,29 @@ export class WyScrollComponent implements OnInit, AfterViewInit, OnChanges {
 
     // 初始化插件
     ngAfterViewInit() {
-      // console.log(11111, this.wrapRef.nativeElement.offsetHeight);
-      this.bs = new BScroll(this.wrapRef.nativeElement, {
-        scrollbar: {
-          interactive: true
-        },
-        mouseWheel: {}
-     });
-     this.bs.on('scrollEnd', ({ y }) => this.onScrollEnd.emit(y));
+        // console.log(11111, this.wrapRef.nativeElement.offsetHeight);
+        this.bs = new BScroll(this.wrapRef.nativeElement, {
+            //https://better-scroll.github.io/docs/en-US/plugins/scroll-bar.html#scrollbar-options
+            //设置Scrollbar， 这一步在上一个commit中就做过了
+            scrollbar: {
+                interactive: true,
+            },
+            // 设置鼠标滚轮，这一步在上一个commit中就做过了， 都用默认值就好了
+            mouseWheel: {},
+        });
+        this.bs.on("scrollEnd", ({ y }) => this.onScrollEnd.emit(y));
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if(changes['data']){      // 如果 data改变的话，就刷新一下
-          this.refreshScroll();
+        if (changes["data"]) {
+            // 如果 data改变的话，就刷新一下
+            this.refreshScroll();
         }
     }
 
-    private refresh(){
-      console.log('refresh');
-      this.bs.refresh();
+    private refresh() {
+        console.log("refresh");
+        this.bs.refresh();
     }
     //因为上面的ngAfterViewInit代码导致我们已进入页面，就初始化了BScroll，并且高度是0，所以这个时候是没法滚动的
     // 所以在面板显示的时候要刷新BScroll插件  使用 BScroll 提供的 refresh() 方法
@@ -82,5 +93,4 @@ export class WyScrollComponent implements OnInit, AfterViewInit, OnChanges {
             this.refresh();
         }, this.refreshDelay);
     }
-
 }
