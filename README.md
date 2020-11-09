@@ -3,17 +3,16 @@
 # 1.0 Description
 This is the Angular App Simulation of Netease Cloud Music, original please click [here](https://music.163.com/).
 
-# 2.0 Tech Stack
-- Angular 8.3.0 & Typescript
-- Ng-Zorro-Antd (Ant Design of Angular)
-  - https://ng.ant.design/docs/introduce/en
-- NGRX - framework for building reactive applications in Angular 状态管理
+# 2.0 Tech Stack && Libraries && Plugins
+- Angular 8.3.0 && Typescript && less
+- Ng-Zorro-Antd (Ant Design of Angular) https://ng.ant.design/docs/introduce/en
+- NgRx - framework for building reactive applications in Angular 状态管理
 - Minireset.css
   - npm install minireset.css
 - Netease Cloud Music API (Node.js API service)
   - https://github.com/Binaryify/NeteaseCloudMusicApi
   - [How To Install](https://github.com/puddlejumper26/ng-wyy/issues/2)
-
+- BetterScroll 2.0 (https://better-scroll.github.io/docs/en-US/)
 
 # 3.0 How to Use this APP
 - Start Netease Cloud Music as Server, this should be a separate folder
@@ -39,12 +38,13 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 - `set()` -  [sheet.vervice.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/sheet.service.ts)
 - `Resolve` - [home-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home-resolve.service.ts)
 - `encapsulation: ViewEncapsulation.None` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
-- `SimpleChanges` - [wy-slider-handle.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-handle.component.ts)
+- `SimpleChanges` - [wy-slider-handle.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-handle.component.ts) | [wy-player-panel.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player-panel/wy-player-panel.component.html)
 - `ElementRef` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 - `DOCUMENT` - [wy-slider-helper.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-helper.ts) | [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 - `ChangeDetectorRef` &  `markForCheck()` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 - `ControlValueAccessor` - `writeValue` | `registerOnChange` | `registerOnTouched` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 - `ngModelChange` - [wy-slider.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.html) | [wy-player.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.html)
+-
 
 ### 4.1.2 rxjs
 
@@ -55,6 +55,7 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 - `fromEvent` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts) | [wy-player.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
 - `distinctUntilChanged()` & `takeUntil()` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 - `merge()` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
+- `QueryList` & `frist` & `firstChange` - [wy-player-panel.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player-panel/wy-player-panel.component.ts)
 
 - `map()` - [home.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home.component.ts) | [home.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/home.service.ts) | [sheet.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/sheet.service.ts) | [singer.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/singer.service.ts) | [song.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/song.service.ts) | [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 - `pipe()` - [home-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home-resolve.service.ts) | [home.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home.component.ts) | [home.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/home.service.ts) | [sheet.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/sheet.service.ts) | [singer.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/singer.service.ts) | [song.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/song.service.ts) | [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
@@ -189,10 +190,13 @@ node ./app.js
   - Play Mode (loop, random,singleLoop)
   - `wy-player.component.html` | `wy-player.component.`
   - `array.ts` | `number.ts`
-  -
-  - Playlist and lyrics
+
+## 5.9 Home page bottom section - Playlist and lyrics
+  - components / services / directives / etc.
   - `wy-player-panel.component`
-  - `wy-player.component.
+  - `wy-player.component.`
+  - ` ng g c share/wy-ui/wy-player/wy-scroll -s -t -c=OnPush -v=None`  - 内联样式，OnPush策略，视图封装
+  - `wy-scroll.component`
 
 
 # 6.0 Final Demo

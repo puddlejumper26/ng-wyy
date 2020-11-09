@@ -57,7 +57,7 @@ export class WyPlayerComponent implements OnInit {
     // 是否可以播放，默认不可以
     songReady = false;
     // volumn
-    volumn = 60;
+    volumn = 10;
     // whether to show volumn panel
     showVolumnPanel = false;
     // 是否点击的是音量面板的本身
