@@ -32,7 +32,8 @@ export class SongService {
     // 参数是 单个的一首歌，也可以是歌曲组成的数组, 因为可以播放一个歌单，也可能是播放一首歌
     getSongList(songs: Song | Song[]): Observable<Song[]> {
         //  先不管传入是什么格式，都转换成数组
-        // slice() 避免引用的问题
+        // slice() 避免引用的问题,
+        // slice()是浅复制，所以相当于是songs数组的一个副本，但是地址不同，值得改变不会影响songs数组本身
         const songArr = Array.isArray(songs) ? songs.slice() : [songs];
         // 需要把songs的每一个id 组成一个 字符串
         const ids = songArr.map((item) => item.id).join(",");

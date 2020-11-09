@@ -1,5 +1,11 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, ElementRef, Inject, OnInit, ViewChild } from "@angular/core";
+import { DOCUMENT } from "@angular/common";
+import {
+    Component,
+    ElementRef,
+    Inject,
+    OnInit,
+    ViewChild,
+} from "@angular/core";
 import { select, Store } from "@ngrx/store";
 
 import { AppStoreModule } from "./../../../store/index";
@@ -12,9 +18,20 @@ import {
     getCurrentSong,
 } from "./../../../store/selectors/player.selector";
 import { PlayMode } from "./player-type";
-import { SetCurrentIndex } from "./../../../store/actions/player.actions";
+import {
+    SetCurrentIndex,
+    SetPlayList,
+    SetPlayMode,
+} from "./../../../store/actions/player.actions";
 import { Song } from "./../../../services/data-types/common.types";
-import { fromEvent, Subscription } from 'rxjs';
+import { fromEvent, Subscription } from "rxjs";
+import { shuffle } from 'src/app/utils/array';
+
+const modeTypes: PlayMode[] = [
+    { type: "loop", label: "循环" },
+    { type: "random", label: "随机" },
+    { type: "singleLoop", label: "单曲循环" },
+];
 
 @Component({
     selector: "app-wy-player",
@@ -48,6 +65,11 @@ export class WyPlayerComponent implements OnInit {
 
     // 绑定 Window 的 click 事件的
     private winClick: Subscription;
+
+    // 当前播放模式
+    currentMode: PlayMode; //当其发生变化时， watchPlayMode
+    // 点击模式图标的次数，默认一次都没点
+    modeCount = 0;
 
     /**
      *        注意这里的绑定的方式， 只有 audioEl才能调动 play() 方法进行播放，
@@ -120,8 +142,22 @@ export class WyPlayerComponent implements OnInit {
     }
     private watchPlayMode(mode: PlayMode) {
         // console.log(3333, mode);
-        // this.currentIndex = mode;
+        this.currentMode = mode;
+        if (this.songList) {
+            // slice()是浅复制，所以相当于是songList数组的一个副本，但是地址不同，值得改变不会影响songList数组本身
+            let list = this.songList.slice(); //建立一个副本
+            if (mode.type === "random") {
+                list = shuffle(this.songList);
+                // console.log(1111, list); //点击播放，然后点击转换就能够看出来了
+
+                // 传入最新的 list 和 当前播放的歌曲
+                this.updateCurrentIndex(list, this.currentSong);
+                // 这里dispatch 改变后的list，注意这时候正在播放的歌曲不能改变，所以要在前面添加 updateCurrentIndex
+                this.store$.dispatch(SetPlayList({ playList: list}));
+            }
+        }
     }
+
     private watchCurrentSong(song: Song) {
         // console.log(4444, song);   //一开始是空的 undefined，点击播放之后才会有信息
         // 先判断 song 是否存在， 不然直接写 运行时 会出现 song不存在的情况，然后报错
@@ -131,52 +167,69 @@ export class WyPlayerComponent implements OnInit {
         }
     }
 
+    // 当顺序打乱之后，要拿到当前播放的歌曲，在新的数组里面的索引
+    private updateCurrentIndex(list: Song[], currentSong: Song){
+        const newIndex = list.findIndex(item => item.id === currentSong.id);
+        this.store$.dispatch(SetCurrentIndex({ currentIndex: newIndex}));
+    }
+
+    // 改变状态
+    changeMode() {
+        const temp = modeTypes[++this.modeCount % 3];
+        // console.log(1111, temp);
+        // 这里set之后，在这里的watchPlayMode中就能监听的到, 然后其中的 the.currentMode = mode, 就会跟着改变
+        // 之后 html中的[ngClass]="currentMode.type" [title]="currentMode.label" 就会跟着改变
+        this.store$.dispatch(SetPlayMode({ playMode: temp }));
+    }
+
     onPercentChange(per: number) {
         // console.log(1111, per);
         // this.audioEl.currentTime = this.duration * (per / 100);
-        if (this.currentSong) { // 没有这里的判断，就会出现一拖动滑块，console里面会报错，因为currentTime 没有
-            const currentTime =  this.duration * (per / 100);
+        if (this.currentSong) {
+            // 没有这里的判断，就会出现一拖动滑块，console里面会报错，因为currentTime 没有
+            const currentTime = this.duration * (per / 100);
             this.audioEl.currentTime = currentTime;
-          }
+        }
     }
 
     // 实时改变音量的大小
-    onVolumnChange(per: number){
+    onVolumnChange(per: number) {
         this.audioEl.volume = per / 100;
     }
 
     // 点击播放器外部，隐藏音量控制， 点击播放器，不隐藏
-    toggleVolPanel(evt: MouseEvent){
+    toggleVolPanel(evt: MouseEvent) {
         evt.stopPropagation(); // stop bubbling
-        this.togglePanel()
+        this.togglePanel();
     }
 
-    togglePanel(){
+    togglePanel() {
         this.showVolumnPanel = !this.showVolumnPanel; // click the 音量按钮 - 显示、隐藏
-        if(this.showVolumnPanel){
+        if (this.showVolumnPanel) {
             this.bindDocumentClickListener();
-        }else{
+        } else {
             this.unbindDocumentClickListener();
         }
     }
 
-     //如果音量面板存在, 就绑定一个全局的click事件，在事件内部，判断selfClick是否存在
-    private bindDocumentClickListener(){
-        if(!this.winClick){
+    //如果音量面板存在, 就绑定一个全局的click事件，在事件内部，判断selfClick是否存在
+    private bindDocumentClickListener() {
+        if (!this.winClick) {
             //赋值，在document 上绑定一个 click事件
-            this.winClick = fromEvent(this.doc, 'click').subscribe(()=>{
-                if(!this.selfClick){  //说明点击了播放器以外的部分
+            this.winClick = fromEvent(this.doc, "click").subscribe(() => {
+                if (!this.selfClick) {
+                    //说明点击了播放器以外的部分
                     this.showVolumnPanel = false;
                     this.unbindDocumentClickListener();
                 }
                 this.selfClick = false;
-            })
+            });
         }
     }
 
     //否则就解绑这个事件
-    private unbindDocumentClickListener(){
-        if(this.winClick){
+    private unbindDocumentClickListener() {
+        if (this.winClick) {
             this.winClick.unsubscribe();
             this.winClick = null;
         }
@@ -234,6 +287,16 @@ export class WyPlayerComponent implements OnInit {
         }
     }
 
+    // When the song plays to the end, what next
+    onEnded(){
+        this.playing = false;
+        if(this.currentMode.type === 'singleLoop'){
+            this.loop();
+        }else{
+            this.onNext(this.currentIndex + 1);
+        }
+    }
+
     // loop the song
     private loop() {
         this.audioEl.currentTime = 0;
@@ -261,12 +324,12 @@ export class WyPlayerComponent implements OnInit {
     onTimeUpdate(e: Event) {
         // console.log(11111, (<HTMLAudioElement>e.target).currentTime); //这地方需要进行断言，不然 currentTime属性不存在
         this.currentTime = (<HTMLAudioElement>e.target).currentTime; // 这里取到的时间是 秒 ，注意和总时长 毫秒之间的统一
-        this.percent = (this.currentTime / this.duration)*100; //move the slider according to the play time
+        this.percent = (this.currentTime / this.duration) * 100; //move the slider according to the play time
 
         const buffered = this.audioEl.buffered; //buffered 返回一个 timeRanges Gets a collection of buffered time ranges.
         // buffered.end(0); // 缓冲区域结束的位置，也是一个时间
 
-        if(buffered.length && this.bufferPercent < 100){
+        if (buffered.length && this.bufferPercent < 100) {
             this.bufferPercent = (buffered.end(0) / this.duration) * 100;
         }
     }

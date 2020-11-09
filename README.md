@@ -66,7 +66,7 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 - `getClientRects()` & `getBoundingClientRect()`  - [wy-slider-helper.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-helper.ts)
 - `ownerDocument` & `defaultView` - [wy-slider-helper.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-helper.ts)
 - `Event` - [wy-slider-types.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-types.ts) | [wy-player.component.ts / html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
-- `canPlay` | `timeupdate` - [wy-player.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.html)
+- `canPlay` | `timeupdate` | `ended` - [wy-player.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.html)
 -  `HTMLAudioElement` | `play()` | `pause()` | `currentTime` | `buffered`- [wy-player.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
 
 ## 4.2 NgRx
@@ -74,8 +74,6 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 - `createAction` & `props` - [player.actions.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/store/actions/player.actions.ts)
 - `createSelector` | `createFeatureSelector`  - [player.selector.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/store/selectors/player.selector.ts)
 - `Store` | `select` - [wy-player.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
-
-
 
 ## 4.3 Ant Design Angular API
 - `[nzDotRender]` - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
@@ -186,7 +184,11 @@ node ./app.js
   - `wy-slider.component.ts`
   -
   - Volumn Bar
-  - `wy-player.component.html` | ``
+  - `wy-player.component.html` | `wy-player.component.`
+  -
+  - Play Mode (loop, random,singleLoop)
+  - `wy-player.component.html` | `wy-player.component.`
+  - `array.ts` | `number.ts`
 
 
 # 6.0 Final Demo
