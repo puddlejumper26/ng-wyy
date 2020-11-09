@@ -77,6 +77,11 @@ export class HomeComponent implements OnInit {
             // this.store$.dispatch(SetSongList({ list: list}));
             // this.store$.dispatch(SetPlayList({ list: list}));
             // this.store$.dispatch(SetCurrentIndex({ index: 0}));
+
+            //这里如果在测试的环境下，只需要歌单里面有3首歌就可以测试清除逻辑，那么可以用 slice
+            // this.store$.dispatch(SetSongList({ songList: list.slice(0,3)}));
+            // this.store$.dispatch(SetPlayList({ playList: list.slice(0,3)}));
+
             this.store$.dispatch(SetSongList({ songList: list}));
             this.store$.dispatch(SetPlayList({ playList: list}));
             this.store$.dispatch(SetCurrentIndex({ currentIndex: 0})); // default to play the first song

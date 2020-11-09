@@ -25,7 +25,7 @@ import {
 } from "./../../../store/actions/player.actions";
 import { Song } from "./../../../services/data-types/common.types";
 import { fromEvent, Subscription } from "rxjs";
-import { shuffle } from 'src/app/utils/array';
+import { shuffle } from "src/app/utils/array";
 
 const modeTypes: PlayMode[] = [
     { type: "loop", label: "循环" },
@@ -62,6 +62,8 @@ export class WyPlayerComponent implements OnInit {
     showVolumnPanel = false;
     // 是否点击的是音量面板的本身
     selfClick = false;
+    // whether to show the list panel
+    showPanel = false;
 
     // 绑定 Window 的 click 事件的
     private winClick: Subscription;
@@ -153,7 +155,7 @@ export class WyPlayerComponent implements OnInit {
                 // 传入最新的 list 和 当前播放的歌曲
                 this.updateCurrentIndex(list, this.currentSong);
                 // 这里dispatch 改变后的list，注意这时候正在播放的歌曲不能改变，所以要在前面添加 updateCurrentIndex
-                this.store$.dispatch(SetPlayList({ playList: list}));
+                this.store$.dispatch(SetPlayList({ playList: list }));
             }
         }
     }
@@ -168,9 +170,9 @@ export class WyPlayerComponent implements OnInit {
     }
 
     // 当顺序打乱之后，要拿到当前播放的歌曲，在新的数组里面的索引
-    private updateCurrentIndex(list: Song[], currentSong: Song){
-        const newIndex = list.findIndex(item => item.id === currentSong.id);
-        this.store$.dispatch(SetCurrentIndex({ currentIndex: newIndex}));
+    private updateCurrentIndex(list: Song[], currentSong: Song) {
+        const newIndex = list.findIndex((item) => item.id === currentSong.id);
+        this.store$.dispatch(SetCurrentIndex({ currentIndex: newIndex }));
     }
 
     // 改变状态
@@ -198,14 +200,33 @@ export class WyPlayerComponent implements OnInit {
     }
 
     // 点击播放器外部，隐藏音量控制， 点击播放器，不隐藏
-    toggleVolPanel(evt: MouseEvent) {
-        evt.stopPropagation(); // stop bubbling
-        this.togglePanel();
+    toggleVolPanel() {
+        // evt.stopPropagation(); // stop bubbling
+        this.togglePanel("showVolumnPanel");
     }
 
-    togglePanel() {
-        this.showVolumnPanel = !this.showVolumnPanel; // click the 音量按钮 - 显示、隐藏
-        if (this.showVolumnPanel) {
+    // 控制歌词面板是否显示
+    toggleListPanel() {
+        if (this.songList.length) {
+            // evt.stopPropagation(); // stop bubbling
+            this.togglePanel("showPanel");
+            // this.toggleListDisplayPanel()
+        }
+    }
+
+    togglePanel(type: string) {
+        this[type] = !this[type];
+        // this.showVolumnPanel = !this.showVolumnPanel; // click the 音量按钮 - 显示、隐藏
+        if (this.showVolumnPanel || this.showPanel) {
+            this.bindDocumentClickListener();
+        } else {
+            this.unbindDocumentClickListener();
+        }
+    }
+
+    toggleListDisplayPanel() {
+        this.showPanel = !this.showPanel
+        if (this.showPanel) {
             this.bindDocumentClickListener();
         } else {
             this.unbindDocumentClickListener();
@@ -220,6 +241,7 @@ export class WyPlayerComponent implements OnInit {
                 if (!this.selfClick) {
                     //说明点击了播放器以外的部分
                     this.showVolumnPanel = false;
+                    this.showPanel = false;
                     this.unbindDocumentClickListener();
                 }
                 this.selfClick = false;
@@ -238,6 +260,11 @@ export class WyPlayerComponent implements OnInit {
     onCanPlay() {
         this.songReady = true; // means now song could be played
         this.play(); // then play
+    }
+
+    // 在播放列表里通过点击来改变播放的歌曲
+    onChangeSong(song: Song){
+        this.updateCurrentIndex(this.playList, song);
     }
 
     // Play or Pause music
@@ -288,11 +315,11 @@ export class WyPlayerComponent implements OnInit {
     }
 
     // When the song plays to the end, what next
-    onEnded(){
+    onEnded() {
         this.playing = false;
-        if(this.currentMode.type === 'singleLoop'){
+        if (this.currentMode.type === "singleLoop") {
             this.loop();
-        }else{
+        } else {
             this.onNext(this.currentIndex + 1);
         }
     }

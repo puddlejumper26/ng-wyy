@@ -1,0 +1,51 @@
+<!-- 这里的show就让这个panel显示 -->
+<div class="play-panel" [class.show]="show">
+    <div class="hd">
+        <div class="hdc">
+            <h4>播放列表(<span>{{songList.length}}</span>)</h4>
+            <div class="add-all">
+                <i class="icon" title="收藏全部"></i>收藏全部
+            </div>
+            <!-- 中间的分割线  -->
+            <span class="line"></span>
+            <div class="clear-all">
+                <i class="icon trush" title="清除"></i>清除
+            </div>
+            <p class="playing-name">{{currentSong?.name}}</p>
+            <i class="icon close" (click)="onClose.emit()"></i>关闭
+        </div>
+    </div>
+
+
+    <!-- 列表的样式 -->
+    <div class="bd">
+        <img src="//music.163.com/api/img/blur/109951163826278397" class="imgbg">
+        <div class="msk"></div>
+        <div class="list-wrap">
+            <ul>
+                <!-- 当前的索引等于 i 的时候， 就加一个 current 的样式 左边的红色箭头，黑色的背景-->
+                <li *ngFor="let item of songList; index as i" [class.current]="currentIndex === i" (click)="onChangeSong.emit(item)">
+                    <i class="col arrow"></i>
+                    <div class="col name ellipsis">{{item.name}}</div>
+                    <div class="col icons">
+                        <i class="ico like" title="收藏"></i>
+                        <i class="ico share" title="分享"></i>
+                        <i class="ico trush" title="删除"></i>
+                    </div>
+                    <div class="singers clearfix ellipsis">
+                        <div class="singer-item" *ngFor="let singer of item.ar; last as isLast">
+                            <a class="col ellipsis">{{singer.name}}</a>
+                            <span [hidden]="isLast">/</span>
+                        </div>
+                    </div>
+                    <div class="col duration">{{(item.dt / 1000) | formatTime}}</div>
+                    <div class="col link"></div>
+                </li>
+            </ul>
+        </div>
+
+
+
+        <ul>歌词</ul>
+    </div>
+</div>

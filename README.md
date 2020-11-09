@@ -189,6 +189,10 @@ node ./app.js
   - Play Mode (loop, random,singleLoop)
   - `wy-player.component.html` | `wy-player.component.`
   - `array.ts` | `number.ts`
+  -
+  - Playlist and lyrics
+  - `wy-player-panel.component`
+  - `wy-player.component.
 
 
 # 6.0 Final Demo
