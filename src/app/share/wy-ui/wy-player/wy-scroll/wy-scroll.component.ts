@@ -52,11 +52,12 @@ export class WyScrollComponent implements OnInit, AfterViewInit, OnChanges {
 
     @ViewChild("wrap", { static: true }) private wrapRef: ElementRef;
 
-    constructor() {}
+    // 这里用 readonly 或者 public ，这样才能使用 el
+    constructor(readonly el: ElementRef) {}
 
     ngOnInit() {}
 
-    // 初始化插件
+    // 初始化BScroll插件
     ngAfterViewInit() {
         // console.log(11111, this.wrapRef.nativeElement.offsetHeight);
         this.bs = new BScroll(this.wrapRef.nativeElement, {
@@ -68,6 +69,12 @@ export class WyScrollComponent implements OnInit, AfterViewInit, OnChanges {
             // 设置鼠标滚轮，这一步在上一个commit中就做过了， 都用默认值就好了
             mouseWheel: {},
         });
+
+        // 这里用 on 的方法 监听 scrollEnd 事件，
+        // https://better-scroll.github.io/docs/zh-CN/guide/base-scroll-api.html#%E6%96%B9%E6%B3%95 查找 on 的 方法和scrollEnd的钩子函数
+        //为 wy-player-panel.component.ts 中的 scrollToCurrent 服务的
+        // 会把当前的位置发送出来， 在 wy-player-panel.component.html中就可以监听这个事件
+        // y 代表 纵坐标， 如果写成 x 那就是计算 横坐标, 也可以同时 {x,y}
         this.bs.on("scrollEnd", ({ y }) => this.onScrollEnd.emit(y));
     }
 
@@ -76,6 +83,29 @@ export class WyScrollComponent implements OnInit, AfterViewInit, OnChanges {
             // 如果 data改变的话，就刷新一下
             this.refreshScroll();
         }
+    }
+
+
+    /**  怎么使用 apply
+     * var person = {
+        fullName: function() {
+            return this.firstName + " " + this.lastName;
+        }
+      }
+      var person1 = {
+        firstName: "Mary",
+        lastName: "Doe"
+      }
+      person.fullName.apply(person1);  // Will return "Mary Doe"
+     */
+
+
+     // Spread Operator
+     // https://medium.com/coding-at-dawn/how-to-use-the-spread-operator-in-javascript-b9e4a8b06fab
+    scrollToElement(...args){
+        // 这里把到时候调用时候的参数 通过 arg，都直接传进去
+        console.log(11111, ...args)
+        this.bs.scrollToElement.apply(this.bs, args)
     }
 
     private refresh() {

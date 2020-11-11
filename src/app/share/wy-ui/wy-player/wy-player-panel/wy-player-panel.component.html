@@ -21,7 +21,7 @@
     <div class="bd">
         <img src="//music.163.com/api/img/blur/109951163826278397" class="imgbg">
         <div class="msk"></div>
-        <app-wy-scroll class="list-wrap" [data]="songList">
+        <app-wy-scroll class="list-wrap" [data]="songList" (onScrollEnd)="scrollY = $event">
             <ul>
                 <!-- 当前的索引等于 i 的时候， 就加一个 current 的样式 左边的红色箭头，黑色的背景-->
                 <li *ngFor="let item of songList; index as i" [class.current]="currentIndex === i" (click)="onChangeSong.emit(item)">
