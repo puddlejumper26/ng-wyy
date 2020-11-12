@@ -102,9 +102,38 @@ export class WyScrollComponent implements OnInit, AfterViewInit, OnChanges {
 
      // Spread Operator
      // https://medium.com/coding-at-dawn/how-to-use-the-spread-operator-in-javascript-b9e4a8b06fab
+     /**
+      *            ...args
+      *
+      * 11111
+      * <li _ngcontent-yig-c7 class=​"ng-star-inserted current" style=​"pointer-events:​ auto;​">​
+      *  <i _ngcontent-yig-c7 class=​"col arrow">​</i>​
+      * <div _ngcontent-yig-c7 class=​"col name ellipsis">​猜不透（翻自 OralG） ​</div>​
+      * <div _ngcontent-yig-c7 class=​"col icons">​…​</div>
+      * ​<div _ngcontent-yig-c7 class=​"singers clearfix ellipsis">​…​</div>
+      * ​<div _ngcontent-yig-c7 class=​"col duration">​0:31​</div>​
+      * <div _ngcontent-yig-c7 class=​"col link">​</div>​</li>​
+      *
+      * 300 false false
+      *
+      *               args
+      *
+      * 22222
+      * (4) [li.ng-star-inserted, 300, false, false]
+      *  0: li.ng-star-inserted.current
+      *  1: 300
+      *  2: false
+      *  3: false
+      *  legth: 4
+      *
+      * @param  scrollToElement(el, time, offsetX, offsetY, easing)
+      *  https://better-scroll.github.io/docs/en-US/guide/base-scroll-api.html#scrolltoelement-el-time-offsetx-offsety-easing
+      *
+      */
     scrollToElement(...args){
-        // 这里把到时候调用时候的参数 通过 arg，都直接传进去
-        console.log(11111, ...args)
+        // 这里把到时候调用时候的参数 通过 args，都直接传进去
+        console.log(11111, ...args);
+        console.log(22222, args);
         this.bs.scrollToElement.apply(this.bs, args)
     }
 

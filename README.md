@@ -74,7 +74,7 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 - `createReducer` & `Action`- [player.reducer.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/store/reducer/play.reducer.ts)
 - `createAction` & `props` - [player.actions.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/store/actions/player.actions.ts)
 - `createSelector` | `createFeatureSelector`  - [player.selector.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/store/selectors/player.selector.ts)
-- `Store` | `select` - [wy-player.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
+- `Store` | `select` - [wy-player.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts) | [home.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home.component.ts)
 
 ## 4.5 Ant Design Angular | BetterScroll
 - `[nzDotRender]` - [Ant] - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
@@ -195,7 +195,7 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
   - ` ng g c share/wy-ui/wy-player/wy-scroll -s -t -c=OnPush -v=None`  - 内联样式，OnPush策略，视图封装
   - `wy-scroll.component`
   - `npm install @better-scroll/scroll-bar --save` && `npm install @better-scroll/mouse-wheel --save`
-  -
+  - `home.component.ts`
 
 
 # 6.0 Final Demo

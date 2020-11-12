@@ -62,11 +62,11 @@
                 </div>
             </div>
 
+            <!--                 [currentIndex]="currentIndex" 从下面的组件里移除 -->
             <!-- Playlist and lyrics -->
             <app-wy-player-panel
                 [songList]="songList"
                 [currentSong]="currentSong"
-                [currentIndex]="currentIndex"
                 [show]="showPanel"
                 (onClose)="showPanel=false"
                 (onChangeSong)="onChangeSong($event)"

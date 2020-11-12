@@ -14,6 +14,7 @@ import {
 import { WyScrollComponent } from "./../wy-scroll/wy-scroll.component";
 import { getCurrentIndex } from "./../../../../store/selectors/player.selector";
 import { Song } from "src/app/services/data-types/common.types";
+import { findIndex } from 'src/app/utils/array';
 
 @Component({
     selector: "app-wy-player-panel",
@@ -24,8 +25,19 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     // 需要监听这两个值得变化， 从 wy-player.component 中
     @Input() songList: Song[];
     @Input() currentSong: Song;
-    @Input() currentIndex: number;
     @Input() show: boolean; //通过父级的组件来进行控制的
+
+    // 应该到 if(changes['currentSong'])中变化时，求出在songList中的一个索引
+    // 中间的媒介就是现在正在播放的歌曲， currentSong
+    currentIndex: number;
+    // @Input() currentIndex: number;
+    /**
+     * 因为这里从 wy-player.component.html中传入的值，<app-wy-player-panel>
+     * 同时涉及到了 songList和playList，
+     *  在 wy-player component中 都是喝 playList相关，
+     * 但是在现在 的
+     * 所以现在出现的问题是 切换到随机播放模式，连续点击下一首之后，打开 播放面板，上面显示的歌曲不是 滑块上面显示的歌曲
+    */
 
     @Output() onClose = new EventEmitter<void>();
     @Output() onChangeSong = new EventEmitter<Song>();
@@ -44,10 +56,13 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.songList) {
             // console.log(11111, this.songList);
+            // 这里是 切换歌单，比如点击另外一个专辑的播放按钮
+            this.currentIndex = 0; //默认从第一首开始播放
         }
         if (changes.currentSong) {
             // console.log(22222, this.currentSong);
             if (this.currentSong) {
+                this.currentIndex = findIndex(this.songList, this.currentSong);
                 if (this.show) {
                     this.scrollToCurrent();
                 }
@@ -68,7 +83,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
                 // 同时因为 refreshScroll（）方法中 等了 50毫秒，所以这里等待 80 毫秒
                setTimeout(()=>{
                 if (this.currentSong) {
-                    this.scrollToCurrent();
+                    this.scrollToCurrent(0); //这里设置成0，那么点击随机，点击歌曲下一首，点击播放面板，打开之后不会有一个歌曲列表跳转的动作
                 }
                }, 80)
             }
@@ -77,7 +92,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
 
     // 将滚动到当前歌曲的位置，并且有深色的显示条, 也就是播放的时候，保持当前的歌曲是可见的
     // 所以需要知道当前正在播放歌曲的 offsetTop， 以及 BScroll 当前列表滚动的位置
-    private scrollToCurrent() {
+    private scrollToCurrent(speed = 300) {
         // 首先获得列表每一行的元素，就是所有的 li 标签
         // 因为 wyScroll 是 WyScrollComponent，  所以 这里的 el 需要被定义在 WyScrollComponent的constructor中
         const songListRefs = this.wyScroll.first.el.nativeElement.querySelectorAll('ul li');
@@ -107,7 +122,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
                 //(第一个是目标 DOM 对象, 300 是速度)
                 this.wyScroll.first.scrollToElement(
                     currentLi,
-                    300,
+                    speed,
                     false,
                     false
                 );

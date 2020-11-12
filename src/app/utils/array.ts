@@ -1,3 +1,4 @@
+import { Song } from '../services/data-types/common.types';
 import { getRandomInt } from './number';
 
 export function inArray(arr: any[], target: any): boolean {
@@ -13,4 +14,9 @@ export function shuffle<T>(arr: T[]): T[] {
         [result[i], result[j]] = [result[j], result[i]];
     }
     return result;
+}
+
+//在数组当中找到索引, 并返回
+export function findIndex(list: Song[], currentSong: Song): number {
+    return list.findIndex(item => item.id === currentSong.id);
 }

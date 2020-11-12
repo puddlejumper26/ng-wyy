@@ -7,6 +7,7 @@ import {
     ViewChild,
 } from "@angular/core";
 import { select, Store } from "@ngrx/store";
+import { fromEvent, Subscription } from "rxjs";
 
 import { AppStoreModule } from "./../../../store/index";
 import {
@@ -24,8 +25,7 @@ import {
     SetPlayMode,
 } from "./../../../store/actions/player.actions";
 import { Song } from "./../../../services/data-types/common.types";
-import { fromEvent, Subscription } from "rxjs";
-import { shuffle } from "src/app/utils/array";
+import { findIndex, shuffle } from "src/app/utils/array";
 
 const modeTypes: PlayMode[] = [
     { type: "loop", label: "循环" },
@@ -171,7 +171,7 @@ export class WyPlayerComponent implements OnInit {
 
     // 当顺序打乱之后，要拿到当前播放的歌曲，在新的数组里面的索引
     private updateCurrentIndex(list: Song[], currentSong: Song) {
-        const newIndex = list.findIndex((item) => item.id === currentSong.id);
+        const newIndex = findIndex(list,currentSong);
         this.store$.dispatch(SetCurrentIndex({ currentIndex: newIndex }));
     }
 
