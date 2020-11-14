@@ -15,6 +15,7 @@ import {
 import BScroll from "@better-scroll/core";
 import ScrollBar from "@better-scroll/scroll-bar";
 import MouseWheel from '@better-scroll/mouse-wheel';
+import { timer } from 'rxjs';
 
 //https://better-scroll.github.io/docs/en-US/plugins/scroll-bar.html#usage
 // 在 ngAfterViewInit 中 初始化
@@ -148,8 +149,13 @@ export class WyScrollComponent implements OnInit, AfterViewInit, OnChanges {
     // 面板的消失隐藏，播放列表的更新等 ，都需要刷新BScroll， 但是刷新一定要在改变结束之后
     refreshScroll() {
         // 不能直接  this.bs.refresh()， 因为有一定的延迟
-        setTimeout(() => {
+
+        // 这里使用 timer 和wy-player-panel.component.ts 中的情况是一样的
+        timer(this.refreshDelay).subscribe(() => {
             this.refresh();
-        }, this.refreshDelay);
+        })
+        // setTimeout(() => {
+        //     this.refresh();
+        // }, this.refreshDelay);
     }
 }

@@ -2,6 +2,7 @@ import {
     Component,
     ElementRef,
     EventEmitter,
+    Inject,
     Input,
     OnChanges,
     OnInit,
@@ -15,6 +16,8 @@ import { WyScrollComponent } from "./../wy-scroll/wy-scroll.component";
 import { getCurrentIndex } from "./../../../../store/selectors/player.selector";
 import { Song } from "src/app/services/data-types/common.types";
 import { findIndex } from 'src/app/utils/array';
+import { timer } from 'rxjs';
+import { WINDOW } from 'src/app/services/services.module';
 
 @Component({
     selector: "app-wy-player-panel",
@@ -48,7 +51,8 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
 
     scrollY = 0;
 
-    constructor() {}
+    // 这时候再使用 win 就可以 不用 timer ， 而是 this.win.setTimeout
+    constructor(@Inject(WINDOW) private win: Window) {}
 
     ngOnInit() {}
 
@@ -79,13 +83,43 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
                 console.log("wyScroll", this.wyScroll);
                 this.wyScroll.first.refreshScroll();
                 this.wyScroll.last.refreshScroll();
+
                 // 下面这步不加的话，会出现播放模式随机，播放歌曲，打开播放面板，发现正在播放的歌曲不在可视区内
                 // 同时因为 refreshScroll（）方法中 等了 50毫秒，所以这里等待 80 毫秒
-               setTimeout(()=>{
-                if (this.currentSong) {
-                    this.scrollToCurrent(0); //这里设置成0，那么点击随机，点击歌曲下一首，点击播放面板，打开之后不会有一个歌曲列表跳转的动作
-                }
-               }, 80)
+
+                //setTimeout(()=>{
+                // if (this.currentSong) {
+                //     this.scrollToCurrent(0); //这里设置成0，那么点击随机，点击歌曲下一首，点击播放面板，打开之后不会有一个歌曲列表跳转的动作
+                // }
+                //}, 80)
+
+               /**
+                * 如果无法避免要使用window上的其他对象，除了setTimeout和setInterval之外的对象或者属性
+                *  可以在 constructor 中 注入 DOCUMENT 的令牌 constructor(@Inject(DOCUMENT ))
+                *   是angular自带的一个令牌
+                *   查看 services.moduel.ts
+                */
+
+                /**  替换方法（一）
+                 * 可以用 timer 来替代下面的setTimeout
+                 *  timer(1000, 2000)  一秒之后发出一个流，然后每隔两秒再发射一个流，相当于是一个setInterval的功能
+                 *  timer(1000) 一秒之后发出一个流，然后就结束了
+                 */
+
+                timer(80).subscribe(() => {
+                    if (this.currentSong) {
+                        this.scrollToCurrent(0); //这里设置成0，那么点击随机，点击歌曲下一首，点击播放面板，打开之后不会有一个歌曲列表跳转的动作
+                    }
+                })
+
+                /**  替换方法（二）
+                 */
+
+                // this.win.setTimeout(() => {
+                    // if (this.currentSong) {
+                        // this.scrollToCurrent(0);
+                    // }
+                // }, 80);
             }
         }
     }

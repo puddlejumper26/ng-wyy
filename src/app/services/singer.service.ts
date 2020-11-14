@@ -17,7 +17,7 @@ type SingerParams = {
 const defaultParams: SingerParams = {
     offset: 0,
     limit: 9,
-    cat: "5001",
+    cat: "5001", //这里设定 5001 是因为 网易云API的设定
 };
 
 @Injectable({
@@ -37,7 +37,7 @@ export class SingerService {
     getEnterSinger(args: SingerParams = defaultParams): Observable<Singer[]> {
         // HttpParams Angular Client 模块的传参模式
         // 因为这里 fromString 是 一个 string 模式， 而 args 是一个 SingerParams对象
-        // 所以这里用 queryStringstringify 来转换 args 序列化 Object Serialization 对象序列化
+        // 所以这里用 queryString.stringify 来转换 args 序列化 Object Serialization 对象序列化
         // http://nodejs.cn/api/querystring.html#querystring_querystring_stringify_obj_sep_eq_options
         const params = new HttpParams({
             fromString: queryString.stringify(args),
