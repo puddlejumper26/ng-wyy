@@ -18,6 +18,7 @@ import { Song } from "src/app/services/data-types/common.types";
 import { findIndex } from 'src/app/utils/array';
 import { timer } from 'rxjs';
 import { WINDOW } from 'src/app/services/services.module';
+import { SongService } from 'src/app/services/song.service';
 
 @Component({
     selector: "app-wy-player-panel",
@@ -52,7 +53,10 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     scrollY = 0;
 
     // 这时候再使用 win 就可以 不用 timer ， 而是 this.win.setTimeout
-    constructor(@Inject(WINDOW) private win: Window) {}
+    constructor(
+        @Inject(WINDOW) private win: Window,
+        private songServe: SongService
+        ) {}
 
     ngOnInit() {}
 
@@ -67,6 +71,10 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
             // console.log(22222, this.currentSong);
             if (this.currentSong) {
                 this.currentIndex = findIndex(this.songList, this.currentSong);
+
+                //同时 这个时候要请求歌词
+                this.updateLyrics();
+
                 if (this.show) {
                     this.scrollToCurrent();
                 }
@@ -122,6 +130,10 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
                 // }, 80);
             }
         }
+    }
+
+    private updateLyrics() {
+        this.songServe.getLyric()
     }
 
     // 将滚动到当前歌曲的位置，并且有深色的显示条, 也就是播放的时候，保持当前的歌曲是可见的

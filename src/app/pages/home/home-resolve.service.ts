@@ -27,6 +27,7 @@ import { first } from "rxjs/internal/operators";
 //这里是一个类型的定义， 返回的数据的集合
 type HomeDataType = [Banner[], HotTag[], SongSheet[], Singer[]];
 
+// The router waits for the data to be resolved before the route is finally activated.
 @Injectable()
 export class HomeResolverService implements Resolve<HomeDataType> {
     constructor(

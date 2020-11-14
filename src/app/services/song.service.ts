@@ -63,4 +63,6 @@ export class SongService {
         });
         return result;
     }
+
+    getLyric() {}
 }

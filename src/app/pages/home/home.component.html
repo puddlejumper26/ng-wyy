@@ -1,26 +1,21 @@
 <div class="home">
-    <app-wy-carousel
-        #wyCarousel
+    <app-wy-carousel #wyCarousel
         [activeIndex]="carouselActiveIndex"
-        (changeSlide)="onChangeSlide($event)"
-    >
+        (changeSlide)="onChangeSlide($event)">
+
         <!-- set auto play and fade in and fade out effects -->
         <!-- https://ng.ant.design/components/carousel/zh  (nzBeforeChange)切换面板的回调		-->
-        <nz-carousel
-            nzAutoPlay
+        <nz-carousel nzAutoPlay
             nzEffect="fade"
             [nzDotRender]="wyCarousel.dotRef"
-            (nzBeforeChange)="onBeforeChange($event)"
-        >
-            <div
-                class="carousel-item"
-                nz-carousel-content
-                *ngFor="let item of banners"
-            >
-                <a [href]="item.url" target="_blank" class="banner-item">
-                    <img [src]="item.imageUrl" />
-                </a>
-            </div>
+            (nzBeforeChange)="onBeforeChange($event)">
+                <div class="carousel-item"
+                    nz-carousel-content
+                    *ngFor="let item of banners">
+                    <a [href]="item.url" target="_blank" class="banner-item">
+                        <img [src]="item.imageUrl" />
+                    </a>
+                </div>
         </nz-carousel>
     </app-wy-carousel>
 
@@ -37,9 +32,7 @@
                                 <a>热门推荐</a>
                             </h2>
                             <nav>
-                                <a *ngFor="let item of hotTags">{{
-                                    item.name
-                                }}</a>
+                                <a *ngFor="let item of hotTags">{{ item.name }}</a>
                             </nav>
                         </div>
                         <a>
@@ -63,6 +56,7 @@
 
             <!-- 右边的歌手等 -->
             <div class="right">
+
                 <app-member-card></app-member-card>
 
                 <div class="settled-singer">
@@ -72,10 +66,8 @@
                             <div *ngFor="let singer of singers">
                                 <div class="pic">
                                     <!-- <img src="{{singer.picUrl}}" alt=""> -->
-                                    <img
-                                        [src]="singer.picUrl"
-                                        [alt]="singer.name"
-                                    />
+                                    <img [src]="singer.picUrl"
+                                        [alt]="singer.name"/>
                                 </div>
                                 <div class="txt">
                                     <b class="ellipsis">{{ singer.name }}</b>

@@ -45,6 +45,7 @@ export class HomeComponent implements OnInit {
         private store$: Store<AppStoreModule>, // Observable
     ) {
         //这里使用了 解构， 注意要用 ()， ([banners, hotTags, songSheetList, singers])
+        // 并且使用了 resolve， 注意这里的 homeDatas 是从 resolve 中来的
         this.route.data
             .pipe(map((res) => res.homeDatas))
             .subscribe(([banners, hotTags, songSheetList, singers]) => {

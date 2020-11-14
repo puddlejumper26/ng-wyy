@@ -8,7 +8,7 @@ export type Banner = {
 };
 
 export type HotTag = {
-    id: number;
+    id: number;  // 这个似乎没有用上
     name: string;
     position: number;
 };

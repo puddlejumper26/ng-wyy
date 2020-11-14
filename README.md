@@ -91,10 +91,10 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 # 5.0 Compositions
 
 ## 5.1 Carousel part
-- [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
+- [Carousel - the process to write the Banner](https://github.com/puddlejumper26/ng-wyy/issues/3)
 - components / services / directives / etc.
-  - `home.service` (obtain data from API, send with observables)
   - `commmon.type` (define data type)
+  - `home.service` (obtain data from API, send with observables)
   - `wy-carousel.copmponent`
   - `home.component` (subscribe data from service, send to template)
 - InterfaceAddress
@@ -189,7 +189,9 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
   - `array.ts` | `number.ts`
 
 ## 5.9 Home page bottom section - Playlist and lyrics
-  - components / services / directives / etc.
+-
+- components / services / directives / etc.
+  -
   - Playlist
   - `wy-player-panel.component`
   - `wy-player.component.`
@@ -198,6 +200,10 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
   - `wy-scroll.component`
   - `npm install @better-scroll/scroll-bar --save` && `npm install @better-scroll/mouse-wheel --save`
   - `home.component.ts`
+  -
+  - Lyrics
+  - `song.service.ts`
+  - `wy-player-panel.component.ts`
 
 # 6.0 Final Demo
 
@@ -208,6 +214,7 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 # 7.0 Knowledge Note
 - [Notes](https://github.com/puddlejumper26/ng-wyy/issues/1)
 
+- Resolve - [home-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home-resolve.service.ts)
 - How the Token (API_CONFIG, Window) is working - [`services.module.ts`](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/services.module.ts)
-- Replace `setTimeout` - 1.0 `timer` | 2.0 `this.win.setTimeout` - [`wy-player-panel.component.ts`](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player-panel/wy-player-panel.component.ts)
+- Replace `setTimeout` - [1.0 `timer` | 2.0 `this.win.setTimeout`] - [`wy-player-panel.component.ts`](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player-panel/wy-player-panel.component.ts)
 -

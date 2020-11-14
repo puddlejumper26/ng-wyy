@@ -20,28 +20,29 @@ export class HomeService {
         @Inject(API_CONFIG) private uri: string
     ) {}
 
+    // 就是主页上滚动的大的图片
     getBanner(): Observable<Banner[]> {
-        return (
-            this.http
-                .get(this.uri + "banner")
+        return this.http.get(this.uri + "banner")
                 // return this.http.get('http://localhost:3000/banner') 上一行就把前缀抽取出来了
                 .pipe(map((res: { banners: Banner[] }) => res.banners))
-        );
+
         // 为什么要用map操作符，因为要返回一个Banner的数组，所以要对数据指明类型
         // banners, check localhost:3000/banner 数据是包含是 banners 数组里的
         // 需要申明一下 res 的属性，为 banners，banners的类型是 Banner[]
     }
 
-    // 获取热门标签 这里先要给 res.tag 排序，再显示前面的5个
+    // 获取热门标签 这里先要给 res.tag 排序，再显示前面的5个,所以这里用 slice
     getHotTags(): Observable<HotTag[]> {
-        return this.http.get(this.uri + "playlist/hot").pipe(
-            map((res: { tags: HotTag[] }) => {
-                return res.tags
-                    .sort((x: HotTag, y: HotTag) => {
-                        return x.position - y.position; // 这里的position 是 HotTag自身的type
-                    })
-                    .slice(0, 5);
-            })
+        return this.http
+            .get(this.uri + "playlist/hot")
+            .pipe(
+                map((res: { tags: HotTag[] }) => {
+                    return res.tags
+                        .sort((x: HotTag, y: HotTag) => {    //这里使用 sort，并且传入position的值，那么最后返回的数组就是按照 position 的值从小到大进行排列
+                            return x.position - y.position; // 这里的position 是 HotTag自身的type
+                        })
+                        .slice(0, 5);
+                })
         );
     }
 

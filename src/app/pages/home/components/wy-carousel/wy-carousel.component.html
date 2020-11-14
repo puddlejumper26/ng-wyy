@@ -8,11 +8,15 @@
             nzTheme="outline"
             (click)="onChangeSlide('pre')"
         ></i>
+
+        <!-- 这里用来展示Banner，大的图片的 -->
         <ng-content></ng-content>
+
         <!-- add dot , number 是当前的索引-->
         <ng-template #dot let-number>
             <i class="dot" [class.active]="activeIndex === number"></i>
         </ng-template>
+
         <!-- add right arrow -->
         <i
             nz-icon
