@@ -13,7 +13,8 @@
                 <div class="right">
                     <!-- Search -->
                     <div class="search">
-                        <!-- here the suffixIconSearch must be with ng-template -->
+                        <!-- here the suffixIconSearch must be with ng-template, 因为nzSuffix必须接受一个TemplateRef类型的值 -->
+                        <!-- 而nzSuffix就是在输入框后加图标的一个API， https://ng.ant.design/components/input/zh -->
                         <nz-input-group [nzSuffix]="suffixIconSearch">
                             <input
                                 type="text"
@@ -21,10 +22,13 @@
                                 placeholder="List/Singer/Song"
                             />
                         </nz-input-group>
+
                         <!-- to display the search icon -->
+                        <!-- 这里使用ng-template同样是因为nzSuffix是 TemplateRef类型 -->
                         <ng-template #suffixIconSearch>
                             <i nz-icon nzType="search"></i>
                         </ng-template>
+
                     </div>
 
                     <div class="member">

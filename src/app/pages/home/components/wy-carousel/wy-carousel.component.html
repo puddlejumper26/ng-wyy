@@ -10,9 +10,12 @@
         ></i>
 
         <!-- 这里用来展示Banner，大的图片的 -->
+        <!-- ng-content 的作用就是当其他组件引用这个组件的时候，能够插入其他内容， -->
         <ng-content></ng-content>
 
-        <!-- add dot , number 是当前的索引-->
+        <!-- add dot , number 是当前的索引  https://zhuanlan.zhihu.com/p/50476699-->
+        <!-- 因为@ViewChild("dot", { static: true }) dotRef: TemplateRef<any>; ， 因为这个 TemplateRef， 所以这里需要用 ng-template 来包裹 -->
+            <!-- Access a TemplateRef instance by placing a directive on an <ng-template> element  -->
         <ng-template #dot let-number>
             <i class="dot" [class.active]="activeIndex === number"></i>
         </ng-template>
@@ -27,3 +30,27 @@
         ></i>
     </div>
 </div>
+
+<!--
+<app-wy-carousel #wyCarousel
+[activeIndex]="carouselActiveIndex"
+(changeSlide)="onChangeSlide($event)">
+
+
+   这里就是插入的内容，会渲染到上面的那个 ng-content 的 插槽中
+
+    <nz-carousel nzAutoPlay
+        nzEffect="fade"
+        [nzDotRender]="wyCarousel.dotRef"
+        (nzBeforeChange)="onBeforeChange($event)">
+            <div class="carousel-item"
+                nz-carousel-content
+                *ngFor="let item of banners">
+                <a [href]="item.url" target="_blank" class="banner-item">
+                    <img [src]="item.imageUrl" />
+                </a>
+            </div>
+    < /nz-carousel>
+
+
+</app-wy-carousel> -->

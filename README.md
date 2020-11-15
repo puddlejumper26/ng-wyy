@@ -11,6 +11,7 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
   - npm install minireset.css
 - Netease Cloud Music API (Node.js API service)
   - https://github.com/Binaryify/NeteaseCloudMusicApi
+  - 【DOC】https://binaryify.github.io/NeteaseCloudMusicApi/#/?id=neteasecloudmusicapi
   - [How To Install](https://github.com/puddlejumper26/ng-wyy/issues/2)
 - BetterScroll 2.0 (https://better-scroll.github.io/docs/en-US/)
 
@@ -35,7 +36,7 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 - `@Injectable({ providedIn: ServicesModule })` - [home.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/home.service.ts)
 - `Pipe`  [play-count.pipe.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/play-count.pipe.ts)
 - `HttpParams` - [singer.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/singer.service.ts)
-- `set()` -  [sheet.vervice.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/sheet.service.ts)
+- `set()` -  [sheet.vervice.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/sheet.service.ts) | [song.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/song.service.ts)
 - `Resolve` - [home-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home-resolve.service.ts)
 - `encapsulation: ViewEncapsulation.None` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 - `SimpleChanges` - [wy-slider-handle.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-handle.component.ts) | [wy-slider-track.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-track.component.ts) | [wy-player-panel.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player-panel/wy-player-panel.component.ts) | [wy-scroll.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-scroll/wy-scroll.component.ts)
@@ -101,7 +102,7 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
   - /banner
 
 ## 5.2 Home page main section - Hottags and SongSheetList
-- [HotTags and SongSheetList](https://github.com/puddlejumper26/ng-wyy/issues/4)
+- [HotTags and SongSheetList 首页16张专辑](https://github.com/puddlejumper26/ng-wyy/issues/4)
 - components / services / directives / etc.
   - `home.service`   (obtain data from API, send with observables)
   - `commmon.type`   (define data type)
@@ -113,7 +114,7 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
   - /personalized
 
 ## 5.3 Home page right section - Singer List
-- [SingerList](https://github.com/puddlejumper26/ng-wyy/issues/5)
+- [SingerList入驻歌手](https://github.com/puddlejumper26/ng-wyy/issues/5)
 - components / services / directives / etc.
   - `singer.service` (obtain data from API, send with observables)
   - `commmon.type` (define data type)
@@ -214,6 +215,7 @@ This is the Angular App Simulation of Netease Cloud Music, original please click
 # 7.0 Knowledge Note
 - [Notes](https://github.com/puddlejumper26/ng-wyy/issues/1)
 
+- Observable in this APP Comparisons - [Click](https://github.com/puddlejumper26/ng-wyy/issues/11)
 - Resolve - [home-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home-resolve.service.ts)
 - How the Token (API_CONFIG, Window) is working - [`services.module.ts`](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/services.module.ts)
 - Replace `setTimeout` - [1.0 `timer` | 2.0 `this.win.setTimeout`] - [`wy-player-panel.component.ts`](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player-panel/wy-player-panel.component.ts)

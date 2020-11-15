@@ -76,7 +76,10 @@ export class HomeComponent implements OnInit {
     onPlaySheet(id: number) {
         // console.log(11111, id);
         this.sheetServe.playSheet(id).subscribe((list) => {
-            // console.log(111, list);
+
+            // 这时候得到的是当前专辑的每一个歌的详细情况的一个对象
+
+            // console.log('list', list);   看 list 的详情 ==> https://github.com/puddlejumper26/ng-wyy/issues/7
 
             // 播放歌曲，需要执行 player.reducer.ts中的 playList, songList currentIndex
             //结束下面的三行 设定代码， 之后 reducer 里面的 那三个值就会改变， 分别会返回一个新的 state
@@ -114,6 +117,10 @@ export class HomeComponent implements OnInit {
         });
     }
 }
+
+/**
+ *     下面这些被重新写，是因为写了 resolve  home-resolve.service.ts
+ */
 
 // constructor(
 //   private HomeServe: HomeService,
