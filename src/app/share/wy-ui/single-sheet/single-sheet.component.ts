@@ -24,5 +24,7 @@ export class SingleSheetComponent implements OnInit {
 
     playSheet(id: number) {
         this.onPlay.emit(id);
+        console.log('single-sheet emit id - ', id);
+
     }
 }

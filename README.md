@@ -1,7 +1,10 @@
 <h1 align='center'>Ng - WYY</h1>
 
 # 1.0 Description
-This is the Angular App Simulation of Netease Cloud Music, original please click [here](https://music.163.com/).
+This is an Angular App Simulation of Netease Cloud Music
+- Original please click [here](https://music.163.com/).
+- The purpose of this APP is only for learning and technical level communications. Not for any commercial reasons.
+- This APP could be only run locally
 
 # 2.0 Tech Stack && Libraries && Plugins
 - Angular 8.3.0 && Typescript && less

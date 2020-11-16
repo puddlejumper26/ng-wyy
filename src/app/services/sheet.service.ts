@@ -38,7 +38,7 @@ export class SheetService {
 
         const params = new HttpParams().set("id", id.toString());
         return this.http
-            .get(this.uri + "playlist/detail", { params })
+            .get(this.uri + "playlist/detail", { params })  // e.g. http://localhost:3000/playlist/detail?id=2829821753
             .pipe(map((res: { playlist: SongSheet }) => res.playlist));
     }
 
@@ -46,6 +46,8 @@ export class SheetService {
     // 还需要继续请求每一首歌的url, 使用 pluck()来筛选出来 tracks的属性
     // 然后用 switchMap 来 请求每一个 track 的播放地址
     // 播放地址的方法是在song.service.ts
+
+    // 这里的 id 是 专辑的 id 号
     playSheet(id: number): Observable<Song[]> {
         return this.getSongSheetDetail(id).pipe(
             pluck("tracks"),
