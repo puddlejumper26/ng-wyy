@@ -39,7 +39,7 @@ const modeTypes: PlayMode[] = [
     styleUrls: ["./wy-player.component.less"],
 })
 export class WyPlayerComponent implements OnInit {
-    percent = 0; //一开始handle 也就是圆点的位置
+    percent = 0; //一开始handle 也就是圆点的位置 就是滑块一开始的位置
     bufferPercent = 0; //一开始 灰色缓冲的位置
 
     songList: Song[];

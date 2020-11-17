@@ -56,7 +56,7 @@
                     <span></span>
                 </p>
 
-                <!-- volumn control -->
+                <!-- volumn control  这里[wyVertical]="true" 让组件垂直-->
                 <div class="control-vol" [hidden]="!showVolumnPanel">
                     <app-wy-slider [wyVertical]="true" [(ngModel)]="volumn" (ngModelChange)="onVolumnChange($event)"></app-wy-slider>
                 </div>
