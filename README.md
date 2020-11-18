@@ -193,9 +193,7 @@ This is an Angular App Simulation of Netease Cloud Music
   - `array.ts` | `number.ts`
 
 ## 5.9 Home page bottom section - Playlist and lyrics
--
 - components / services / directives / etc.
-  -
   - Playlist
   - `wy-player-panel.component`
   - `wy-player.component.`
