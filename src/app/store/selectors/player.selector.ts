@@ -19,3 +19,22 @@ export const getCurrentIndex = createSelector(selectPlayerStates, (state: PlaySt
 //这样就拿到正在播放的歌曲
 export const getCurrentSong = createSelector(selectPlayerStates, ({playList, currentIndex}: PlayState) => playList[currentIndex]);
 
+/**
+ *    上面的这些导出的元素会被用在 最后需要展示数据的组件里，这里是 wy-player，也就是播放器组件
+ *
+ *      appStore$
+            .pipe(select(getSongList))
+            .subscribe((list) => this.watchList(list, "songList"));
+        appStore$
+            .pipe(select(getPlayList))
+            .subscribe((list) => this.watchList(list, "playList"));
+        appStore$
+            .pipe(select(getCurrentIndex))
+            .subscribe((index) => this.watchCurrentIndex(index));
+        appStore$
+            .pipe(select(getPlayMode))
+            .subscribe((mode) => this.watchPlayMode(mode));
+        appStore$
+            .pipe(select(getCurrentSong))
+            .subscribe((song) => this.watchCurrentSong(song));
+ */

@@ -94,11 +94,6 @@ export class HomeComponent implements OnInit {
             // this.store$.dispatch(SetSongList({ songList: list.slice(0,3)}));
             // this.store$.dispatch(SetPlayList({ playList: list.slice(0,3)}));
 
-
-            // 问题， 接下来因为没有考虑模式的问题，就直接发送歌曲了，那么如果进入页面，先点击模式到随机
-            // 然后连续点击下一曲，就会按照顺序播放，因为没有模式的限定。
-            // 所以需要添加一个 if
-
             // this.store$.dispatch(SetSongList({ songList: list}));
             // this.store$.dispatch(SetPlayList({ playList: list}));
             // this.store$.dispatch(SetCurrentIndex({ currentIndex: 0})); // default to play the first song
@@ -107,6 +102,9 @@ export class HomeComponent implements OnInit {
 
             let trueIndex = 0;
             let trueList = list.slice();
+            // 问题， 接下来因为没有考虑模式的问题，就直接发送歌曲了，那么如果进入页面，先点击模式到随机
+            // 然后连续点击下一曲，就会按照顺序播放，因为没有模式的限定。
+            // 所以需要添加一个 if
             if(this.playerState.playMode.type === 'random') {
                 trueList = shuffle(list || []); // [] 兼容一下list 不存在的情况
                 // 上面打乱一下顺序，然后在新的乱掉的列表中，找到正在播放歌曲的index
@@ -114,6 +112,8 @@ export class HomeComponent implements OnInit {
             }
             this.store$.dispatch(SetPlayList({ playList: trueList}));
             this.store$.dispatch(SetCurrentIndex({ currentIndex: trueIndex}));
+
+            // 上面这些代码执行之后，reducer中的InitialState的值就发生了变化，这个变化在 Redux插件中可以看到
         });
     }
 }

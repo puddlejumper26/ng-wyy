@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from "@angular/core";
 export class FormatTimePipe implements PipeTransform {
     transform(time: number): any {
         if (time) {
-            const temp = time | 0; // 这里的 | 相当于 Math.floor
+            const temp = time | 0; // 这里的 | 相当于 Math.floor 向下取零
             const minute = temp / 60 | 0;
             // padStart 是前置补0， 如是个位数，前面就需要补零， 最多是两位数，不够补一个零
             const second = (temp % 60).toString().padStart(2, "0");

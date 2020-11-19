@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
     // CommonModule,
     //https://next.ngrx.io/guide/store/configuration/runtime-checks#configuring-runtime-checks
     StoreModule.forRoot({ player: playerReducer}, {
-      //检测这些操作是否合法
+      //检测这些操作是否合法，一些配置
       runtimeChecks: {
         strictStateImmutability: true,
         strictActionImmutability: true,

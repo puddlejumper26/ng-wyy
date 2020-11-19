@@ -8,6 +8,7 @@
         <div class="wrap">
             <div class="btns">
                 <i class="prev" (click)="onPrev(currentIndex-1)"></i>
+                <!-- 这里通过当playing是true的情况下，就加上一个playing的class就转换成暂停的图标了 -->
                 <i class="toggle" [class.playing]="playing" (click)="onToggle()"></i>
                 <i class="next" (click)="onNext(currentIndex+1)"></i>
             </div>

@@ -57,7 +57,7 @@ export class WyPlayerComponent implements OnInit {
     // 是否可以播放，默认不可以
     songReady = false;
     // volumn
-    volumn = 10;
+    volumn = 60;
     // whether to show volumn panel
     showVolumnPanel = false;
     // 是否点击的是音量面板的本身
@@ -82,30 +82,30 @@ export class WyPlayerComponent implements OnInit {
                     }
                 就会得到 WyPlayerComponent.html:63 ERROR TypeError: this.audio.play is not a function
      */
-    @ViewChild("audio", { static: true }) private audio: ElementRef;
-    private audioEl: HTMLAudioElement; // 原生的 DOM 对象
+    @ViewChild("audio", { static: true }) private audio: ElementRef;                    // -------------- (5)
+    private audioEl: HTMLAudioElement; // 原生的 DOM 对象                                // -------------- (5)
 
     constructor(
         private store$: Store<AppStoreModule>,
         @Inject(DOCUMENT) private doc: Document
     ) {
-        const appStore$ = this.store$.pipe(select(getPlayer));
+        const appStore$ = this.store$.pipe(select(getPlayer));                           // -------------- (1)
 
         appStore$
             .pipe(select(getSongList))
-            .subscribe((list) => this.watchList(list, "songList"));
+            .subscribe((list) => this.watchList(list, "songList")); // 赋值              // -------------- (1)
         appStore$
             .pipe(select(getPlayList))
-            .subscribe((list) => this.watchList(list, "playList"));
+            .subscribe((list) => this.watchList(list, "playList")); // 赋值              // -------------- (1)
         appStore$
             .pipe(select(getCurrentIndex))
-            .subscribe((index) => this.watchCurrentIndex(index));
+            .subscribe((index) => this.watchCurrentIndex(index)); // 赋值                    // -------------- (1)
         appStore$
             .pipe(select(getPlayMode))
-            .subscribe((mode) => this.watchPlayMode(mode));
+            .subscribe((mode) => this.watchPlayMode(mode)); // 赋值                      // -------------- (1) (18)
         appStore$
             .pipe(select(getCurrentSong))
-            .subscribe((song) => this.watchCurrentSong(song));
+            .subscribe((song) => this.watchCurrentSong(song)); // 赋值                     // -------------- (1)
 
         /**
          *         // following is not working under @ngrx/store-devtool@8.6.0 only for 8.3.0
@@ -131,151 +131,88 @@ export class WyPlayerComponent implements OnInit {
 
     ngOnInit() {
         // console.log(11111, this.audio.nativeElement);
-        this.audioEl = this.audio.nativeElement;
+        this.audioEl = this.audio.nativeElement;                         // -------------- (5)
     }
 
-    private watchList(list: Song[], type: string) {
+    private watchList(list: Song[], type: string) {                    // -------------- (2)
         // console.log(11111, list, type);
+        // 把获得的数据保存到songList或者playList中
         this[type] = list;
     }
-    private watchCurrentIndex(index: number) {
+    private watchCurrentIndex(index: number) {                        // -------------- (2)
         // console.log(22222, index);
+        // 把获得的数据保存到currentIndex中
         this.currentIndex = index;
     }
-    private watchPlayMode(mode: PlayMode) {
-        // console.log(3333, mode);
-        this.currentMode = mode;
-        if (this.songList) {
-            // slice()是浅复制，所以相当于是songList数组的一个副本，但是地址不同，值得改变不会影响songList数组本身
-            let list = this.songList.slice(); //建立一个副本
-            if (mode.type === "random") {
-                list = shuffle(this.songList);
-                // console.log(1111, list); //点击播放，然后点击转换就能够看出来了
 
-                // 传入最新的 list 和 当前播放的歌曲
-                this.updateCurrentIndex(list, this.currentSong);
-                // 这里dispatch 改变后的list，注意这时候正在播放的歌曲不能改变，所以要在前面添加 updateCurrentIndex
-                this.store$.dispatch(SetPlayList({ playList: list }));
-            }
-        }
-    }
-
-    private watchCurrentSong(song: Song) {
+    /**
+     *     通过这个组件里的
+     * <audio   [src]="currentSong?.url" (canplay)="onCanPlay()">
+     *     并通过 canplay 就可以播放歌曲了
+     */
+    private watchCurrentSong(song: Song) {                                         // -------------- (2)
         // console.log(4444, song);   //一开始是空的 undefined，点击播放之后才会有信息
         // 先判断 song 是否存在， 不然直接写 运行时 会出现 song不存在的情况，然后报错
-        if (song) {
+        if (song) {                                                             // -------------- (7)
             this.currentSong = song;
             this.duration = song.dt / 1000; //dt 就是播放的时长，毫秒/1000 换算成秒，可以通过 log song 来看
         }
     }
 
-    // 当顺序打乱之后，要拿到当前播放的歌曲，在新的数组里面的索引
-    private updateCurrentIndex(list: Song[], currentSong: Song) {
-        const newIndex = findIndex(list,currentSong);
-        this.store$.dispatch(SetCurrentIndex({ currentIndex: newIndex }));
-    }
-
-    // 改变状态
-    changeMode() {
-        const temp = modeTypes[++this.modeCount % 3];
-        // console.log(1111, temp);
-        // 这里set之后，在这里的watchPlayMode中就能监听的到, 然后其中的 the.currentMode = mode, 就会跟着改变
-        // 之后 html中的[ngClass]="currentMode.type" [title]="currentMode.label" 就会跟着改变
-        this.store$.dispatch(SetPlayMode({ playMode: temp }));
-    }
-
-    onPercentChange(per: number) {
-        // console.log(1111, per);
-        // this.audioEl.currentTime = this.duration * (per / 100);
-        if (this.currentSong) {
-            // 没有这里的判断，就会出现一拖动滑块，console里面会报错，因为currentTime 没有
-            const currentTime = this.duration * (per / 100);
-            this.audioEl.currentTime = currentTime;
-        }
-    }
-
-    // 实时改变音量的大小
-    onVolumnChange(per: number) {
-        this.audioEl.volume = per / 100;
-    }
-
-    // 点击播放器外部，隐藏音量控制， 点击播放器，不隐藏
-    toggleVolPanel() {
-        // evt.stopPropagation(); // stop bubbling
-        this.togglePanel("showVolumnPanel");
-    }
-
-    // 控制歌词面板是否显示
-    toggleListPanel() {
-        if (this.songList.length) {
-            // evt.stopPropagation(); // stop bubbling
-            this.togglePanel("showPanel");
-            // this.toggleListDisplayPanel()
-        }
-    }
-
-    togglePanel(type: string) {
-        this[type] = !this[type];
-        // this.showVolumnPanel = !this.showVolumnPanel; // click the 音量按钮 - 显示、隐藏
-        if (this.showVolumnPanel || this.showPanel) {
-            this.bindDocumentClickListener();
-        } else {
-            this.unbindDocumentClickListener();
-        }
-    }
-
-    toggleListDisplayPanel() {
-        this.showPanel = !this.showPanel
-        if (this.showPanel) {
-            this.bindDocumentClickListener();
-        } else {
-            this.unbindDocumentClickListener();
-        }
-    }
-
-    //如果音量面板存在, 就绑定一个全局的click事件，在事件内部，判断selfClick是否存在
-    private bindDocumentClickListener() {
-        if (!this.winClick) {
-            //赋值，在document 上绑定一个 click事件
-            this.winClick = fromEvent(this.doc, "click").subscribe(() => {
-                if (!this.selfClick) {
-                    //说明点击了播放器以外的部分
-                    this.showVolumnPanel = false;
-                    this.showPanel = false;
-                    this.unbindDocumentClickListener();
-                }
-                this.selfClick = false;
-            });
-        }
-    }
-
-    //否则就解绑这个事件
-    private unbindDocumentClickListener() {
-        if (this.winClick) {
-            this.winClick.unsubscribe();
-            this.winClick = null;
-        }
-    }
-
-    onCanPlay() {
+     // [src]="currentSong?.url" 中存在的话，就可以开始播放这个地址的歌曲
+    onCanPlay() {                                                            // -------------- (3)
         this.songReady = true; // means now song could be played
-        this.play(); // then play
+        this.play(); // then play                                            // -------------- (4)
     }
 
-    // 在播放列表里通过点击来改变播放的歌曲
-    onChangeSong(song: Song){
-        this.updateCurrentIndex(this.playList, song);
+    private play() {                                                    // -------------- (4)
+        this.audioEl.play();                                              // -------------- (5)
+        this.playing = true; // means now is playing, is a status
+    }
+
+    // 取值器 获得图片的信息
+   get picUrl(): string {                                                    // -------------- (7)
+    return this.currentSong  //因为在watchCurrentSong中已经赋值给currentSong了
+        ? this.currentSong.al.picUrl
+        : "//s4.music.126.net/style/web2/img/default/default_album.jpg";
+    }
+
+    // audio标签里的 timeupdate 对 播放时间的实时监听
+    // 实现 滑块跟着时间吻合移动, 缓冲条也同样
+    /**
+     *  这里计算的
+     *    percent - 这一首歌曲播放时候 滑块和红色的 应该在的位置的比例
+     *    buffered - 缓冲的时间长度
+     *    bufferPercent - 缓冲结束 ， 缓冲条应该在的位置的比例
+     *
+     *    这些数据就更新了 模板 里<app-wy-slider>里的数值，继而改变了DOM
+     */
+    onTimeUpdate(e: Event) {                                                     // -------------- (8)
+        // console.log(11111, (<HTMLAudioElement>e.target).currentTime); //这地方需要进行断言，不然 currentTime属性不存在
+        this.currentTime = (<HTMLAudioElement>e.target).currentTime; // 这里取到的时间是 秒 ，注意和总时长 毫秒之间的统一
+        // 这里的比例非常重要，也要用在滑块等的移动上
+        this.percent = (this.currentTime / this.duration) * 100; //move the slider according to the play time
+
+        const buffered = this.audioEl.buffered; //buffered 返回一个 timeRanges Gets a collection of buffered time ranges.
+        // buffered.end(0); // 缓冲区域结束的位置，也是一个时间
+
+        if (buffered.length && this.bufferPercent < 100) {
+            this.bufferPercent = (buffered.end(0) / this.duration) * 100;
+        }
     }
 
     // Play or Pause music
-    onToggle() {
+   onToggle() {                                                                        // -------------- (9)
         // home.component.ts中set list，但是并不是现在就播放 ,
+        // 因为在UI中点击了专辑的播放按钮之后，就触发了 home.component.ts中的onPlaySheet方法
+        // 也就同时 set 出了 songList， playList 和 currentIndex
+        // 但是现实情况下可能出现 setList 但是不播放，也就是currentSong 不存在的情况
         if (!this.currentSong) {
             if (this.playList.length) {
                 // 并且播放列表不为空
                 // this.store$.dispatch(SetCurrentIndex({ currentIndex: 0 })); //播放第一首歌
                 // this.songReady = false;
-                this.updateIndex(0); //播放第一首歌
+                this.updateIndex(0); //播放第一首歌                                       // -------------- (10)
             }
         } else {
             // home.component.ts中set list 并且播放
@@ -290,32 +227,164 @@ export class WyPlayerComponent implements OnInit {
         }
     }
 
-    // play previous song
-    onPrev(index: number) {
-        if (!this.songReady) return;
-        if (this.playList.length === 1) {
-            this.loop();
-        } else {
-            // 如果小于等于0，就播放播放列表中的最后一首
-            const newIndex = index <= 0 ? this.playList.length - 1 : index;
-            this.updateIndex(newIndex);
-        }
+    private updateIndex(index: number) {                                                 // -------------- (10)
+        // 更新索引
+        this.store$.dispatch(SetCurrentIndex({ currentIndex: index })); //播放第index首歌
+        // 这里如果使用的话，那么切换到 新的歌曲之后，要等缓冲结束，才能再切换下一首
+        // 这里隐藏掉就可以飞速切换上下一首歌
+        // this.songReady = false;
     }
 
+
     // play next song
-    onNext(index: number) {
-        if (!this.songReady) return;
+    onNext(index: number) {                                                             // -------------- (11)
+        if (!this.songReady) return;  //其实这里判断是如果不存在的话，就不用切换了
         if (this.playList.length === 1) {
-            this.loop();
+            this.loop();                                                                 // -------------- (11.5)
         } else {
             // 如果大于播放列表，就播放第一首歌曲
             const newIndex = index >= this.playList.length ? 0 : index;
-            this.updateIndex(newIndex);
+            this.updateIndex(newIndex); //播放第newIndex首歌
         }
     }
 
+    // play previous song
+    onPrev(index: number) {                                                             // -------------- (11)
+        if (!this.songReady) return;
+        if (this.playList.length === 1) {
+            this.loop();                                                                // -------------- (11.5)
+        } else {
+            // 如果小于等于0，就播放播放列表中的最后一首
+            const newIndex = index <= 0 ? this.playList.length - 1 : index;
+            this.updateIndex(newIndex); //播放第newIndex首歌
+        }
+    }
+
+    // loop the song
+    private loop() {                                                                   // -------------- (11.5)
+        this.audioEl.currentTime = 0;
+        this.play();
+    }
+
+    // 设置歌曲的进度,但拖动滑块的时候,歌曲的进度随之改变
+    onPercentChange(per: number) {                                                       // -------------- (12)
+        // console.log(1111, per);
+        // this.audioEl.currentTime = this.duration * (per / 100);
+        if (this.currentSong) {
+            // 没有这里的判断，就会出现一拖动滑块，console里面会报错，因为currentTime 没有
+            const currentTime = this.duration * (per / 100);
+            this.audioEl.currentTime = currentTime;
+        }
+    }
+
+    // 实时改变音量的大小
+    onVolumnChange(per: number) {                                                          // -------------- (13)
+        this.audioEl.volume = per / 100;
+    }
+
+    // 点击播放器外部，隐藏音量控制， 点击播放器，不隐藏
+    toggleVolPanel() {                                                                    // -------------- (14)
+        // evt.stopPropagation(); // stop bubbling
+        this.togglePanel("showVolumnPanel");
+    }
+
+    // 控制歌词面板是否显示
+    toggleListPanel() {
+        if (this.songList.length) {
+            // evt.stopPropagation(); // stop bubbling
+            this.togglePanel("showPanel");
+            // this.toggleListDisplayPanel()
+        }
+    }
+
+    togglePanel(type: string) {                                                                // -------------- (15)
+        this[type] = !this[type];
+        // this.showVolumnPanel = !this.showVolumnPanel; // click the 音量按钮 - 显示、隐藏
+        if (this.showVolumnPanel || this.showPanel) {
+            this.bindDocumentClickListener();                                                  // -------------- (16)
+        } else {
+            this.unbindDocumentClickListener();                                           // -------------- (17)
+        }
+    }
+
+    toggleListDisplayPanel() {
+        this.showPanel = !this.showPanel
+        if (this.showPanel) {
+            this.bindDocumentClickListener();
+        } else {
+            this.unbindDocumentClickListener();
+        }
+    }
+
+
+    /**
+     *   <div class="m-player" (click)="selfClick = true">
+     *
+     *    在模板中,在player也就是播放器面板最外层绑定了 (click)="selfClick = true", 那么结合下面的code
+     *    如果点击了播放器面板以外的地方, selfClick就会变为false
+     */
+    //如果音量面板存在, 就绑定一个全局的click事件，在事件内部，判断selfClick是否存在
+    private bindDocumentClickListener() {                                                   // -------------- (16)
+        if (!this.winClick) {
+            //赋值，在document 上绑定一个 click事件
+            this.winClick = fromEvent(this.doc, "click").subscribe(() => {
+                if (!this.selfClick) {
+                    //!this.selfClick说明点击了播放器以外的部分
+                    this.showVolumnPanel = false; // 隐藏面板
+                    this.showPanel = false;
+                    this.unbindDocumentClickListener();   //解绑                              // -------------- (17)
+                }
+                this.selfClick = false;
+            });
+        }
+    }
+
+    //否则就解绑这个事件
+    private unbindDocumentClickListener() {                                                 // -------------- (17)
+        if (this.winClick) {
+            this.winClick.unsubscribe();
+            this.winClick = null;
+        }
+    }
+
+    // 改变播放状态,单曲循环,循环还是随机
+    changeMode() {                                                                      // -------------- (18)
+        const temp = modeTypes[++this.modeCount % 3];
+        // console.log(1111, temp);
+        // 这里set之后，在这里的watchPlayMode中就能监听的到, 然后其中的 the.currentMode = mode, 就会跟着改变
+        // 之后 html中的[ngClass]="currentMode.type" [title]="currentMode.label" 就会跟着改变
+        this.store$.dispatch(SetPlayMode({ playMode: temp }));
+    }
+
+
+    private watchPlayMode(mode: PlayMode) {                                             // -------------- (19)
+        // console.log(3333, mode);
+        this.currentMode = mode;
+        if (this.songList) {
+            // slice()是浅复制，所以相当于是songList数组的一个副本，但是地址不同，值得改变不会影响songList数组本身
+            let list = this.songList.slice(); //建立一个副本
+            if (mode.type === "random") {
+                list = shuffle(this.songList);
+                // console.log(1111, list); //点击播放，然后点击转换就能够看出来了
+
+                // 传入最新的 list 和 当前播放的歌曲
+                this.updateCurrentIndex(list, this.currentSong);                      // -------------- (20)
+                // 更新
+                // 这里dispatch 改变后的list，注意这时候正在播放的歌曲不能改变，所以要在前面添加 updateCurrentIndex
+                this.store$.dispatch(SetPlayList({ playList: list }));
+            }
+        }
+    }
+
+    // 当顺序打乱之后，要拿到当前播放的歌曲，在新的数组里面的索引
+    private updateCurrentIndex(list: Song[], currentSong: Song) {                      // -------------- (20)
+        const newIndex = findIndex(list,currentSong);
+        // 发射出去新的索引
+        this.store$.dispatch(SetCurrentIndex({ currentIndex: newIndex }));
+    }
+
     // When the song plays to the end, what next
-    onEnded() {
+    onEnded() {                                                                      // -------------- (21)
         this.playing = false;
         if (this.currentMode.type === "singleLoop") {
             this.loop();
@@ -324,40 +393,8 @@ export class WyPlayerComponent implements OnInit {
         }
     }
 
-    // loop the song
-    private loop() {
-        this.audioEl.currentTime = 0;
-        this.play();
-    }
-
-    private updateIndex(index: number) {
-        // 更新索引
-        this.store$.dispatch(SetCurrentIndex({ currentIndex: index })); //播放第index首歌
-        this.songReady = false;
-    }
-
-    private play() {
-        this.audioEl.play();
-        this.playing = true; // means now is playing, is a status
-    }
-
-    // 取值器
-    get picUrl(): string {
-        return this.currentSong
-            ? this.currentSong.al.picUrl
-            : "//s4.music.126.net/style/web2/img/default/default_album.jpg";
-    }
-
-    onTimeUpdate(e: Event) {
-        // console.log(11111, (<HTMLAudioElement>e.target).currentTime); //这地方需要进行断言，不然 currentTime属性不存在
-        this.currentTime = (<HTMLAudioElement>e.target).currentTime; // 这里取到的时间是 秒 ，注意和总时长 毫秒之间的统一
-        this.percent = (this.currentTime / this.duration) * 100; //move the slider according to the play time
-
-        const buffered = this.audioEl.buffered; //buffered 返回一个 timeRanges Gets a collection of buffered time ranges.
-        // buffered.end(0); // 缓冲区域结束的位置，也是一个时间
-
-        if (buffered.length && this.bufferPercent < 100) {
-            this.bufferPercent = (buffered.end(0) / this.duration) * 100;
-        }
+    // 在播放列表里通过点击来改变播放的歌曲
+    onChangeSong(song: Song){
+        this.updateCurrentIndex(this.playList, song);
     }
 }
