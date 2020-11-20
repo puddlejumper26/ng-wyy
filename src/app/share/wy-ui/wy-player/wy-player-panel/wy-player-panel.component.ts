@@ -1,3 +1,4 @@
+import { SongSheet } from './../../../../services/data-types/common.types';
 import {
     Component,
     ElementRef,
@@ -43,8 +44,9 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
      * 所以现在出现的问题是 切换到随机播放模式，连续点击下一首之后，打开 播放面板，上面显示的歌曲不是 滑块上面显示的歌曲
     */
 
-    @Output() onClose = new EventEmitter<void>();
-    @Output() onChangeSong = new EventEmitter<Song>();
+    // 这里的关闭的事件要发送给父级 (onClose)="showPanel=false"，这样点击close之后就会关闭面板
+    @Output() onClose = new EventEmitter<void>();                              // -------------------(1)
+    @Output() onChangeSong = new EventEmitter<Song>();                             // -------------------(2)
 
     //因为播放列表和歌词部分都需要用到，所以这里用 ViewChildren
     // @ViewChildren(WyScrollComponent) private wyScroll: QueryList<WyScrollComponent>;
@@ -62,12 +64,14 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
 
     //监听变化
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes.songList) {
+        if (changes.songList) {                                               // -------------------(2)
             // console.log(11111, this.songList);
             // 这里是 切换歌单，比如点击另外一个专辑的播放按钮
             this.currentIndex = 0; //默认从第一首开始播放
         }
-        if (changes.currentSong) {
+
+
+        if (changes.currentSong) {                                             // -------------------(4)
             // console.log(22222, this.currentSong);
             if (this.currentSong) {
                 this.currentIndex = findIndex(this.songList, this.currentSong);
@@ -76,19 +80,20 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
                 this.updateLyrics();
 
                 if (this.show) {
-                    this.scrollToCurrent();
+                    this.scrollToCurrent();                                     // -------------------(5)
                 }
             }
         }
-        if (changes["show"]) {
+        if (changes["show"]) {                                                 // -------------------(3)
             //如果不是第一次变化,因为页面一进来就有了第一次变化，这里就需要屏蔽掉, 这时候就刷新 BScroll 组件
             // if(!changes.show.firstChange && this.show){
             //     console.log('wyScroll', this.wyScroll);
             //     this.wyScroll.first.refreshScroll(); // first 是在有多个 BScroll 组件的情况下，采用第一个，还有 .last
+            //    这里的first 是指歌曲列表里的，last是指歌词面板里的
             //     this.wyScroll.last.refreshScroll();
             // }
             if (!changes.show.firstChange && this.show) {
-                console.log("wyScroll", this.wyScroll);
+                // console.log("wyScroll", this.wyScroll);
                 this.wyScroll.first.refreshScroll();
                 this.wyScroll.last.refreshScroll();
 
@@ -132,33 +137,44 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
         }
     }
 
+    sentChangeSong(song: Song){                                                             // -------------------(2)
+        this.onChangeSong.emit(song);
+    }
+
     private updateLyrics() {
         this.songServe.getLyric()
     }
 
     // 将滚动到当前歌曲的位置，并且有深色的显示条, 也就是播放的时候，保持当前的歌曲是可见的
     // 所以需要知道当前正在播放歌曲的 offsetTop， 以及 BScroll 当前列表滚动的位置
-    private scrollToCurrent(speed = 300) {
+    private scrollToCurrent(speed = 300) {                                                  // -------------------(5)
+
+        // this.wyScroll.first可以拿到scroll组件的一个实例
+        // el.nativeElement拿到组件下面的dom
         // 首先获得列表每一行的元素，就是所有的 li 标签
         // 因为 wyScroll 是 WyScrollComponent，  所以 这里的 el 需要被定义在 WyScrollComponent的constructor中
         const songListRefs = this.wyScroll.first.el.nativeElement.querySelectorAll('ul li');
         // console.log('songListRefs', songListRefs);
         if(songListRefs.length){
             // 这里需要定义下 HTMLElement 类型， 这样下面的currentLi才能取到 offsetTop
+            // 找到当前正在播放的 li
             const currentLi = <HTMLElement>songListRefs[this.currentIndex || 0];
 
+            // 这里需要在 wy-scroll.component中this.bs.on("scrollEnd", ({ y }) => this.onScrollEnd.emit(y));
+            // 然后在本组件的模板中(onScrollEnd)="scrollY = $event"
             // 下面这两个就是用来判断播放歌曲是否超出可视区的
             // offsetTop - |scrollY| > 一个特定值，就说明超过可视区  (这是向下播放的情况)
             // offsetTop < |scrollY|  (这是向上播放的情况)
             // 这两个都是通过log在浏览器中慢慢测出来的
             // 这个特定的值就是播放列表打开之后实际的高度，可以直接在浏览器中测出来，大概 5个歌曲名字的高度
+
             const offsetTop = currentLi.offsetTop;
             const offsetHeight = currentLi.offsetHeight;
             const scrollYValue = Math.abs(this.scrollY);
 
-            console.log('offsetTop', offsetTop);
-            console.log('offsetHeight',offsetHeight);
-            console.log('scrollY', this.scrollY);
+            // console.log('offsetTop', offsetTop);
+            // console.log('offsetHeight',offsetHeight);
+            // console.log('scrollY', this.scrollY);
 
             // if(offsetTop - Math.abs(this.scrollY) > offsetHeight * 5 ){
             if (

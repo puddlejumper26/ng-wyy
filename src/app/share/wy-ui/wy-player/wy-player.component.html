@@ -51,6 +51,8 @@
             </div>
             <div class="ctrl">
                 <i class="volume" title="音量" (click)="toggleVolPanel()"></i>
+                <!-- 播放模式的图标，随着点击会有三种变化 -->
+                <!-- 这里都是动态的绑定，随着后面changeMode()带来的变化，而改变currentMode.type和currentMode.label -->
                 <i [ngClass]="currentMode.type" [title]="currentMode.label" (click)="changeMode()"></i>
                 <!-- 展开播放面板的按钮 -->
                 <p class="open" (click)="toggleListPanel()">

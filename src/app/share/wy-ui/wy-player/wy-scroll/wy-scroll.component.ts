@@ -19,9 +19,11 @@ import { timer } from 'rxjs';
 
 //https://better-scroll.github.io/docs/en-US/plugins/scroll-bar.html#usage
 // 在 ngAfterViewInit 中 初始化
+// 接下来就能使用scrollbar了
 BScroll.use(ScrollBar);
 
 //https://better-scroll.github.io/docs/en-US/plugins/mouse-wheel.html#basic-usage
+//  接下来就能开始使用鼠标的滚轮了
 BScroll.use(MouseWheel);
 
 @Component({
@@ -45,11 +47,16 @@ BScroll.use(MouseWheel);
 })
 export class WyScrollComponent implements OnInit, AfterViewInit, OnChanges {
     @Input() data: any[];
-    @Input() refreshDelay = 50; //延迟50毫秒刷新
+    @Input() refreshDelay = 50; //延迟50毫秒刷新，可以不用Input来装饰，因为这里规定了就是50
 
     @Output() private onScrollEnd = new EventEmitter<number>();
 
     private bs: BScroll;
+
+
+    /**
+     *    使用这个插件， 需要对这个的DOM进行使用，然后在 ngAfterViewInit中进行初始化
+     */
 
     @ViewChild("wrap", { static: true }) private wrapRef: ElementRef;
 
@@ -65,7 +72,7 @@ export class WyScrollComponent implements OnInit, AfterViewInit, OnChanges {
             //https://better-scroll.github.io/docs/en-US/plugins/scroll-bar.html#scrollbar-options
             //设置Scrollbar， 这一步在上一个commit中就做过了
             scrollbar: {
-                interactive: true,
+                interactive: true, //这个设置是让鼠标能够点击拖动scroll bar
             },
             // 设置鼠标滚轮，这一步在上一个commit中就做过了， 都用默认值就好了
             mouseWheel: {},
@@ -133,13 +140,13 @@ export class WyScrollComponent implements OnInit, AfterViewInit, OnChanges {
       */
     scrollToElement(...args){
         // 这里把到时候调用时候的参数 通过 args，都直接传进去
-        console.log(11111, ...args);
-        console.log(22222, args);
+        // console.log(11111, ...args);
+        // console.log(22222, args);
         this.bs.scrollToElement.apply(this.bs, args)
     }
 
     private refresh() {
-        console.log("refresh");
+        // console.log("refresh");
         this.bs.refresh();
     }
     //因为上面的ngAfterViewInit代码导致我们已进入页面，就初始化了BScroll，并且高度是0，所以这个时候是没法滚动的
@@ -147,6 +154,7 @@ export class WyScrollComponent implements OnInit, AfterViewInit, OnChanges {
     // https://better-scroll.github.io/docs/en-US/guide/base-scroll-api.html#methods
 
     // 面板的消失隐藏，播放列表的更新等 ，都需要刷新BScroll， 但是刷新一定要在改变结束之后
+    // 通过查看这个方法的使用地方，思考什么时候需要刷新，如果考虑不完全，那么就会无法起作用
     refreshScroll() {
         // 不能直接  this.bs.refresh()， 因为有一定的延迟
 

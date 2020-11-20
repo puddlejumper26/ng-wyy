@@ -277,6 +277,11 @@ export class WyPlayerComponent implements OnInit {
         }
     }
 
+
+    /**
+     *                                      音量调节，以及音量面板隐藏
+     */
+
     // 实时改变音量的大小
     onVolumnChange(per: number) {                                                          // -------------- (13)
         this.audioEl.volume = per / 100;
@@ -288,15 +293,6 @@ export class WyPlayerComponent implements OnInit {
         this.togglePanel("showVolumnPanel");
     }
 
-    // 控制歌词面板是否显示
-    toggleListPanel() {
-        if (this.songList.length) {
-            // evt.stopPropagation(); // stop bubbling
-            this.togglePanel("showPanel");
-            // this.toggleListDisplayPanel()
-        }
-    }
-
     togglePanel(type: string) {                                                                // -------------- (15)
         this[type] = !this[type];
         // this.showVolumnPanel = !this.showVolumnPanel; // click the 音量按钮 - 显示、隐藏
@@ -306,16 +302,6 @@ export class WyPlayerComponent implements OnInit {
             this.unbindDocumentClickListener();                                           // -------------- (17)
         }
     }
-
-    toggleListDisplayPanel() {
-        this.showPanel = !this.showPanel
-        if (this.showPanel) {
-            this.bindDocumentClickListener();
-        } else {
-            this.unbindDocumentClickListener();
-        }
-    }
-
 
     /**
      *   <div class="m-player" (click)="selfClick = true">
@@ -347,9 +333,20 @@ export class WyPlayerComponent implements OnInit {
         }
     }
 
-    // 改变播放状态,单曲循环,循环还是随机
+
+    /**
+     *                                               播放模式
+     */
+
+    // 改变播放状态,单曲循环,循环还是随机 这里发射出去之后， 就会被这里constructor中的
+    // appStore$
+    //         .pipe(select(getPlayMode))
+    //         .subscribe((mode) => this.watchPlayMode(mode));
+    // 接受， 继而触发下面的watchPlayMode方法
     changeMode() {                                                                      // -------------- (18)
-        const temp = modeTypes[++this.modeCount % 3];
+        // console.log('++this.modeCount % 3', this.modeCount);
+        // 这里 使用 ++ 相当于是把 this.modeCount 自身增加1 之后在 %3，每次模板被点击一次，这里的modeCount都自增1
+        const temp = modeTypes[(++this.modeCount) % 3];
         // console.log(1111, temp);
         // 这里set之后，在这里的watchPlayMode中就能监听的到, 然后其中的 the.currentMode = mode, 就会跟着改变
         // 之后 html中的[ngClass]="currentMode.type" [title]="currentMode.label" 就会跟着改变
@@ -357,20 +354,22 @@ export class WyPlayerComponent implements OnInit {
     }
 
 
+    // 在changeMode()被触发之后 触发
     private watchPlayMode(mode: PlayMode) {                                             // -------------- (19)
         // console.log(3333, mode);
         this.currentMode = mode;
         if (this.songList) {
             // slice()是浅复制，所以相当于是songList数组的一个副本，但是地址不同，值得改变不会影响songList数组本身
             let list = this.songList.slice(); //建立一个副本
+            // 这里要考虑随机的播放具体的实施
             if (mode.type === "random") {
                 list = shuffle(this.songList);
                 // console.log(1111, list); //点击播放，然后点击转换就能够看出来了
-
                 // 传入最新的 list 和 当前播放的歌曲
                 this.updateCurrentIndex(list, this.currentSong);                      // -------------- (20)
                 // 更新
                 // 这里dispatch 改变后的list，注意这时候正在播放的歌曲不能改变，所以要在前面添加 updateCurrentIndex
+                // 发射新的歌曲列表
                 this.store$.dispatch(SetPlayList({ playList: list }));
             }
         }
@@ -393,8 +392,33 @@ export class WyPlayerComponent implements OnInit {
         }
     }
 
+    // 模板上的按钮触发这个方法，显示或者隐藏歌词面板
+    // 控制歌词面板是否显示
+    // 这里的改变了showPanel的值，从而触发了 <app-wy-player-panel [show]="showPanel">
+    // 中的值，并继续传递给 wy-playerpanel中的 @Input show
+    // 从而最终来使得面板 隐藏或者显示
+
+    toggleListPanel() {                                                                // -------------- (22)
+        if (this.songList.length) {
+            // evt.stopPropagation(); // stop bubbling
+            this.togglePanel("showPanel");
+            // this.toggleListDisplayPanel()
+        }
+    }
+
+
+    toggleListDisplayPanel() {                                                      // -------------- (22)
+        this.showPanel = !this.showPanel
+        if (this.showPanel) {
+            this.bindDocumentClickListener();
+        } else {
+            this.unbindDocumentClickListener();
+        }
+    }
+
+
     // 在播放列表里通过点击来改变播放的歌曲
-    onChangeSong(song: Song){
+    onChangeSong(song: Song){                                                        // -------------------(23)
         this.updateCurrentIndex(this.playList, song);
     }
 }
