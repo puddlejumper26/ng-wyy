@@ -55,7 +55,8 @@ export class HomeComponent implements OnInit {
                 this.songSheetLists = songSheetList;
             });
 
-        // 这里通过select操作符，拿到 player 里state的数据
+        // 这里通过select操作符，拿到 player 里state的数据,
+        // 然后下面的this.playerState.playMode.type === 'random'才能够运作
         this.store$.pipe(select(getPlayer)).subscribe(res => this.playerState = res)
     }
 

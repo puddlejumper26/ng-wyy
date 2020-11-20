@@ -34,8 +34,9 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
 
     // 应该到 if(changes['currentSong'])中变化时，求出在songList中的一个索引
     // 中间的媒介就是现在正在播放的歌曲， currentSong
-    currentIndex: number;
+    currentIndex: number;                                                     // -------------------(6)
     // @Input() currentIndex: number;
+
     /**
      * 因为这里从 wy-player.component.html中传入的值，<app-wy-player-panel>
      * 同时涉及到了 songList和playList，
@@ -74,7 +75,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
         if (changes.currentSong) {                                             // -------------------(4)
             // console.log(22222, this.currentSong);
             if (this.currentSong) {
-                this.currentIndex = findIndex(this.songList, this.currentSong);
+                this.currentIndex = findIndex(this.songList, this.currentSong);    // -------------------(6)
 
                 //同时 这个时候要请求歌词
                 this.updateLyrics();
@@ -119,7 +120,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
                  *  timer(1000) 一秒之后发出一个流，然后就结束了
                  */
 
-                timer(80).subscribe(() => {
+                timer(80).subscribe(() => {                                             // -------------------(6)
                     if (this.currentSong) {
                         this.scrollToCurrent(0); //这里设置成0，那么点击随机，点击歌曲下一首，点击播放面板，打开之后不会有一个歌曲列表跳转的动作
                     }
@@ -182,7 +183,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
                 offsetTop < scrollYValue
             ) {
                 //(第一个是目标 DOM 对象, 300 是速度)
-                this.wyScroll.first.scrollToElement(
+                this.wyScroll.first.scrollToElement(   //这个方法被定义在 wy scroll 组件中，最后仍旧使用了 BS 中的API
                     currentLi,
                     speed,
                     false,
