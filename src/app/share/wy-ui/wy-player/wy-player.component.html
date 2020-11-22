@@ -61,7 +61,9 @@
 
                 <!-- volumn control  这里[wyVertical]="true" 让组件垂直-->
                 <div class="control-vol" [hidden]="!showVolumnPanel">
-                    <app-wy-slider [wyVertical]="true" [(ngModel)]="volumn" (ngModelChange)="onVolumnChange($event)"></app-wy-slider>
+                    <!-- <app-wy-slider [wyVertical]="true" [(ngModel)]="volumn" (ngModelChange)="onVolumnChange($event)"></app-wy-slider> -->
+                    <!-- 这里如果用ngModelChange进行绑定的话，那么就无法和这里的volumn进行绑定，那么在ts中的volumn的初始值设定就无法体现在音量上，仅仅只能体现在模板的显示上 -->
+                    <app-wy-slider [wyVertical]="true" [(ngModel)]="volumn" (wyOnAfterChange)="onVolumnChange($event)"></app-wy-slider>
                 </div>
             </div>
 
