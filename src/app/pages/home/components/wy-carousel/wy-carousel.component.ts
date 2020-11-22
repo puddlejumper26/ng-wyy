@@ -22,6 +22,7 @@ import {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WyCarouselComponent implements OnInit {
+    //  Static 意味着在变化发生之前应该进行检测，true意味着模板是静态的，false意味着模板不是静态的，比如ngIf
     // here we need static, cause Angular 8 would calculate the time for template searching, static means
     // the check should happen before or after the changes, true means the template is static,
     // false means the tempalte is not static, e.g. decorated with *ngIf,

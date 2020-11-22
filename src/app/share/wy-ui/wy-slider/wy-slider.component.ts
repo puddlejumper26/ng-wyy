@@ -172,16 +172,19 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
                 tap(sliderEvent), // 阻止冒泡和默认事件
                 pluck(...pluckKey), //展开运算符， 展开这个数组， 这步之后就 取到了当前鼠标或者touch的位置
                 // 现在已经拿到了 鼠标或者 touch 的位置，是一个 number类型
-                //这时候已经拿到了 位置，是一个 Number， 这时候要根据 位置算出值，所以要做 位置和值的转换
+                //这时候已经拿到了 鼠标的位置或者touch位置，是一个 number， 这时候要根据 位置算出值，所以要做 位置和值的转换
                 map((position: number) => this.findClosestValue(position))    // ------------------------ (2)
             );
 
             // 这里有原生的 document  属性， angular已经有一个已经 依赖注入过的 document 对象
             // https://angular.io/api/common/DOCUMENT
             // 避免是用原生的浏览器的对象，因为后期渲染的时候会出问题。  解释看下面
-            //
+            // this.doc: check constructor for the DOCUMENT  这里应该指的是整个的页面
             source.end$ = fromEvent(this.doc, end);               // ------------------------ (2)
-            // check constructor for the DOCUMENT
+            // source.end$ = fromEvent(this.sliderDom, end);     // 也能够运行
+
+
+            // this.doc: check constructor for the DOCUMENT
             source.moveResolved$ = fromEvent(this.doc, move).pipe(
                 filter(filterEvent),
                 tap(sliderEvent),
@@ -197,13 +200,77 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
         this.dragMove$ = merge(mouse.moveResolved$, touch.moveResolved$);          // ------------------------ (3)
         this.dragEnd$ = merge(mouse.end$, touch.end$);                            // ------------------------ (3)
 
-
         /**
-         *               接下来就是订阅这三个事件
+         *               接下来就是订阅这三个事件 跳到 (4)
          *
          */
 
     } // end of function createDraggingObservables
+
+    // position / slider component length = (val - min)/(max-min) 这里因为 min=0， max=100， 所以就可以直接写成 val / 100
+    // 滑块当前位置 / 滑块组件总长 === (val - 最小值) / (值得范围) 以此来求得 val
+    // min and max are the @Input wyMin and wyMax above, for the user to set
+    // slider component length is based on the dom of this component, wySlider
+    private findClosestValue(position: number): number {                // ------------------------ (2)
+        // log出的位置，其实就是点击了组件中的位置的 left
+        // console.log('position --', position);
+
+        // obtain slider length
+        const sliderLength = this.getSliderLength();                    // ------------------------ (2)
+        // 就是滑动条整体的长度，这里一旦获得之后，就是一个固定的值
+        // console.log('sliderLength --', sliderLength);
+
+        // obtain slider (left, top) position 滑块(左,上）端点位置
+        const sliderStart = this.getSliderStartPosition();               // ------------------------ (2)
+        // 就是滑动条开始的位置，这里一旦获得之后，就是一个固定的值
+        // console.log('sliderStart --', sliderStart);
+
+        // const ratio = (position - sliderStart)/sliderLength
+        // obtain position / slider component length 但是下面这一行没法用在垂直情况下
+        // 查看 https://github.com/puddlejumper26/ng-wyy/issues/8
+        // 因为这个时候的 sliderStart 是从 A点开始，而垂直的状况下，这个是顶点，而实际需要的应该是这个时候的B点
+        // 所以这时候的 公式 求出来的就是   CA/BA 而我们需要的是 BC/BA
+        // 因为这里的ratio 的值得范围就是 位于 0-1 之间，所以可以引用 limitNumberInRange，仅仅只是为了限制一下
+        const ratio = limitNumberInRange((position - sliderStart) / sliderLength, 0, 1);
+        // 所以这里调整一下
+        const ratioTrue = this.wyVertical ? 1 - ratio : ratio;
+
+        // val === ratio * (max-min) + min
+        // 返回值就是 在滑条上 缓冲条，进度条和滑块应该所在的位置，所以在 dragStart$ 和 dragMove$ 的时候都需要用
+        // console.log('return value - ', ratioTrue * (this.wyMax - this.wyMin) + this.wyMin);
+        return ratioTrue * (this.wyMax - this.wyMin) + this.wyMin;
+
+    }
+
+    // 通过本身的dom就可以或者整体的长度或者高度
+    private getSliderLength(): number {                       // ------------------------ (2)
+        return this.wyVertical
+            ? this.sliderDom.clientHeight
+            : this.sliderDom.clientWidth;
+    }
+
+    private getSliderStartPosition(): number {               // ------------------------ (2)
+        const offset = getElementOffset(this.sliderDom);   //获取offsetLeft 或者 offsetTop 的值
+        return this.wyVertical ? offset.top : offset.left;
+    }
+
+
+    /**                               为什么使用 bind
+     *      const module = {
+                x: 42,
+                getX: function() {
+                   return this.x;
+                }
+            };
+
+            const unboundGetX = module.getX;
+            console.log(unboundGetX()); // The function gets invoked at the global scope
+            // expected output: undefined
+
+            const boundGetX = unboundGetX.bind(module);
+            console.log(boundGetX());
+            // expected output: 42
+     */
 
     //参数为数组，是因为需要能够同时订阅多个事件, 就是用来订阅这三类事件的
     private subscribeDrag(events: string[] = ["start", "move", "end"]) {     // ------------------------ (4) (7)
@@ -212,16 +279,18 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
         // };
         if (inArray(events, "start") && this.dragStart$ && !this.dragStart_) {
             this.dragStart_ = this.dragStart$.subscribe(
-                this.onDragStart.bind(this)                                        // ------------------------ (5)
+                this.onDragStart.bind(this)       // 这里的this 就是 wySliderComponent          // ------------------------ (5)
             );
         }
         if (inArray(events, "move") && this.dragMove$ && !this.dragMove_) {
             this.dragMove_ = this.dragMove$.subscribe(
-                this.onDragMove.bind(this)                                      // ------------------------ (5)
+                this.onDragMove.bind(this)         // 这里的this 就是 wySliderComponent          // ------------------------ (5)
             );
         }
         if ((inArray(events, "end"), this.dragEnd$ && !this.dragEnd_)) {
-            this.dragEnd_ = this.dragEnd$.subscribe(this.onDragEnd.bind(this)); // ------------------------ (5)
+            this.dragEnd_ = this.dragEnd$.subscribe(
+                this.onDragEnd.bind(this)         // 这里的this 就是 wySliderComponent          // ------------------------ (5)
+            );
         }
     }
 
@@ -243,32 +312,55 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
 
     // 参数是 number， 是因为拿到的是一个位置， 这个并非鼠标dom的距离，而是根据鼠标的位置换算成我们需要的值  this.findClosestValue(position)
     private onDragStart(value: number) {                             // ------------------------ (5)
-        // console.log(111111, value);
-        //需要绑定 move 和 end 事件， true 表明正在移动
+        // 这里接受的值就是上面findClosestValue 的返回值，
+        // 但一开始点击的时候，得到的findClosestValue的返回值被赋予这里的value，
+        // 之后移动，findClosestValue的返回值就被赋予了下面的onDragMove里的value
+        // console.log('onDragStart - value - ', value);
+
+        //这里的作用就是需要绑定 move 和 end 事件， true 表明正在移动
         this.toggleDragMoving(true);                                  // ------------------------ (6)
-        this.setValue(value); // 这样鼠标点击到进度条的任何一点， handle都会移动过去
+        // 这样鼠标点击到进度条的任何一点， handle都会移动过去
+        this.setValue(value);
     }
+
     private onDragMove(value: number) {                             // ------------------------ (8)
+        // 这里接受的值就是上面findClosestValue 的返回值，
+        // 但一开始点击的时候，得到的findClosestValue的返回值被赋予上面 onDragStart的value，
+        // 之后移动，findClosestValue的返回值就被赋予了这里的onDragMove里的value
+        // console.log('onDragMove - value - ', value);
         if (this.isDragging) {
             this.setValue(value); //传入 value                       // ------------------------ (9)
             //手动更新检测 When a view uses the OnPush (checkOnce) change detection strategy, explicitly marks the view as changed so that it can be checked again.
-            this.cdr.markForCheck();                            // ------------------------ (11)
+            this.cdr.markForCheck(); // dom 发生变化，手动变更检测                       // ------------------------ (11)
         }
     }
+
     // 在 onDragEnd的時候 需要改變歌曲的進度，参考onPercentChange（wy-player.component.ts）
     private onDragEnd() {                                          // ------------------------ (5)
         //这里发射这个值，这样 和 wy-player.component.html的 (wyOnAfterChange)="onPercentChange($event)"中进行绑定，
         // 这样this.value就通过  $event 传进了 wy-player.component
-        this.wyOnAfterChange.emit(this.value);
+        this.wyOnAfterChange.emit(this.value);                                                            // <====================== !!!!!!!!!!!
+        // 这里就需要解绑move 和 end
         this.toggleDragMoving(false);  //false 表明不在移动                           // ------------------------ (6)
-        this.cdr.markForCheck(); //手动变更检测                       // ------------------------ (11)
+        this.cdr.markForCheck(); // dom 发生变化，手动变更检测                       // ------------------------ (11)
+    }
+
+    //如果正在移动，用一个变量标识一下
+    private toggleDragMoving(movable: boolean) {                     // ------------------------ (6)
+        this.isDragging = movable;
+        if (movable) {
+            //绑定 move 和 end 事件,并触发其中的 move 和 end 的方法
+            this.subscribeDrag(["move", "end"]); //绑定 move 和 end 事件,   // ------------------------ (7)
+        } else {
+            this.unSubscribeDrag(["move", "end"]); //如果没有移动，就解绑   // ------------------------ (7)
+        }
     }
 
     // to save the value , 因为如果从外面传入一个值得话，需要控制合法性，所以需要 needCheck
     // 在最后的 writeValue() 中 needCheck的值就是
     private setValue(value: SliderValue, needCheck = false) {                         // ------------------------ (9)
         if (needCheck) {
-            if (this.isDragging) return; //如果在拖拽过程中，就直接 return 了
+            if (this.isDragging) return; //如果在拖拽过程中，就直接 return 了，如果没有这一步，在进度条的拖拽过程中会出现不流畅
             this.value = this.formatValue(value); //把不合法的值变成合法的值   // ------------------------ (10)
             this.updateTrackAndHandles();                                      // ------------------------ (12)
         } else if (!this.valuesEqual(this.value, value)) {                     // ------------------------ (12)
@@ -311,63 +403,20 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
     //          和 wy-slider-handle 中的 wyOffset 属性
     // 这两个属性也是绑定在 wy-slider.component.html中的
     private updateTrackAndHandles() {                                   // ------------------------ (12)
-        // offset 就是 把 value的值转换成 dom 所需要的百分比
+        // console.log('value ---', this.value);
+        // offset 就是 把 value的值转换成 dom 所需要的百分比的具体数值
+
+        // 也就是相对于原点的移动距离, 因为最小值是0，最大值是100，所以这里 this.offset = this.value
         this.offset = this.getValueToOffset(this.value);               // ------------------------ (13)
+
+        // console.log('offset---', this.offset);
         // 这里dom 发生变化 还是要手动检测
-        this.cdr.markForCheck();                                     // ------------------------ (11)
+        this.cdr.markForCheck();   // dom 发生变化，手动变更检测                       // ------------------------ (11)
     }
 
-    // 转换 value  to offset 根据传入的值 求出 dom 上 移动所需要的百分比
+    // 转换 value  to offset 根据传入的值 求出 dom 上 移动所需要的数字
     private getValueToOffset(value: SliderValue): SliderValue {             // ------------------------ (13)
         return getPercent(this.wyMin, this.wyMax, value);
-    }
-
-    //如果正在移动，用一个变量标识一下
-    private toggleDragMoving(movable: boolean) {                     // ------------------------ (6)
-        this.isDragging = movable;
-        if (movable) {
-            //绑定 move 和 end 事件,并触发其中的 move 和 start 的方法
-            this.subscribeDrag(["move", "end"]); //绑定 move 和 end 事件,   // ------------------------ (7)
-        } else {
-            this.unSubscribeDrag(["move", "end"]); //如果没有移动，就解绑   // ------------------------ (7)
-        }
-    }
-
-    // position / slider component length = (val - min)/(max-min) 这里因为 min=0， max=100， 所以就可以直接写成 val / 100
-    // 滑块当前位置 / 滑块组件总长 === (val - 最小值) / (值得范围) 以此来求得 val
-    // min and max are the @Input wyMin and wyMax above, for the user to set
-    // slider component length is based on the dom of this component, wySlider
-    private findClosestValue(position: number): number {                // ------------------------ (2)
-        // obtain slider length
-        const sliderLength = this.getSliderLength();                    // ------------------------ (2)
-
-        // obtain slider (left, top) position 滑块(左,上）端点位置
-        const sliderStart = this.getSliderStartPosition();               // ------------------------ (2)
-
-        // const ratio = (position - sliderStart)/sliderLength
-        // obtain position / slider component length 但是下面这一行没法用在垂直情况下
-        // 查看 https://github.com/puddlejumper26/ng-wyy/issues/8
-        // 因为这个时候的 sliderStart 是从 A点开始，而垂直的状况下，这个是顶点，而实际需要的应该是这个时候的B点
-        // 所以这时候的 公式 求出来的就是   CA/BA 而我们需要的是 BC/BA
-        // 因为这里的ratio 的值得范围就是 位于 0-1 之间，所以可以引用 limitNumberInRange，仅仅只是为了限制一下
-        const ratio = limitNumberInRange((position - sliderStart) / sliderLength, 0, 1);
-        // 所以这里调整一下
-        const ratioTrue = this.wyVertical ? 1 - ratio : ratio;
-
-        // val === ratio * (max-min) + min
-        return ratioTrue * (this.wyMax - this.wyMin) + this.wyMin;
-    }
-
-    // 通过本身的dom就可以或者整体的长度或者高度
-    private getSliderLength(): number {                       // ------------------------ (2)
-        return this.wyVertical
-            ? this.sliderDom.clientHeight
-            : this.sliderDom.clientWidth;
-    }
-
-    private getSliderStartPosition(): number {               // ------------------------ (2)
-        const offset = getElementOffset(this.sliderDom);   //获取offsetLeft 或者 offsetTop 的值
-        return this.wyVertical ? offset.top : offset.left;
     }
 
     private onValueChange(value: SliderValue): void {}
@@ -400,6 +449,10 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
         this.onTouched = fn;
     }
 
+
+    /**
+     *   放在最后的组件销毁
+     */
     ngOnDestroy() {
         this.unSubscribeDrag();
     }

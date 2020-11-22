@@ -3,6 +3,7 @@ export function limitNumberInRange(val: number, min: number, max: number): numbe
     return Math.min(Math.max(val, min), max)
 }
 
+// 最后得到的是一个介于[0-100]之间的一个数字，不是百分数
 export function getPercent(min: number, max: number, val: number): number {
     return ((val - min)/(max - min)) * 100;
 }

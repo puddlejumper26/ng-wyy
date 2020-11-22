@@ -22,9 +22,9 @@ export class SingleSheetComponent implements OnInit {
 
     ngOnInit() {}
 
+    // 这里的id就是专辑的id号
     playSheet(id: number) {
         this.onPlay.emit(id);
-        console.log('single-sheet emit id - ', id);
-
+        // console.log('single-sheet emit id - ', id);
     }
 }

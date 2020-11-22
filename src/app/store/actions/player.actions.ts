@@ -23,3 +23,15 @@ export const SetPlayList = createAction('[player] Set playList', props<{ playLis
 export const SetSongList = createAction('[player] Set songList', props<{ songList: Song[]}>());
 export const SetPlayMode = createAction('[player] Set playMode', props<{ playMode: PlayMode}>());
 export const SetCurrentIndex = createAction('[player] Set currentIndex', props<{ currentIndex: number}>());
+
+
+/**
+ *   props() function takes care of adding properties without payload
+ *
+ *   这篇文章解释了为什么可以如上进行 createAction 的定义
+ *   https://medium.com/@gregor.woiwode/ngrx-8-meet-the-new-upcoming-factory-methods-of-the-next-major-release-a97a079cc089
+ *
+ *   这篇文具体解释了 Actions of NgRx
+ *    https://medium.com/angular-in-depth/ngrx-action-creators-redesigned-d396960e46da
+ *
+ */

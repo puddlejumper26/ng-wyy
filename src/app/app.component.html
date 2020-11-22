@@ -69,6 +69,8 @@
             </div>
         </nz-header>
 
+        <!-- 中间的内容 轮播图，16张专辑，右边的9张热门歌手 -->
+        <!-- 这里通过routing 来引入进了 home.component -->
         <nz-content class="content">
             <router-outlet></router-outlet>
         </nz-content>
@@ -79,4 +81,6 @@
     </nz-layout>
 </div>
 
+<!-- 最下面的播放器组件 -->
+<!-- 这里通过组件件的import引入了 wy-player component -->
 <app-wy-player></app-wy-player>

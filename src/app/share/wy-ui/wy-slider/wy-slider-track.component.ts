@@ -29,6 +29,8 @@ export class WySliderTrackComponent implements OnInit, OnChanges {
     @Input() wyLength: number;  //滑块要移动的距离 和 slider-handle 中wyOffset一样
     // 这里才有， slider-handle 中就没有 从 slider.component.html中获得，
     // 和模板中的[class.buffer]="wyBuffer"进行绑定，就能显示缓冲条了
+    // 这里的wyBuffer和slider.component.html 中的 [wyBuffer]="true" 控制是否显示 缓冲条
+    //  具体缓冲条的位置计算 要在 wy-player.component中 onTimeUpdate 中进行计算
     @Input() wyBuffer = false;
     // 通过 angular自身的 [ngStyle] 来将这个变化传给组件，
     // 这里需要定义WySliderStyle，不然下面的赋值会出错

@@ -1,6 +1,7 @@
 import { Song } from '../services/data-types/common.types';
 import { getRandomInt } from './number';
 
+// target在传入的数组中存在
 export function inArray(arr: any[], target: any): boolean {
     return arr.indexOf(target) !== -1;
 }

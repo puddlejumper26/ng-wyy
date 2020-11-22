@@ -9,6 +9,9 @@ import { Song, SongUrl } from "./data-types/common.types";
 /**
  *    This should be used together with
  *                                  sheet.service.ts
+ *
+ *              这个service的主要作用就是 通过 传进来一个（多个） 歌曲的 id
+ *              来得到这些歌曲的 播放地址 url
  */
 
 @Injectable({
@@ -20,20 +23,12 @@ export class SongService {
         @Inject(API_CONFIG) private uri: string
     ) {}
 
-    //根据 网易云的API， 接口可以同时获取多个歌曲的播放地址，所以这里接受的是一个 string
-    getSongUrl(ids: string): Observable<SongUrl[]> {
-        const params = new HttpParams().set("id", ids);
-        return this.http
-            .get(this.uri + "song/url", { params })
-            .pipe(map((res: { data: SongUrl[] }) => res.data));
-    }
-
     // parameter could be one single sone, could a songs array
     // 参数是 单个的一首歌，也可以是歌曲组成的数组, 因为可以播放一个歌单，也可能是播放一首歌
     getSongList(songs: Song | Song[]): Observable<Song[]> {
         //  先不管传入是什么格式，都转换成数组
         // slice() 避免引用的问题,
-        // slice()是浅复制，所以相当于是songs数组的一个副本，但是地址不同，值得改变不会影响songs数组本身
+        // slice()是浅复制，所以相当于是songs数组的一个副本，但是地址不同，值的改变不会影响songs数组本身
         // console.log('songs', songs);
         const songArr = Array.isArray(songs) ? songs.slice() : [songs];
         // console.log('songArr', songArr);
@@ -41,7 +36,7 @@ export class SongService {
         // 需要把songs的每一个id 组成一个 字符串
         //这里把这个songArr数组中每个元素里的id属性的值练成了一个整体，
         const ids = songArr.map((item) => item.id).join(",");
-        // console.log('ids', ids );
+        // console.log('ids', ids );  看下面的解释
         //  console.log('this.getSongUrl(ids)', this.getSongUrl(ids));
 
         // new Observable可以创造一个流
@@ -60,6 +55,14 @@ export class SongService {
         return this.getSongUrl(ids).pipe(map(urls => this.generateSongList(songArr, urls)))
     }
 
+    //根据 网易云的API， 接口可以同时获取多个歌曲的播放地址，所以这里接受的是一个 string
+    getSongUrl(ids: string): Observable<SongUrl[]> {
+        const params = new HttpParams().set("id", ids);
+        return this.http
+            .get(this.uri + "song/url", { params })
+            .pipe(map((res: { data: SongUrl[] }) => res.data));
+    }
+
     // 拼接的方法 ， 注意这里返回的是普通的 一个 Song[]， 而getSongList 返回的是一个 Observable
     // 拼接 歌单详情 和 URL 两个在一起
     private generateSongList(songs: Song[], urls: SongUrl[]): Song[] {
@@ -73,7 +76,7 @@ export class SongService {
                 result.push({ ...song, url }); //这里的result就是 两个拼接的结果，并且类型是 Song[]
             }
         });
-        console.log('result', result);  // 看下面的解释
+        // console.log('result', result);  // 看下面的解释
         return result;
     }
 
