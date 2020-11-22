@@ -239,7 +239,7 @@ export class WyPlayerComponent implements OnInit {
     // play next song
     onNext(index: number) {                                                             // -------------- (11)
         if (!this.songReady) return;  //其实这里判断是如果不存在的话，就不用切换了
-        if (this.playList.length === 1) {
+        if (this.playList.length === 1 || this.currentMode.type === 'singleLoop') {
             this.loop();                                                                 // -------------- (11.5)
         } else {
             // 如果大于播放列表，就播放第一首歌曲
@@ -251,7 +251,7 @@ export class WyPlayerComponent implements OnInit {
     // play previous song
     onPrev(index: number) {                                                             // -------------- (11)
         if (!this.songReady) return;
-        if (this.playList.length === 1) {
+        if (this.playList.length === 1 || this.currentMode.type === 'singleLoop') {
             this.loop();                                                                // -------------- (11.5)
         } else {
             // 如果小于等于0，就播放播放列表中的最后一首
