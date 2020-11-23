@@ -20,6 +20,7 @@ import { findIndex } from 'src/app/utils/array';
 import { timer } from 'rxjs';
 import { WINDOW } from 'src/app/services/services.module';
 import { SongService } from 'src/app/services/song.service';
+import { BaseLyricLine, WyLyric } from './wy-lyric';
 
 @Component({
     selector: "app-wy-player-panel",
@@ -54,6 +55,8 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     @ViewChildren(WyScrollComponent) private wyScroll: QueryList<WyScrollComponent>;
 
     scrollY = 0;
+
+    currentLyric: BaseLyricLine[]; //是一个数组
 
     // 这时候再使用 win 就可以 不用 timer ， 而是 this.win.setTimeout
     constructor(
@@ -96,7 +99,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
             if (!changes.show.firstChange && this.show) {
                 // console.log("wyScroll", this.wyScroll);
                 this.wyScroll.first.refreshScroll();
-                this.wyScroll.last.refreshScroll();
+                this.wyScroll.last.refreshScroll();                          // -------------------(8)
 
                 // 下面这步不加的话，会出现播放模式随机，播放歌曲，打开播放面板，发现正在播放的歌曲不在可视区内
                 // 同时因为 refreshScroll（）方法中 等了 50毫秒，所以这里等待 80 毫秒
@@ -138,12 +141,25 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
         }
     }
 
-    sentChangeSong(song: Song){                                                             // -------------------(2)
+    sentChangeSong(song: Song){             // -------------------(2)
+        // console.log('song', song.id)
         this.onChangeSong.emit(song);
     }
 
-    private updateLyrics() {
-        this.songServe.getLyric()
+    private updateLyrics() {                                                      // -------------------(7)
+        console.log('updateLyrics');
+        if(this.currentSong){
+            this.songServe.getLyric(this.currentSong.id).subscribe(res => {
+                // console.log('lyric', res);
+                // 这里是用WyLyric来解析res
+                const lyric = new WyLyric(res);
+
+                this.currentLyric = lyric.lines; // lines 是WyLyric 类中的属性
+                 // 这里就得到了一个类型是BaseLyricLine的数组，然后可以模板上进行显示了
+                console.log('updateLyrics - currentLyrics--', this.currentLyric);
+
+            });
+        }
     }
 
     // 将滚动到当前歌曲的位置，并且有深色的显示条, 也就是播放的时候，保持当前的歌曲是可见的

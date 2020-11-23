@@ -47,8 +47,14 @@
             </ul>
         </app-wy-scroll>
 
-
-
-        <ul>歌词</ul>
+        <!-- 歌词部分 -->
+        <app-wy-scroll class="list-lyric">
+            <ul>
+                <!-- 并且在这里 this.wyScroll.last.refreshScroll();   才能滚动-->
+                <li *ngFor="let item of currentLyric">
+                    {{ item.txt }} <br> {{ item.txtCn }}
+                </li>
+            </ul>
+        </app-wy-scroll>
     </div>
 </div>

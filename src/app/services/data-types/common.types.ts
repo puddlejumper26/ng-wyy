@@ -58,4 +58,12 @@ export type SongUrl = {
     url: string;
 };
 
+// localhost:3000/lyric + id <歌曲id>
+// 歌词类型
+export type Lyric = {
+    lyric: string;
+    tlyric: string;
+}
+
+
 export type SliderValue = number | null;

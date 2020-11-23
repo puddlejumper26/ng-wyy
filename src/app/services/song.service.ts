@@ -4,7 +4,7 @@ import { map } from "rxjs/internal/operators";
 import { Observable, Observer } from "rxjs";
 
 import { API_CONFIG, ServicesModule } from "./services.module";
-import { Song, SongUrl } from "./data-types/common.types";
+import { Lyric, Song, SongUrl } from "./data-types/common.types";
 
 /**
  *    This should be used together with
@@ -52,7 +52,9 @@ export class SongService {
         //         Here is the simplied method, without creating a flow
         // 这里是简化的方法，不用创建流
 
-        return this.getSongUrl(ids).pipe(map(urls => this.generateSongList(songArr, urls)))
+        return this.getSongUrl(ids).pipe(
+            map((urls) => this.generateSongList(songArr, urls))
+        );
     }
 
     //根据 网易云的API， 接口可以同时获取多个歌曲的播放地址，所以这里接受的是一个 string
@@ -80,7 +82,19 @@ export class SongService {
         return result;
     }
 
-    getLyric() {}
+    getLyric(id: number): Observable<Lyric> {
+        const params = new HttpParams().set("id", id.toString());
+        // console.log('getLyric---params', params);
+        return this.http
+            .get(this.uri + "lyric", { params })
+            // .pipe(map((res) => <Lyric>res));// 这里是全部都返回，是不准确的
+            .pipe(map( (res: { [key: string]: { lyric: string}}) => {
+                return {
+                    lyric: res.lrc.lyric,
+                    tlyric: res.lrc.lyric,
+                }
+            }))
+    }
 }
 
 
