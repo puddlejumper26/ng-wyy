@@ -275,7 +275,7 @@ export class WySliderComponent implements OnInit, OnDestroy, ControlValueAccesso
     //参数为数组，是因为需要能够同时订阅多个事件, 就是用来订阅这三类事件的
     private subscribeDrag(events: string[] = ["start", "move", "end"]) {     // ------------------------ (4) (7)
         // if(events.indexOf('start') !== -1 && this.dragStart$){
-        //   this.dragStart$.subscribe(this.onDragStart.bind(this));
+        //   this.dragStart$.subscribe(this.onDragStart.bind(this));        这里使用 bind 就是将这个行为绑定到 当前的组件上
         // };
         if (inArray(events, "start") && this.dragStart$ && !this.dragStart_) {
             this.dragStart_ = this.dragStart$.subscribe(

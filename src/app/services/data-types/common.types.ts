@@ -31,22 +31,22 @@ export type Singer = {
 // localhost:3000/playlist/detail + id <专辑id>
 // data type of each song 每一首歌的信息，需要整合两个API的信息
 export type Song = {
-    al: { id: number; name: string; picUrl: string }; // information about the album <album>
+    al: { id: number; name: string; picUrl: string }; // information about the album <album> 这里的id 是 歌曲所在专辑的id，专辑的名字，专辑的封面
     ar: Singer[]; //the informaton of singer <artist>
     dt: number; // play time
-    id: number;
-    name: string;
-    url: string;
+    id: number;   // 这里是 歌曲自身的id
+    name: string;  // 歌曲的名字
+    url: string;   // 歌曲的播放地址
 };
 
-// 16张专辑的信息
+// 16张推荐专辑的信息
 // localhost:3000/personalized
-// 歌单数据类型 就是专辑名称
+// 歌单数据类型 就是推荐专辑名称
 export type SongSheet = {
-    id: number;
-    name: string;
-    picUrl: string;
-    playCount: number;
+    id: number;           // 这里是推荐专辑的id
+    name: string;        // 推荐专辑的名字， 但是不是专辑的名字
+    picUrl: string;      // 推荐专辑的封面
+    playCount: number;   // 推荐专辑的点击数量
     tracks: Song[];
 };
 
@@ -54,7 +54,7 @@ export type SongSheet = {
 // localhost:3000/song/url + id <歌曲id>
 // Song Url 播放地址
 export type SongUrl = {
-    id: number;
+    id: number;      // 这里是歌曲的id
     url: string;
 };
 

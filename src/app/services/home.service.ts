@@ -38,15 +38,15 @@ export class HomeService {
             .pipe(
                 map((res: { tags: HotTag[] }) => {
                     return res.tags
-                        .sort((x: HotTag, y: HotTag) => {    //这里使用 sort，并且传入position的值，那么最后返回的数组就是按照 position 的值从小到大进行排列
-                            return x.position - y.position; // 这里的position 是 HotTag自身的type
-                        })
+                        // .sort((x: HotTag, y: HotTag) => {    //这里使用 sort，并且传入position的值，那么最后返回的数组就是按照 position 的值从小到大进行排列
+                        //     return x.position - y.position; // 这里的position 是 HotTag自身的type
+                        // })
                         .slice(0, 5);
                 })
         );
     }
 
-    // 获取热门歌单, 因为主页上只显示 16个歌曲，所以这里用 slice
+    // 获取推荐专辑, 因为主页上只显示 16个推荐专辑，所以这里用 slice
     getPersonalSheetList(): Observable<SongSheet[]> {
         return this.http
             .get(this.uri + "personalized")

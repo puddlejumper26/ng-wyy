@@ -10,7 +10,7 @@ import { Singer } from "./data-types/common.types";
 type SingerParams = {
     offset: number; //分页
     limit: number; // 每页的条数
-    cat?: string;
+    area?: number;
 };
 
 // 写一个默认的参数，作为首页的列表的默认值
@@ -18,7 +18,7 @@ type SingerParams = {
 const defaultParams: SingerParams = {
     offset: 0,
     limit: 9,
-    cat: "5001", //这里设定 5001 是因为 网易云API的设定, 数字带来的具体细节不同，看 ISSUE 5
+    area: 96, //这里设定 5001 是因为 网易云API的设定, 数字带来的具体细节不同，看 ISSUE 5
 };
 
 @Injectable({

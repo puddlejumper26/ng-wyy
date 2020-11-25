@@ -75,10 +75,10 @@ export class HomeComponent implements OnInit {
      * This would be used in the template, therefore template would obatin a complete song information and play address
      */
     onPlaySheet(id: number) {
-        // console.log(11111, id);
+        // console.log(11111, id); 这里的id 是推荐专辑的 id
         this.sheetServe.playSheet(id).subscribe((list) => {
 
-            // 这时候得到的是当前专辑的每一个歌的详细情况的一个对象
+            // 这时候得到的是当前推荐专辑的每一个歌的详细情况的一个对象
 
             // console.log('list', list);   看 list 的详情 ==> https://github.com/puddlejumper26/ng-wyy/issues/7
 

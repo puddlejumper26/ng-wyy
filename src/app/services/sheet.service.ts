@@ -47,7 +47,7 @@ export class SheetService {
     // 然后用 switchMap 来 请求每一个 track 的播放地址
     // 播放地址的方法是在song.service.ts
 
-    // 这里的 id 是 专辑的 id 号
+    // 这里的 id 是 推荐专辑的 id 号
     playSheet(id: number): Observable<Song[]> {
         return this.getSongSheetDetail(id).pipe(
             pluck("tracks"),
