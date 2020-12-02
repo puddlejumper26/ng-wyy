@@ -65,5 +65,4 @@ export type Lyric = {
     tlyric: string;
 }
 
-
 export type SliderValue = number | null;

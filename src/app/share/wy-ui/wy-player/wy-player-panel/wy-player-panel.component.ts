@@ -147,16 +147,19 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     }
 
     private updateLyrics() {                                                      // -------------------(7)
-        console.log('updateLyrics');
+        // console.log('updateLyrics');
         if(this.currentSong){
+            // console.log('updateLyrics --->', this.currentSong.id);
             this.songServe.getLyric(this.currentSong.id).subscribe(res => {
-                // console.log('lyric', res);
-                // 这里是用WyLyric来解析res
+                // console.log('updateLyrics --->', res);
+                // 这里是用WyLyric来解析res, 把得到的所有的歌词的信息传入到WyLyric的 constructor中进行解析
                 const lyric = new WyLyric(res);
 
                 this.currentLyric = lyric.lines; // lines 是WyLyric 类中的属性
                  // 这里就得到了一个类型是BaseLyricLine的数组，然后可以模板上进行显示了
-                console.log('updateLyrics - currentLyrics--', this.currentLyric);
+                // console.log('updateLyrics - currentLyrics--', this.currentLyric);
+                //   正确的情况下是这样的
+                //   2: {txt: "I'm lovin' how I'm floating next to you", txtCn: "我爱我沉浸在你周身的感觉", time: 6270}
 
             });
         }

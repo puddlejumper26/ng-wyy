@@ -89,9 +89,16 @@ export class SongService {
             .get(this.uri + "lyric", { params })
             // .pipe(map((res) => <Lyric>res));// 这里是全部都返回，是不准确的
             .pipe(map( (res: { [key: string]: { lyric: string}}) => {
-                return {
-                    lyric: res.lrc.lyric,
-                    tlyric: res.lrc.lyric,
+                try{
+                    return {
+                        lyric: res.lrc.lyric,
+                        tlyric: res.tlyric.lyric,
+                    }
+                } catch (error){
+                    return {
+                        lyric: '',
+                        tlyric: '',
+                    }
                 }
             }))
     }

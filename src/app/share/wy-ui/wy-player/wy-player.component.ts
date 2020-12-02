@@ -286,7 +286,7 @@ export class WyPlayerComponent implements OnInit {
 
     // 实时改变音量的大小
     onVolumnChange(per: number) {                                                          // -------------- (13)
-        console.log('onVolumnChange - per--', per);
+        // console.log('onVolumnChange - per--', per);
 
         this.audioEl.volume = per / 100;
     }
