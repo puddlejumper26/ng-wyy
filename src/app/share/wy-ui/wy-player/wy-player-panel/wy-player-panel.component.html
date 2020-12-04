@@ -51,7 +51,7 @@
         <app-wy-scroll class="list-lyric">
             <ul>
                 <!-- 并且在这里 this.wyScroll.last.refreshScroll();   才能滚动-->
-                <li *ngFor="let item of currentLyric">
+                <li *ngFor="let item of currentLyric; index as i" [class.current]="currentLineNum === i">
                     {{ item.txt }} <br> {{ item.txtCn }}
                 </li>
             </ul>

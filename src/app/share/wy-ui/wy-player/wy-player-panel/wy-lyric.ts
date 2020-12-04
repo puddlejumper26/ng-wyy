@@ -1,3 +1,4 @@
+import { Subject } from 'rxjs';
 import { from } from 'rxjs/internal/observable/from';
 import { zip } from 'rxjs/internal/observable/zip';
 import { skip } from 'rxjs/internal/operators';
@@ -22,13 +23,23 @@ interface LyricLine extends BaseLyricLine {
 //     time: number;   // 当前这一行对应的时间， 毫秒
 // }
 
-export class WyLyric {
+interface Handler extends BaseLyricLine {
+    lineNum: number; //当前歌词的索引
+}
 
-    private lrc: Lyric;
+export class WyLyric {
 
     // 用来保存makeLine执行之后得到的新的数组
     // 并且要把每一行转换成一个对象，这个对象就是LyricLine类型
     lines: LyricLine[] = [];
+
+    handler = new Subject<Handler>();                // ---------------------- 7
+
+    private lrc: Lyric;
+    private playing = false;
+    private curNum: number;
+    private startStamp: number;
+
 
     // 这里的lrc就是在wy-player-panel组件中的updateLyrics中的res
     constructor(lrc: Lyric){
@@ -59,7 +70,7 @@ export class WyLyric {
     }
 
     // 只有中文歌词的情况下
-    private generLyric() {
+    private generLyric() {                                                   // ---------------------- 1
         // 下面的log得到的是一个字符串，样式看下面这个链接
         // https://github.com/puddlejumper26/ng-wyy/issues/10#issuecomment-731837229
         // console.log('generLyric -- ', this.lrc.lyric);
@@ -68,12 +79,12 @@ export class WyLyric {
         // console.log('generLyric - generLyricLines ---', generLyricLines);
 
         // 单独处理这个数组里的每一项
-        generLyricLines.forEach(line=> this.makeLine(line));
+        generLyricLines.forEach(line=> this.makeLine(line));                              // ---------------------- 3
         // console.log('generLyric - lines', this.lines);
 
     }
 
-    private generTLyric() {
+    private generTLyric() {                                                            // ---------------------- 2
         // 一样先分行
         const lines = this.lrc.lyric.split('\n');
         // 只需要匹配到时间的部分， 把前面的e.g. [by:羽新也] 去除掉
@@ -96,7 +107,8 @@ export class WyLyric {
 
         // 用来定义较短的那个字段，并且找到这个较短字段的第一个元素在较长字段中的索引, 也就是元素的时间部分相等
         // 所以这里首先拿到较短字段的第一行的时间部分
-        const first = timeExp.exec(tempArr[1][0])[0]; //[1]是tempArr的第二个元素，[0]是第一行，[0]就是整体的时间部分
+        //[1]是tempArr的第二个元素，[0]是第一行，[0]就是整体的时间部分
+        const first = timeExp.exec(tempArr[1][0])[0];
         // console.log('generTLyric -- first --->', timeExp.exec(tempArr[1][0]));
         // 0: "[00:00.000]"
         // 1: "00"
@@ -118,7 +130,7 @@ export class WyLyric {
         // 先把过滤掉的那些行暂时保存下来
         const skipItems = tempArr[0].slice(0,_skip);
         if(skipItems.length){
-            skipItems.forEach(line => this.makeLine(line));
+            skipItems.forEach(line => this.makeLine(line));                                        // ---------------------- 3
         }
         // console.log('generTLyric -- this.lines --->', this.lines);
 
@@ -138,7 +150,7 @@ export class WyLyric {
         zipLines$.subscribe(([line, tline])=>{ this.makeLine(line, tline)})
     }
 
-    private makeLine(line: string, tline='') {
+    private makeLine(line: string, tline='') {                                                   // ---------------------- 3
         // 查询当前行是否有时间的内容
         const result = timeExp.exec(line);
         // console.log('makeLine - result --- ', result);
@@ -160,11 +172,67 @@ export class WyLyric {
                 this.lines.push({ txt, txtCn, time});
             }
         }
+    }
 
+    // 歌词播放的方法， 参数是歌词应该从什么时间开始播放，默认是0， 方便之后如果是拖动进度条，这里也能够传入相应的值
+    play(startTime: number = 0){                                                 // ---------------------- 4
+        if(!this.lines.length) return;
+        if(!this.playing) {
+            this.playing = true; //重置状态
+        }
+
+        // 然后找到 startTime 对应的是第几行歌词
+        //   2: {txt: "I'm lovin' how I'm floating next to you", txtCn: "我爱我沉浸在你周身的感觉", time: 6270}
+        this.curNum = this.findCurNum(startTime);                                        // ---------------------- 5
+        // console.log('wy-lyric - play - curNum', this.curNum);
+
+        // 保存当前的时间戳和startTime 之间的时间差
+        this.startStamp = Date.now() - startTime;
+
+        // 现在已经知道正在播放第几行
+        if(this.curNum < this.lines.length) { //说明这首歌没有播放完
+            this.playReset();                                       // ---------------------- 6
+        }
+    }
+
+    // 当前正在播放的第几行歌词， 传入的是当前播放的 毫秒数， 返回的是当前行数的 索引
+    // findIndex()方法返回数组中满足提供的测试函数的第一个元素的索引。若没有找到对应元素则返回-1
+    private findCurNum(time: number): number {                                       // ---------------------- 5
+        const index = this.lines.findIndex(item => (item.time >= time));
+        console.log('wy-lyric --- findCurNum --- index', index);
+        // 没找到就返回最后一个
+        return index === -1 ? this.lines.length-1 : index;
+    }
+
+    // 就是继续往下播放
+    private playReset() {                                       // ---------------------- 6
+        //拿到当前播放这一行的数据
+        let line = this.lines[this.curNum];
+
+        // 延时就是 等待 delay 的毫秒数 之后跳到下一行去
+        // 这里的逻辑是  line.time - Date.now(now)+Date.now(pre)-startTime
+        //          开始播放这一行的累计总时间 - (这一行开始和完成的时间差 - 看下面一行的解释) - 这一行开始的时间
+        //      时间差是通过Date.now()的差值来获得，因为如果出现中途暂停之类的情况，这时候就起作用了。
+        const delay = line.time - (Date.now() - this.startStamp);
+
+        // 播放一句，就要把当前歌词的数据发射到外界去，发射完，当前的索引也要++，先用再加，所以是 放在后面
+        setTimeout(() => {
+            this.callHandler(this.curNum++);              // ---------------------- 7
+            if(this.curNum < this.lines.length && this.playing){
+                this.playReset()
+            }
+        }, delay)
+    }
+
+    // 把正在播放的歌词往外发射，接受一个索引 , 在 player-panel - handleLyric中拿到
+    private callHandler(i: number){                       // ---------------------- 7
+        this.handler.next({
+            txt: this.lines[i].txt,
+            txtCn: this.lines[i].txtCn,
+            lineNum: i
+        });
     }
 }
-
-
 
 /**
  *  zip 的 作用
@@ -187,4 +255,4 @@ export class WyLyric {
     const subscribe = example.subscribe(val => console.log(val));
 
     //output: ["Hello", "World!", "Goodbye", "World!"]
- */
+*/

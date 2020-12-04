@@ -14,7 +14,6 @@ import {
 } from "@angular/core";
 
 import { WyScrollComponent } from "./../wy-scroll/wy-scroll.component";
-import { getCurrentIndex } from "./../../../../store/selectors/player.selector";
 import { Song } from "src/app/services/data-types/common.types";
 import { findIndex } from 'src/app/utils/array';
 import { timer } from 'rxjs';
@@ -33,10 +32,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     @Input() currentSong: Song;
     @Input() show: boolean; //通过父级的组件来进行控制的
 
-    // 应该到 if(changes['currentSong'])中变化时，求出在songList中的一个索引
-    // 中间的媒介就是现在正在播放的歌曲， currentSong
-    currentIndex: number;                                                     // -------------------(6)
-    // @Input() currentIndex: number;
+    @Input() playing: boolean;
 
     /**
      * 因为这里从 wy-player.component.html中传入的值，<app-wy-player-panel>
@@ -44,7 +40,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
      *  在 wy-player component中 都是喝 playList相关，
      * 但是在现在 的
      * 所以现在出现的问题是 切换到随机播放模式，连续点击下一首之后，打开 播放面板，上面显示的歌曲不是 滑块上面显示的歌曲
-    */
+     */
 
     // 这里的关闭的事件要发送给父级 (onClose)="showPanel=false"，这样点击close之后就会关闭面板
     @Output() onClose = new EventEmitter<void>();                              // -------------------(1)
@@ -54,9 +50,16 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     // @ViewChildren(WyScrollComponent) private wyScroll: QueryList<WyScrollComponent>;
     @ViewChildren(WyScrollComponent) private wyScroll: QueryList<WyScrollComponent>;
 
-    scrollY = 0;
+    // 应该到 if(changes['currentSong'])中变化时，求出在songList中的一个索引
+    // 中间的媒介就是现在正在播放的歌曲， currentSong
+    currentIndex: number;                                                     // -------------------(6)
+    // @Input() currentIndex: number;
 
     currentLyric: BaseLyricLine[]; //是一个数组
+    currentLineNum: number; // 用来控制歌词的高亮, 和模板中的样式[class.current]进行绑定
+
+    lyric: WyLyric;
+    scrollY = 0;
 
     // 这时候再使用 win 就可以 不用 timer ， 而是 this.win.setTimeout
     constructor(
@@ -68,12 +71,19 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
 
     //监听变化
     ngOnChanges(changes: SimpleChanges): void {
+        // 这里是以防万一，以免 updateLyric方法是比 playing状态改变要快的话
+        // if(changes.playing){                                               //---------------------- (10)
+        //     if(!changes.playing.firstChange && this.playing){   //如果不是第一次改变
+        //         this.lyric.play();
+        //     }
+        // }
+
+
         if (changes.songList) {                                               // -------------------(2)
             // console.log(11111, this.songList);
             // 这里是 切换歌单，比如点击另外一个专辑的播放按钮
             this.currentIndex = 0; //默认从第一首开始播放
         }
-
 
         if (changes.currentSong) {                                             // -------------------(4)
             // console.log(22222, this.currentSong);
@@ -88,6 +98,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
                 }
             }
         }
+
         if (changes["show"]) {                                                 // -------------------(3)
             //如果不是第一次变化,因为页面一进来就有了第一次变化，这里就需要屏蔽掉, 这时候就刷新 BScroll 组件
             // if(!changes.show.firstChange && this.show){
@@ -153,13 +164,23 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
             this.songServe.getLyric(this.currentSong.id).subscribe(res => {
                 // console.log('updateLyrics --->', res);
                 // 这里是用WyLyric来解析res, 把得到的所有的歌词的信息传入到WyLyric的 constructor中进行解析
-                const lyric = new WyLyric(res);
+                this.lyric = new WyLyric(res);
 
-                this.currentLyric = lyric.lines; // lines 是WyLyric 类中的属性
+                this.currentLyric = this.lyric.lines; // lines 是WyLyric 类中的属性
                  // 这里就得到了一个类型是BaseLyricLine的数组，然后可以模板上进行显示了
                 // console.log('updateLyrics - currentLyrics--', this.currentLyric);
                 //   正确的情况下是这样的
                 //   2: {txt: "I'm lovin' how I'm floating next to you", txtCn: "我爱我沉浸在你周身的感觉", time: 6270}
+
+                this.handleLyric();                                                 // -------------------(10)
+
+                // 每一次切一首新歌，都需要导入歌词，并且在面板上自动先滚动到歌词的顶端
+                this.wyScroll.last.scrollTo(0,0);                                   // -------------------(8)
+
+                // 如果歌曲正在播放，那么歌词也要播放
+                if(this.playing){                                                   // -------------------(9)
+                    this.lyric.play();
+                }
 
             });
         }
@@ -211,5 +232,12 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
             }
         }
 
+    }
+
+    private handleLyric() {                                    // -------------------(10)
+        this.lyric.handler.subscribe(({lineNum}) => {
+            console.log('player-panel-handleLyric - lineNum', lineNum);
+            this.currentLineNum = lineNum;
+        });
     }
 }

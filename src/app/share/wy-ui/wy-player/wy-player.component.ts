@@ -270,7 +270,7 @@ export class WyPlayerComponent implements OnInit {
     // 这里的per 是从 slider 组件中在拖动结束的时候发射出来的数字，也就是相对于原点的位置
     // 从而根据现在这首歌的总时间dt计算出来滑块缓冲条应该在的位置
     onPercentChange(per: number) {                                                       // -------------- (12)
-        console.log('onPercentChange - per -- ', per);
+        // console.log('onPercentChange - per -- ', per);
         // this.audioEl.currentTime = this.duration * (per / 100);
         if (this.currentSong) {
             // 没有这里的判断，就会出现一拖动滑块，console里面会报错，因为currentTime 没有
