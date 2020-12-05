@@ -75,7 +75,7 @@ This is an Angular App Simulation of Netease Cloud Music
 - `Event` - [wy-slider-types.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-types.ts) | [wy-player.component.ts / html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
 - `canPlay` | `timeupdate` | `ended` - [wy-player.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.html)
 -  `HTMLAudioElement` | `play()` | `pause()` | `currentTime` | `buffered`| `end` - [wy-player.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
--  `HTMLElement`- [wy-player-panel.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player-panel/wy-player-panel.component.html)
+-  `HTMLElement` | `el` | `querySelectorAll` | `NodeList`- [wy-player-panel.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player-panel/wy-player-panel.component.html)
 -  `padStart` - [format-time.pipe.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/pipes/format-time.pipe.ts)
 
 ## 4.4 NgRx

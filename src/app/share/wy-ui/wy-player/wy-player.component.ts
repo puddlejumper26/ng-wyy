@@ -279,7 +279,6 @@ export class WyPlayerComponent implements OnInit {
         }
     }
 
-
     /**
      *                                      音量调节，以及音量面板隐藏
      */

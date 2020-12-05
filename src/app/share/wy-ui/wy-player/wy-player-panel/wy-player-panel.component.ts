@@ -56,9 +56,19 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
 
     currentLyric: BaseLyricLine[]; //是一个数组
     currentLineNum: number; // 用来控制歌词的高亮, 和模板中的样式[class.current]进行绑定
-
-    lyric: WyLyric;
     scrollY = 0;
+
+    private lyric: WyLyric;
+    /**
+     * NodeList 不是一个数组，是一个类似数组的对象(Like Array Object)。
+     * 虽然 NodeList 不是一个数组，但是可以使用 forEach() 来迭代。
+     * 你还可以使用 Array.from() 将其转换为数组。
+     *
+     *  如果文档中的节点树发生变化，NodeList 也会随之变化。 https://developer.mozilla.org/zh-CN/docs/Web/API/NodeList
+     *  在其他情况下，NodeList 是一个静态集合，也就意味着随后对文档对象模型的任何改动都不会影响集合的内容。
+     *    document.querySelectorAll 就会返回一个静态 NodeList。
+     */
+    private lyricRefs: NodeList;
 
     // 这时候再使用 win 就可以 不用 timer ， 而是 this.win.setTimeout
     constructor(
@@ -98,6 +108,8 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
                 if (this.show) {
                     this.scrollToCurrent();                                     // -------------------(5)
                 }
+            }else {
+                this.resetLyric();
             }
         }
 
@@ -162,6 +174,9 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     private updateLyrics() {                                                      // -------------------(7)
         // console.log('【wy-player-panel】 - updateLyrics');
         if(this.currentSong){
+            // 这里首先需要重置一下歌词，不然切换到下面一首歌词的时候，实例化的其实还是第一首的歌词
+            this.resetLyric();                                                  // -------------------(11)
+
             // console.log('【wy-player-panel】 - updateLyrics - this.currentSong.id', this.currentSong.id);
             this.songServe.getLyric(this.currentSong.id).subscribe(res => {
                 // console.log('【wy-player-panel】 - updateLyrics - res', res);
@@ -238,8 +253,33 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
 
     private handleLyric() {                                    // -------------------(10)
         this.lyric.handler.subscribe(({lineNum}) => {
-            console.log('【wy-player-panel】 - handleLyric - lineNum', lineNum);
-            this.currentLineNum = lineNum;
+            if(!this.lyricRefs) {
+                // console.log('【wy-player-panel】 - handleLyric - lineNum', lineNum);
+                // 拿到这一行的 ul-li 标签, 并且只能触发一次
+                this.lyricRefs = this.wyScroll.last.el.nativeElement.querySelectorAll('ul, li');
+                console.log('wy-player-panel】 - handleLyric - this.lyricRefs -', this.lyricRefs);
+            }
+
+            // 如果里面已经有dom了
+            if(this.lyricRefs.length) {
+                this.currentLineNum = lineNum;
+                // 滚动到当前这个 li
+                const targetLine = this.lyricRefs[lineNum];
+                if(targetLine) {
+                    this.wyScroll.last.scrollToElement(targetLine, 300, false, false);
+                }
+            }
         });
+    }
+
+    // 重置清空歌词
+    private resetLyric() {                               // -------------------(11)
+        if(this.lyric) {
+            this.lyric.stop();
+            this.lyric = null;
+            this.currentLyric = [];
+            this.currentLineNum = 0;
+            this.lyricRefs = null;
+        }
     }
 }

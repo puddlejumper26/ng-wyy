@@ -260,7 +260,7 @@ export class WyLyric {
     }
 
     // 暂停播放, playing = false, 并且停掉定时器
-    private stop() {                                    // ---------------------- 9
+    stop() {                                    // ---------------------- 9
         if(this.playing) {
             this.playing = false;
         }
