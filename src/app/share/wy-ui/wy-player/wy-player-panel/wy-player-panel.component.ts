@@ -189,7 +189,8 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
                 //   正确的情况下是这样的
                 //   2: {txt: "I'm lovin' how I'm floating next to you", txtCn: "我爱我沉浸在你周身的感觉", time: 6270}
 
-                this.handleLyric();                                                 // -------------------(10)
+                const aa = res.tlyric ? 1 : 2;
+                this.handleLyric(aa);                                                 // -------------------(10)
 
                 // 每一次切一首新歌，都需要导入歌词，并且在面板上自动先滚动到歌词的顶端
                 this.wyScroll.last.scrollTo(0,0);                                   // -------------------(8)
@@ -251,22 +252,30 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
 
     }
 
-    private handleLyric() {                                    // -------------------(10)
+    // 这里选择2是反复调试出来的，但是 如果有中外文对应的就需要重新考虑
+    private handleLyric(startLine: number = 2) {                                    // -------------------(10)
         this.lyric.handler.subscribe(({lineNum}) => {
             if(!this.lyricRefs) {
                 // console.log('【wy-player-panel】 - handleLyric - lineNum', lineNum);
                 // 拿到这一行的 ul-li 标签, 并且只能触发一次
-                this.lyricRefs = this.wyScroll.last.el.nativeElement.querySelectorAll('ul, li');
+                this.lyricRefs = this.wyScroll.last.el.nativeElement.querySelectorAll('ul li');
                 console.log('wy-player-panel】 - handleLyric - this.lyricRefs -', this.lyricRefs);
             }
 
             // 如果里面已经有dom了
             if(this.lyricRefs.length) {
                 this.currentLineNum = lineNum;
-                // 滚动到当前这个 li
-                const targetLine = this.lyricRefs[lineNum];
-                if(targetLine) {
-                    this.wyScroll.last.scrollToElement(targetLine, 300, false, false);
+
+                // 要知道从第几行开始滚动
+                if(lineNum > startLine) {
+                    // 滚动到当前这个 li
+                    const targetLine = this.lyricRefs[lineNum - startLine];
+                    if(targetLine) {
+                        this.wyScroll.last.scrollToElement(targetLine, 300, false, false);
+                    }
+                }else {
+                    // 保持在最顶端
+                    this.wyScroll.last.scrollTo(0, 0);
                 }
             }
         });
