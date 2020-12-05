@@ -39,11 +39,12 @@ export class WyLyric {
     private playing = false;
     private curNum: number;
     private startStamp: number;
-
+    private timer: any;                      // ---------------------- 9
+    private pauseStamp: number;
 
     // 这里的lrc就是在wy-player-panel组件中的updateLyrics中的res
     constructor(lrc: Lyric){
-        // console.log('WyLyric Constructor lrc ---', lrc.tlyric);
+        // console.log('【wy-lyric】 - Constructor lrc ---', lrc.tlyric);
         this.lrc = lrc;
         this.init();
     }
@@ -73,15 +74,14 @@ export class WyLyric {
     private generLyric() {                                                   // ---------------------- 1
         // 下面的log得到的是一个字符串，样式看下面这个链接
         // https://github.com/puddlejumper26/ng-wyy/issues/10#issuecomment-731837229
-        // console.log('generLyric -- ', this.lrc.lyric);
+        // console.log('【wy-lyric】 - generLyric -- ', this.lrc.lyric);
 
         const generLyricLines = this.lrc.lyric.split('\n'); //先用换行符分隔一下 并转成了数组
-        // console.log('generLyric - generLyricLines ---', generLyricLines);
+        // console.log('【wy-lyric】 - generLyric - generLyricLines ---', generLyricLines);
 
         // 单独处理这个数组里的每一项
         generLyricLines.forEach(line=> this.makeLine(line));                              // ---------------------- 3
-        // console.log('generLyric - lines', this.lines);
-
+        // console.log('【wy-lyric】 - generLyric - lines', this.lines);
     }
 
     private generTLyric() {                                                            // ---------------------- 2
@@ -89,8 +89,8 @@ export class WyLyric {
         const lines = this.lrc.lyric.split('\n');
         // 只需要匹配到时间的部分， 把前面的e.g. [by:羽新也] 去除掉
         const tlines = this.lrc.tlyric.split('\n').filter(item => timeExp.exec(item) !== null);
-        // console.log('generTLyric - lines --->', lines);
-        // console.log('generTLyric - tlines --->', tlines);
+        // console.log('【wy-lyric】 - generTLyric - lines --->', lines);
+        // console.log('【wy-lyric】 - generTLyric - tlines --->', tlines);
 
         // 经过上面这一步之后，一般来说 tline的长度一般都小于lines的长度
         // 通过下来的这个判断，来决定用那个歌词来做一个主导
@@ -109,7 +109,7 @@ export class WyLyric {
         // 所以这里首先拿到较短字段的第一行的时间部分
         //[1]是tempArr的第二个元素，[0]是第一行，[0]就是整体的时间部分
         const first = timeExp.exec(tempArr[1][0])[0];
-        // console.log('generTLyric -- first --->', timeExp.exec(tempArr[1][0]));
+        // console.log('【wy-lyric】 - generTLyric -- first --->', timeExp.exec(tempArr[1][0]));
         // 0: "[00:00.000]"
         // 1: "00"
         // 2: "00"
@@ -118,12 +118,12 @@ export class WyLyric {
         // 在较长字段里要跳过的行数
         const skipIndex = tempArr[0].findIndex(item => {
             const exec = timeExp.exec(item);
-            console.log('generTLyric - skipIndex -- exec --->', exec);
+            console.log('【wy-lyric】 - generTLyric - skipIndex -- exec --->', exec);
             if(exec){
                 return exec[0] === first;
             }
         })
-        // console.log('generTLyric -- skipIndex --->', skipIndex);
+        // console.log('【wy-lyric】 - generTLyric -- skipIndex --->', skipIndex);
         // 如果是-1说明没找到，那么就从第一行开始就是对应的了
         const _skip = skipIndex === -1 ? 0 : skipIndex;
 
@@ -132,7 +132,7 @@ export class WyLyric {
         if(skipItems.length){
             skipItems.forEach(line => this.makeLine(line));                                        // ---------------------- 3
         }
-        // console.log('generTLyric -- this.lines --->', this.lines);
+        // console.log('【wy-lyric】 - generTLyric -- this.lines --->', this.lines);
 
         let zipLines$; //定义一个流
 
@@ -153,7 +153,7 @@ export class WyLyric {
     private makeLine(line: string, tline='') {                                                   // ---------------------- 3
         // 查询当前行是否有时间的内容
         const result = timeExp.exec(line);
-        // console.log('makeLine - result --- ', result);
+        // console.log('【wy-lyric】 - makeLine - result --- ', result);
 
         if(result) {
             // 这里的匹配到的部分设为空，并且把多余的空格都去掉， 这样就把数字部分都去掉了，只剩下文字部分
@@ -184,13 +184,18 @@ export class WyLyric {
         // 然后找到 startTime 对应的是第几行歌词
         //   2: {txt: "I'm lovin' how I'm floating next to you", txtCn: "我爱我沉浸在你周身的感觉", time: 6270}
         this.curNum = this.findCurNum(startTime);                                        // ---------------------- 5
-        // console.log('wy-lyric - play - curNum', this.curNum);
+        // console.log('【wy-lyric】 - play - curNum', this.curNum);
 
-        // 保存当前的时间戳和startTime 之间的时间差
-        this.startStamp = Date.now() - startTime;
+        // 保存当前的时间戳和startTime，，一个固定值 也就是歌曲刚开始的时间， 和 togglePlay进行结合理解
+        // console.log('【wy-lyric】 - play - startTime', startTime);  //一个固定值
+        this.startStamp = Date.now() - startTime; // 一首歌只有一个这个值
+        // console.log('【wy-lyric】 - play - this.startStamp', this.startStamp);
 
         // 现在已经知道正在播放第几行
+        // 注意这里是一个循环，所以只要满足这个条件，就会一直执行，
         if(this.curNum < this.lines.length) { //说明这首歌没有播放完
+            // 首先清除定时器                                          // ---------------------- 9
+            clearTimeout(this.timer);
             this.playReset();                                       // ---------------------- 6
         }
     }
@@ -199,7 +204,7 @@ export class WyLyric {
     // findIndex()方法返回数组中满足提供的测试函数的第一个元素的索引。若没有找到对应元素则返回-1
     private findCurNum(time: number): number {                                       // ---------------------- 5
         const index = this.lines.findIndex(item => (item.time >= time));
-        console.log('wy-lyric --- findCurNum --- index', index);
+        // console.log('【wy-lyric】- findCurNum - index', index);
         // 没找到就返回最后一个
         return index === -1 ? this.lines.length-1 : index;
     }
@@ -209,14 +214,17 @@ export class WyLyric {
         //拿到当前播放这一行的数据
         let line = this.lines[this.curNum];
 
-        // 延时就是 等待 delay 的毫秒数 之后跳到下一行去
-        // 这里的逻辑是  line.time - Date.now(now)+Date.now(pre)-startTime
-        //          开始播放这一行的累计总时间 - (这一行开始和完成的时间差 - 看下面一行的解释) - 这一行开始的时间
-        //      时间差是通过Date.now()的差值来获得，因为如果出现中途暂停之类的情况，这时候就起作用了。
-        const delay = line.time - (Date.now() - this.startStamp);
+        // 延时就是 等待 delay 的毫秒数 之后跳到下一行去，delay 是这一行播放完的时间
+        // console.log('【wy-lyric】 - playReset - this.startStamp', this.startStamp);
+        // this.startStamp 是一个固定的值
+        // 括号里的 - 这一行刚开始的时间 减去 这首歌刚开始的时间 （都是从1970开始到那时的总毫秒数）- 得到的就是到这行之前这首歌播放的总时间
+        // console.log('【wy-lyric】 - playReset - line.time', line.time); //可以在generLyric 和 generTLyric的 lines中找到
+        // 这个时间就是每行设定的时间，是歌曲开始播放到这行结束的理论总毫秒数
+        const delay = line.time - (Date.now() - this.startStamp); // 每一行歌词都有一个这个值
+        // console.log('【wy-lyric】 - playReset - delay', delay);
 
         // 播放一句，就要把当前歌词的数据发射到外界去，发射完，当前的索引也要++，先用再加，所以是 放在后面
-        setTimeout(() => {
+        this.timer = setTimeout(() => {                        // ---------------------- 9
             this.callHandler(this.curNum++);              // ---------------------- 7
             if(this.curNum < this.lines.length && this.playing){
                 this.playReset()
@@ -232,6 +240,34 @@ export class WyLyric {
             lineNum: i
         });
     }
+
+    togglePlay(playing: boolean) {                  // ---------------------- 8
+        //先保存当前的时间戳
+        const now = Date.now();
+        this.playing = playing;
+        //如果正在播放, 继续调用play方法   ，  否则暂停播放
+        if(playing){
+            // console.log('【wy-lyric】- togglePlay - this.pauseStamp', this.pauseStamp);
+            // console.log('【wy-lyric】- togglePlay - this.startStamp', this.startStamp);
+            const startTime = (this.pauseStamp || now) - (this.startStamp || now);
+            // console.log('【wy-lyric】- togglePlay - startTime', startTime);
+            this.play(startTime);
+        }else{
+            this.stop();                                 // ---------------------- 9
+            //记录暂停的时间
+            this.pauseStamp = now;
+        }
+    }
+
+    // 暂停播放, playing = false, 并且停掉定时器
+    private stop() {                                    // ---------------------- 9
+        if(this.playing) {
+            this.playing = false;
+        }
+        //也需要清除定时器
+        clearTimeout(this.timer);
+    }
+
 }
 
 /**

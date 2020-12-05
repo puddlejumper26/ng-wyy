@@ -31,7 +31,6 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     @Input() songList: Song[];
     @Input() currentSong: Song;
     @Input() show: boolean; //通过父级的组件来进行控制的
-
     @Input() playing: boolean;
 
     /**
@@ -72,21 +71,24 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     //监听变化
     ngOnChanges(changes: SimpleChanges): void {
         // 这里是以防万一，以免 updateLyric方法是比 playing状态改变要快的话
-        // if(changes.playing){                                               //---------------------- (10)
-        //     if(!changes.playing.firstChange && this.playing){   //如果不是第一次改变
-        //         this.lyric.play();
-        //     }
-        // }
+        if(changes.playing){                                               //---------------------- (10)
+            // if(!changes.playing.firstChange && this.playing){   //如果不是第一次改变
+            //     this.lyric.play();
+            // }
+            if(!changes.playing.isFirstChange()){   //如果不是第一次改变
+                this.lyric && this.lyric.togglePlay(this.playing);
+            }
+        }
 
 
         if (changes.songList) {                                               // -------------------(2)
-            // console.log(11111, this.songList);
+            // console.log('【wy-player-panel】 - ngOnChanges - songList', this.songList);
             // 这里是 切换歌单，比如点击另外一个专辑的播放按钮
             this.currentIndex = 0; //默认从第一首开始播放
         }
 
         if (changes.currentSong) {                                             // -------------------(4)
-            // console.log(22222, this.currentSong);
+            // console.log('【wy-player-panel】 - ngOnChanges - currentSong', this.currentSong);
             if (this.currentSong) {
                 this.currentIndex = findIndex(this.songList, this.currentSong);    // -------------------(6)
 
@@ -102,13 +104,13 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
         if (changes["show"]) {                                                 // -------------------(3)
             //如果不是第一次变化,因为页面一进来就有了第一次变化，这里就需要屏蔽掉, 这时候就刷新 BScroll 组件
             // if(!changes.show.firstChange && this.show){
-            //     console.log('wyScroll', this.wyScroll);
+            //     console.log('【wy-player-panel】 - ngOnChange - show - wyScroll', this.wyScroll);
             //     this.wyScroll.first.refreshScroll(); // first 是在有多个 BScroll 组件的情况下，采用第一个，还有 .last
             //    这里的first 是指歌曲列表里的，last是指歌词面板里的
             //     this.wyScroll.last.refreshScroll();
             // }
             if (!changes.show.firstChange && this.show) {
-                // console.log("wyScroll", this.wyScroll);
+                // console.log("【wy-player-panel】 - ngOnChange - show - wyScroll", this.wyScroll);
                 this.wyScroll.first.refreshScroll();
                 this.wyScroll.last.refreshScroll();                          // -------------------(8)
 
@@ -153,22 +155,22 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     }
 
     sentChangeSong(song: Song){             // -------------------(2)
-        // console.log('song', song.id)
+        // console.log('【wy-player-panel】 - sentChangeSong - song', song.id)
         this.onChangeSong.emit(song);
     }
 
     private updateLyrics() {                                                      // -------------------(7)
-        // console.log('updateLyrics');
+        // console.log('【wy-player-panel】 - updateLyrics');
         if(this.currentSong){
-            // console.log('updateLyrics --->', this.currentSong.id);
+            // console.log('【wy-player-panel】 - updateLyrics - this.currentSong.id', this.currentSong.id);
             this.songServe.getLyric(this.currentSong.id).subscribe(res => {
-                // console.log('updateLyrics --->', res);
+                // console.log('【wy-player-panel】 - updateLyrics - res', res);
                 // 这里是用WyLyric来解析res, 把得到的所有的歌词的信息传入到WyLyric的 constructor中进行解析
                 this.lyric = new WyLyric(res);
 
                 this.currentLyric = this.lyric.lines; // lines 是WyLyric 类中的属性
                  // 这里就得到了一个类型是BaseLyricLine的数组，然后可以模板上进行显示了
-                // console.log('updateLyrics - currentLyrics--', this.currentLyric);
+                // console.log('【wy-player-panel】 - updateLyrics - currentLyrics -', this.currentLyric);
                 //   正确的情况下是这样的
                 //   2: {txt: "I'm lovin' how I'm floating next to you", txtCn: "我爱我沉浸在你周身的感觉", time: 6270}
 
@@ -195,7 +197,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
         // 首先获得列表每一行的元素，就是所有的 li 标签
         // 因为 wyScroll 是 WyScrollComponent，  所以 这里的 el 需要被定义在 WyScrollComponent的constructor中
         const songListRefs = this.wyScroll.first.el.nativeElement.querySelectorAll('ul li');
-        // console.log('songListRefs', songListRefs);
+        // console.log('【wy-player-panel】 - songListRefs', songListRefs);
         if(songListRefs.length){
             // 这里需要定义下 HTMLElement 类型， 这样下面的currentLi才能取到 offsetTop
             // 找到当前正在播放的 li
@@ -213,9 +215,9 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
             const offsetHeight = currentLi.offsetHeight;
             const scrollYValue = Math.abs(this.scrollY);
 
-            // console.log('offsetTop', offsetTop);
-            // console.log('offsetHeight',offsetHeight);
-            // console.log('scrollY', this.scrollY);
+            // console.log('【wy-player-panel】 - offsetTop', offsetTop);
+            // console.log('【wy-player-panel】 - offsetHeight',offsetHeight);
+            // console.log('【wy-player-panel】 - scrollY', this.scrollY);
 
             // if(offsetTop - Math.abs(this.scrollY) > offsetHeight * 5 ){
             if (
@@ -236,7 +238,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
 
     private handleLyric() {                                    // -------------------(10)
         this.lyric.handler.subscribe(({lineNum}) => {
-            console.log('player-panel-handleLyric - lineNum', lineNum);
+            console.log('【wy-player-panel】 - handleLyric - lineNum', lineNum);
             this.currentLineNum = lineNum;
         });
     }
