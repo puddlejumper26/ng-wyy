@@ -267,6 +267,10 @@ export class WyPlayerComponent implements OnInit {
     private loop() {                                                                   // -------------- (11.5)
         this.audioEl.currentTime = 0;
         this.play();
+        if(this.playerPanel){                                                     // -------------- (24)
+            // 歌词重置， 从头开始
+            this.playerPanel.seekLyric(0);
+        }
     }
 
     // 设置歌曲的进度,但拖动滑块的时候,歌曲的进度随之改变，
