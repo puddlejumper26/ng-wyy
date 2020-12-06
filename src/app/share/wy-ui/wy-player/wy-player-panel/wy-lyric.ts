@@ -7,6 +7,11 @@ import { Lyric } from './../../../../services/data-types/common.types';
 // 第三位可能2位或者3位数字  [00:00.000]
 const timeExp = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
 
+// In TypeScript, an interface can create the new name that can be used everywhere.
+// Type does not have a functionality of extending.
+// An interface can extend multiple interfaces and class as well.
+// Type is mainly used when a union or tuple type needs to be used.
+
 // 定义一个借口
 export interface BaseLyricLine {
     txt: string;    // 外文歌词
@@ -33,6 +38,7 @@ export class WyLyric {
     // 并且要把每一行转换成一个对象，这个对象就是LyricLine类型
     lines: LyricLine[] = [];
 
+    // Subject是多播，both as Observable and Observer  -->https://github.com/puddlejumper26/blogs/issues/184
     handler = new Subject<Handler>();                // ---------------------- 7
 
     private lrc: Lyric;
@@ -175,7 +181,7 @@ export class WyLyric {
     }
 
     // 歌词播放的方法， 参数是歌词应该从什么时间开始播放，默认是0， 方便之后如果是拖动进度条，这里也能够传入相应的值
-    play(startTime: number = 0){                                                 // ---------------------- 4
+    play(startTime: number = 0, skip: boolean = false){                                                 // ---------------------- 4
         if(!this.lines.length) return;
         if(!this.playing) {
             this.playing = true; //重置状态
@@ -190,6 +196,10 @@ export class WyLyric {
         // console.log('【wy-lyric】 - play - startTime', startTime);  //一个固定值
         this.startStamp = Date.now() - startTime; // 一首歌只有一个这个值
         // console.log('【wy-lyric】 - play - this.startStamp', this.startStamp);
+
+        if(!skip) {
+            this.callHandler(this.curNum);  //可能需要 this.curNum - 1                       // ---------------------- 10
+        }
 
         // 现在已经知道正在播放第几行
         // 注意这里是一个循环，所以只要满足这个条件，就会一直执行，
@@ -209,7 +219,7 @@ export class WyLyric {
         return index === -1 ? this.lines.length-1 : index;
     }
 
-    // 就是继续往下播放
+    // 就是继续往下播放歌词
     private playReset() {                                       // ---------------------- 6
         //拿到当前播放这一行的数据
         let line = this.lines[this.curNum];
@@ -234,11 +244,16 @@ export class WyLyric {
 
     // 把正在播放的歌词往外发射，接受一个索引 , 在 player-panel - handleLyric中拿到
     private callHandler(i: number){                       // ---------------------- 7
-        this.handler.next({
-            txt: this.lines[i].txt,
-            txtCn: this.lines[i].txtCn,
-            lineNum: i
-        });
+        //这里不判断的话，那么可能后面需要使用到 这个功能的时候，那个地方执行过快，使得执行完成了，这里的值还没有发射出去
+        // 就会造成需要接受的地方得不到相应的数据
+        // 通过 wy-player-panel 中的 handleLyric 方法 log (this.lyricRefs) 就能看出是否dom有问题
+        if(i > 0) {
+            this.handler.next({
+                txt: this.lines[i].txt,
+                txtCn: this.lines[i].txtCn,
+                lineNum: i
+            });
+        }
     }
 
     togglePlay(playing: boolean) {                  // ---------------------- 8
@@ -251,7 +266,9 @@ export class WyLyric {
             // console.log('【wy-lyric】- togglePlay - this.startStamp', this.startStamp);
             const startTime = (this.pauseStamp || now) - (this.startStamp || now);
             // console.log('【wy-lyric】- togglePlay - startTime', startTime);
-            this.play(startTime);
+
+            //注意这里调用 play 方法的时候，不需要里面的 callHandler的方法， 因为已经有了
+            this.play(startTime, true);
         }else{
             this.stop();                                 // ---------------------- 9
             //记录暂停的时间
@@ -266,6 +283,11 @@ export class WyLyric {
         }
         //也需要清除定时器
         clearTimeout(this.timer);
+    }
+
+    // 快速改变歌词的时间，相当于拖动进度条
+    seek(time: number) {                  // ---------------------- 10
+        this.play(time);
     }
 
 }

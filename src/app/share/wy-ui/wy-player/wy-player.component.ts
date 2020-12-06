@@ -26,6 +26,7 @@ import {
 } from "./../../../store/actions/player.actions";
 import { Song } from "./../../../services/data-types/common.types";
 import { findIndex, shuffle } from "src/app/utils/array";
+import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
 
 const modeTypes: PlayMode[] = [
     { type: "loop", label: "循环" },
@@ -84,6 +85,8 @@ export class WyPlayerComponent implements OnInit {
      */
     @ViewChild("audio", { static: true }) private audio: ElementRef;                    // -------------- (5)
     private audioEl: HTMLAudioElement; // 原生的 DOM 对象                                // -------------- (5)
+
+    @ViewChild(WyPlayerPanelComponent, { static: false }) private playerPanel: WyPlayerPanelComponent;
 
     constructor(
         private store$: Store<AppStoreModule>,
@@ -276,6 +279,10 @@ export class WyPlayerComponent implements OnInit {
             // 没有这里的判断，就会出现一拖动滑块，console里面会报错，因为currentTime 没有
             const currentTime = this.duration * (per / 100);
             this.audioEl.currentTime = currentTime;
+            if(this.playerPanel){                                                  // -------------- (24)
+                // 这里乘以 1000 是因为需要传入一个 时间戳， 也就是毫秒数
+                this.playerPanel.seekLyric(currentTime*1000);
+            }
         }
     }
 

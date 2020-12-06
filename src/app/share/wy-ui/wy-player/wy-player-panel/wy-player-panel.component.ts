@@ -189,8 +189,9 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
                 //   正确的情况下是这样的
                 //   2: {txt: "I'm lovin' how I'm floating next to you", txtCn: "我爱我沉浸在你周身的感觉", time: 6270}
 
-                const aa = res.tlyric ? 1 : 2;
-                this.handleLyric(aa);                                                 // -------------------(10)
+                //这里sLine 和 下面引用的时候用的startLine 是一样的，但是如果用同样的变量名字，就会出错
+                const sLine = res.tlyric ? 1 : 2;
+                this.handleLyric(sLine);                                                 // -------------------(10)
 
                 // 每一次切一首新歌，都需要导入歌词，并且在面板上自动先滚动到歌词的顶端
                 this.wyScroll.last.scrollTo(0,0);                                   // -------------------(8)
@@ -254,6 +255,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
 
     // 这里选择2是反复调试出来的，但是 如果有中外文对应的就需要重新考虑
     private handleLyric(startLine: number = 2) {                                    // -------------------(10)
+        // console.log('【wy-player-panel】 - this.lyric.handler - ', this.lyric.handler);
         this.lyric.handler.subscribe(({lineNum}) => {
             if(!this.lyricRefs) {
                 // console.log('【wy-player-panel】 - handleLyric - lineNum', lineNum);
@@ -289,6 +291,13 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
             this.currentLyric = [];
             this.currentLineNum = 0;
             this.lyricRefs = null;
+        }
+    }
+
+    // 在进度条改变的时候要调用， wy-player.component.ts-onPercentChange
+    seekLyric(time: number) {                                        // -------------------(12)
+        if(this.lyric) {
+            this.lyric.seek(time);
         }
     }
 }
