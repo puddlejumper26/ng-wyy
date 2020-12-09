@@ -95,6 +95,10 @@ export class WyScrollComponent implements OnInit, AfterViewInit, OnChanges {
 
 
     /**  怎么使用 apply
+     *
+     *    call()方法的作用和 apply() 方法类似，
+     * 区别就是call()方法接受的是参数列表，而apply()方法接受的是一个参数数组。
+     *
      * var person = {
         fullName: function() {
             return this.firstName + " " + this.lastName;
@@ -105,6 +109,13 @@ export class WyScrollComponent implements OnInit, AfterViewInit, OnChanges {
         lastName: "Doe"
       }
       person.fullName.apply(person1);  // Will return "Mary Doe"
+    *
+
+        var array = ['a', 'b'];
+        var elements = [0, 1, 2];
+        array.push.apply(array, elements);
+        console.info(array); // ["a", "b", 0, 1, 2]
+
      */
 
 

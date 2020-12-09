@@ -87,6 +87,10 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
             // }
             if(!changes.playing.isFirstChange()){   //如果不是第一次改变
                 this.lyric && this.lyric.togglePlay(this.playing);
+                // 上面这一行是下面的简写方式
+                // if(this.lyric){
+                //     this.lyric.togglePlay(this.playing);
+                // }
             }
         }
 
@@ -261,17 +265,20 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
                 // console.log('【wy-player-panel】 - handleLyric - lineNum', lineNum);
                 // 拿到这一行的 ul-li 标签, 并且只能触发一次
                 this.lyricRefs = this.wyScroll.last.el.nativeElement.querySelectorAll('ul li');
-                console.log('wy-player-panel】 - handleLyric - this.lyricRefs -', this.lyricRefs);
+                // console.log('【wy-player-panel】 - handleLyric - this.lyricRefs -', this.lyricRefs);
             }
 
             // 如果里面已经有dom了
             if(this.lyricRefs.length) {
+                // 这里控制高亮的歌词， 其实会每句唱完就跳到下一行，结合下面的if判断
+                // 那么当跳动的高亮的行数大于设定的startLine数字，那么就启动歌词滚动
                 this.currentLineNum = lineNum;
 
                 // 要知道从第几行开始滚动
                 if(lineNum > startLine) {
                     // 滚动到当前这个 li
                     const targetLine = this.lyricRefs[lineNum - startLine];
+                    console.log('【wy-player-panel】 - handleLyric - targetLine', targetLine);
                     if(targetLine) {
                         this.wyScroll.last.scrollToElement(targetLine, 300, false, false);
                     }
