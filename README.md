@@ -90,6 +90,7 @@ This is an Angular App Simulation of Netease Cloud Music
 - `next()`, `pre()` - [Ant] - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
 - `[ngModel]` - [Ant] - [Slider Bar](https://github.com/puddlejumper26/ng-wyy/issues/8)
 - `on` | `scrollEnd` | `scrollToElement` - [BetterScroll] -  [wy-scroll.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-scroll/wy-scroll.component.ts)
+- `NzModalService - confirm` - [wy-player.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
 
 ## 4.6 Node.js
 - `queryString` - Object Serialization 对象序列化-[singer.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/singer.service.ts)
@@ -206,8 +207,11 @@ This is an Angular App Simulation of Netease Cloud Music
   - `home.component.ts`
   -
   - Lyrics
+  - `common.type.ts`
   - `song.service.ts`
-  - `wy-player-panel.component.ts`
+  - `wy-player.component`
+  - `wy-player-panel.component`
+  - `wy-lyric.ts`
 
 # 6.0 Final Demo
 

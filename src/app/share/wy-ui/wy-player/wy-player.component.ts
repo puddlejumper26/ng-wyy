@@ -23,10 +23,12 @@ import {
     SetCurrentIndex,
     SetPlayList,
     SetPlayMode,
+    SetSongList,
 } from "./../../../store/actions/player.actions";
 import { Song } from "./../../../services/data-types/common.types";
 import { findIndex, shuffle } from "src/app/utils/array";
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
+import { NzModalService } from "ng-zorro-antd";
 
 const modeTypes: PlayMode[] = [
     { type: "loop", label: "循环" },
@@ -89,6 +91,7 @@ export class WyPlayerComponent implements OnInit {
     @ViewChild(WyPlayerPanelComponent, { static: false }) private playerPanel: WyPlayerPanelComponent;
 
     constructor(
+        private nzModalServe: NzModalService,
         private store$: Store<AppStoreModule>,
         @Inject(DOCUMENT) private doc: Document
     ) {
@@ -133,17 +136,17 @@ export class WyPlayerComponent implements OnInit {
     }
 
     ngOnInit() {
-        // console.log(11111, this.audio.nativeElement);
+        // console.log('wy-player.component - ngOnInit - this.audio.nativeElement', this.audio.nativeElement);
         this.audioEl = this.audio.nativeElement;                         // -------------- (5)
     }
 
     private watchList(list: Song[], type: string) {                    // -------------- (2)
-        // console.log(11111, list, type);
+        // console.log('wy-player.component - watchList - list / type', list, type);
         // 把获得的数据保存到songList或者playList中
         this[type] = list;
     }
     private watchCurrentIndex(index: number) {                        // -------------- (2)
-        // console.log(22222, index);
+        // console.log('wy-player.component - watchCurrentIndex - index', index);
         // 把获得的数据保存到currentIndex中
         this.currentIndex = index;
     }
@@ -154,7 +157,7 @@ export class WyPlayerComponent implements OnInit {
      *     并通过 canplay 就可以播放歌曲了
      */
     private watchCurrentSong(song: Song) {                                         // -------------- (2)
-        // console.log(4444, song);   //一开始是空的 undefined，点击播放之后才会有信息
+        // console.log('wy-player.component - watchCurrentSong - song', song);   //一开始是空的 undefined，点击播放之后才会有信息
         // 先判断 song 是否存在， 不然直接写 运行时 会出现 song不存在的情况，然后报错
         if (song) {                                                             // -------------- (7)
             this.currentSong = song;
@@ -191,7 +194,7 @@ export class WyPlayerComponent implements OnInit {
      *    这些数据就更新了 模板 里<app-wy-slider>里的数值，继而改变了DOM
      */
     onTimeUpdate(e: Event) {                                                     // -------------- (8)
-        // console.log(11111, (<HTMLAudioElement>e.target).currentTime); //这地方需要进行断言，不然 currentTime属性不存在
+        // console.log('wy-player.component - onTimeUpdate', (<HTMLAudioElement>e.target).currentTime); //这地方需要进行断言，不然 currentTime属性不存在
         this.currentTime = (<HTMLAudioElement>e.target).currentTime; // 这里取到的时间是 秒 ，注意和总时长 毫秒之间的统一
         // 这里的比例非常重要，也要用在滑块等的移动上
         this.percent = (this.currentTime / this.duration) * 100; //move the slider according to the play time
@@ -277,7 +280,7 @@ export class WyPlayerComponent implements OnInit {
     // 这里的per 是从 slider 组件中在拖动结束的时候发射出来的数字，也就是相对于原点的位置
     // 从而根据现在这首歌的总时间dt计算出来滑块缓冲条应该在的位置
     onPercentChange(per: number) {                                                       // -------------- (12)
-        // console.log('onPercentChange - per -- ', per);
+        // console.log('wy-player.component - onPercentChange - per -- ', per);
         // this.audioEl.currentTime = this.duration * (per / 100);
         if (this.currentSong) {
             // 没有这里的判断，就会出现一拖动滑块，console里面会报错，因为currentTime 没有
@@ -296,7 +299,7 @@ export class WyPlayerComponent implements OnInit {
 
     // 实时改变音量的大小
     onVolumnChange(per: number) {                                                          // -------------- (13)
-        // console.log('onVolumnChange - per--', per);
+        // console.log('wy-player.component - onVolumnChange - per--', per);
 
         this.audioEl.volume = per / 100;
     }
@@ -358,10 +361,10 @@ export class WyPlayerComponent implements OnInit {
     //         .subscribe((mode) => this.watchPlayMode(mode));
     // 接受， 继而触发下面的watchPlayMode方法
     changeMode() {                                                                      // -------------- (18)
-        // console.log('++this.modeCount % 3', this.modeCount);
+        // console.log('wy-player.component - changeMode - ++this.modeCount % 3', this.modeCount);
         // 这里 使用 ++ 相当于是把 this.modeCount 自身增加1 之后在 %3，每次模板被点击一次，这里的modeCount都自增1
         const temp = modeTypes[(++this.modeCount) % 3];
-        // console.log(1111, temp);
+        // console.log('wy-player.component - changeMode - temp', temp);
         // 这里set之后，在这里的watchPlayMode中就能监听的到, 然后其中的 the.currentMode = mode, 就会跟着改变
         // 之后 html中的[ngClass]="currentMode.type" [title]="currentMode.label" 就会跟着改变
         this.store$.dispatch(SetPlayMode({ playMode: temp }));
@@ -370,7 +373,7 @@ export class WyPlayerComponent implements OnInit {
 
     // 在changeMode()被触发之后 触发
     private watchPlayMode(mode: PlayMode) {                                             // -------------- (19)
-        // console.log(3333, mode);
+        // console.log('wy-player.component - watchPlayMode - mode', mode);
         this.currentMode = mode;
         if (this.songList) {
             // slice()是浅复制，所以相当于是songList数组的一个副本，但是地址不同，值得改变不会影响songList数组本身
@@ -378,7 +381,7 @@ export class WyPlayerComponent implements OnInit {
             // 这里要考虑随机的播放具体的实施
             if (mode.type === "random") {
                 list = shuffle(this.songList);
-                // console.log(1111, list); //点击播放，然后点击转换就能够看出来了
+                // console.log('wy-player.component - watchPlayMode - list', list); //点击播放，然后点击转换就能够看出来了
                 // 传入最新的 list 和 当前播放的歌曲
                 this.updateCurrentIndex(list, this.currentSong);                      // -------------- (20)
                 // 更新
@@ -430,9 +433,49 @@ export class WyPlayerComponent implements OnInit {
         }
     }
 
-
     // 在播放列表里通过点击来改变播放的歌曲
     onChangeSong(song: Song){                                                        // -------------------(23)
         this.updateCurrentIndex(this.playList, song);
+    }
+
+    // 在播放列表里删除播放的歌曲
+    onDeleteSong(song: Song){                                                        // -------------------(24)
+        const songList = this.songList.slice();
+        const playList = this.playList.slice();
+        let currentIndex = this.currentIndex; //前面watchCurrentIndex已经赋过值了
+
+        // 找到传入的歌在songList和playList中的索引，然后删除掉
+        const sIndex = findIndex(songList, song);
+        // console.log('wy-player.component - onDeleteSong - sIndex', sIndex);
+        // 从songList中删除这首歌
+        songList.splice(sIndex, 1);
+        const pIndex = findIndex(playList, song);
+        // console.log('wy-player.component - onDeleteSong - pIndex', pIndex);
+        playList.splice(pIndex, 1);
+
+        // 如果 现在播放的歌曲的索引大于要删除歌曲的索引|| 现在播放的歌曲是最后一首歌
+        if(currentIndex > pIndex || currentIndex === playList.length) {
+            currentIndex--; //上述两种情况都需要减一
+            console.log('wy-player.component - onDeleteSong - currentIndex', currentIndex);
+        }
+
+        // 发送值给store
+        this.store$.dispatch(SetSongList({ songList: songList }));
+        this.store$.dispatch(SetPlayList({ playList: playList }));
+        this.store$.dispatch(SetCurrentIndex({ currentIndex: currentIndex }));
+    }
+
+    // 清空歌曲
+    onClearSong(){
+        // 这里设置一个提示，防止误操作，通过 ng-ant里的NzModalService组件
+        this.nzModalServe.confirm({
+            nzTitle: 'Confirm',
+            nzOnOk: ()=> {
+                // 发送值给store
+                this.store$.dispatch(SetSongList({ songList: [] }));
+                this.store$.dispatch(SetPlayList({ playList: [] }));
+                this.store$.dispatch(SetCurrentIndex({ currentIndex: -1 }));
+            }
+        })
     }
 }

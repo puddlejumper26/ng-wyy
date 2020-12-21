@@ -44,6 +44,8 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     // 这里的关闭的事件要发送给父级 (onClose)="showPanel=false"，这样点击close之后就会关闭面板
     @Output() onClose = new EventEmitter<void>();                              // -------------------(1)
     @Output() onChangeSong = new EventEmitter<Song>();                             // -------------------(2)
+    @Output() onDeleteSong = new EventEmitter<Song>();                             // -------------------(13)
+    @Output() onClearSong = new EventEmitter<void>(); //直接清空列表所以 void        // -------------------(13)
 
     //因为播放列表和歌词部分都需要用到，所以这里用 ViewChildren
     // @ViewChildren(WyScrollComponent) private wyScroll: QueryList<WyScrollComponent>;
@@ -99,13 +101,15 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
             // console.log('【wy-player-panel】 - ngOnChanges - songList', this.songList);
             // 这里是 切换歌单，比如点击另外一个专辑的播放按钮
             this.currentIndex = 0; //默认从第一首开始播放
+            // this.currentIndex = findIndex(this.songList, this.currentSong);
+            this.updateCurrentIndex();
         }
 
         if (changes.currentSong) {                                             // -------------------(4)
             // console.log('【wy-player-panel】 - ngOnChanges - currentSong', this.currentSong);
             if (this.currentSong) {
-                this.currentIndex = findIndex(this.songList, this.currentSong);    // -------------------(6)
-
+                // this.currentIndex = findIndex(this.songList, this.currentSong);    // -------------------(6)
+                this.updateCurrentIndex();
                 //同时 这个时候要请求歌词
                 this.updateLyrics();
 
@@ -306,5 +310,9 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
         if(this.lyric) {
             this.lyric.seek(time);
         }
+    }
+
+    private updateCurrentIndex() {                                   // -------------------(13)
+        this.currentIndex = findIndex(this.songList, this.currentSong);
     }
 }
