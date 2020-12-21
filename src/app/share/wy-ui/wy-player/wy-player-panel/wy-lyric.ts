@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs';
+import { Subject, Subscription, timer } from 'rxjs';
 import { from } from 'rxjs/internal/observable/from';
 import { zip } from 'rxjs/internal/observable/zip';
 import { skip } from 'rxjs/internal/operators';
@@ -40,12 +40,12 @@ export class WyLyric {
 
     // Subject是多播，both as Observable and Observer  -->https://github.com/puddlejumper26/blogs/issues/184
     handler = new Subject<Handler>();                // ---------------------- 7
+    private timer$: Subscription;                      // ---------------------- 9 , 11
 
     private lrc: Lyric;
     private playing = false;
     private curNum: number;
     private startStamp: number;
-    private timer: any;                      // ---------------------- 9
     private pauseStamp: number;
 
     // 这里的lrc就是在wy-player-panel组件中的updateLyrics中的res
@@ -219,7 +219,8 @@ export class WyLyric {
         // 注意这里是一个循环，所以只要满足这个条件，就会一直执行，
         if(this.curNum < this.lines.length) { //说明这首歌没有播放完
             // 首先清除定时器                                          // ---------------------- 9
-            clearTimeout(this.timer);
+            // clearTimeout(this.timer);
+            this.clearTimer()
             this.playReset();                                       // ---------------------- 6
         }
     }
@@ -248,12 +249,19 @@ export class WyLyric {
         // console.log('【wy-lyric】 - playReset - delay', delay);
 
         // 播放一句，就要把当前歌词的数据发射到外界去，发射完，当前的索引也要++，先用再加，所以是 放在后面
-        this.timer = setTimeout(() => {                        // ---------------------- 9
-            this.callHandler(this.curNum++);              // ---------------------- 7
+        // this.timer = setTimeout(() => {                        // ---------------------- 9
+        //     this.callHandler(this.curNum++);              // ---------------------- 7
+        //     if(this.curNum < this.lines.length && this.playing){
+        //         this.playReset()
+        //     }
+        // }, delay)
+                // 替换上面的 setTimeout
+        this.timer$ = timer(delay).subscribe(() => {
+            this.callHandler(this.curNum++);              // ---------------------- 12
             if(this.curNum < this.lines.length && this.playing){
                 this.playReset()
             }
-        }, delay)
+        })
     }
 
     // 把正在播放的歌词往外发射，接受一个索引 , 在 player-panel - handleLyric中拿到
@@ -268,6 +276,10 @@ export class WyLyric {
                 lineNum: i
             });
         }
+    }
+
+    private clearTimer() {                                // ---------------------- 13
+        this.timer$ && this.timer$.unsubscribe();
     }
 
     togglePlay(playing: boolean) {                  // ---------------------- 8
@@ -298,7 +310,8 @@ export class WyLyric {
             this.playing = false;
         }
         //也需要清除定时器
-        clearTimeout(this.timer);
+        // clearTimeout(this.timer);
+        this.clearTimer();
     }
 
     // 快速改变歌词的时间，相当于拖动进度条
