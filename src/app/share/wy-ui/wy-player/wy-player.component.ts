@@ -29,6 +29,7 @@ import { Song } from "./../../../services/data-types/common.types";
 import { findIndex, shuffle } from "src/app/utils/array";
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
 import { NzModalService } from "ng-zorro-antd";
+import { BatchActionsService } from "src/app/store/batch-actions.service";
 
 const modeTypes: PlayMode[] = [
     { type: "loop", label: "循环" },
@@ -93,7 +94,8 @@ export class WyPlayerComponent implements OnInit {
     constructor(
         private nzModalServe: NzModalService,
         private store$: Store<AppStoreModule>,
-        @Inject(DOCUMENT) private doc: Document
+        @Inject(DOCUMENT) private doc: Document,
+        private batchActionServe: BatchActionsService,
     ) {
         const appStore$ = this.store$.pipe(select(getPlayer));                           // -------------- (1)
 
@@ -438,31 +440,34 @@ export class WyPlayerComponent implements OnInit {
         this.updateCurrentIndex(this.playList, song);
     }
 
-    // 在播放列表里删除播放的歌曲
+    // 在播放列表里删除播放的歌曲 //  ----- 移动到 batch-actions.service.ts
     onDeleteSong(song: Song){                                                        // -------------------(24)
-        const songList = this.songList.slice();
-        const playList = this.playList.slice();
-        let currentIndex = this.currentIndex; //前面watchCurrentIndex已经赋过值了
+    //     const songList = this.songList.slice(); //  ----- 移动到 batch-actions.service.ts
+    //     const playList = this.playList.slice(); //  ----- 移动到 batch-actions.service.ts
+    //     let currentIndex = this.currentIndex; //前面watchCurrentIndex已经赋过值了
 
-        // 找到传入的歌在songList和playList中的索引，然后删除掉
-        const sIndex = findIndex(songList, song);
-        // console.log('wy-player.component - onDeleteSong - sIndex', sIndex);
-        // 从songList中删除这首歌
-        songList.splice(sIndex, 1);
-        const pIndex = findIndex(playList, song);
-        // console.log('wy-player.component - onDeleteSong - pIndex', pIndex);
-        playList.splice(pIndex, 1);
+    //     // 找到传入的歌在songList和playList中的索引，然后删除掉
+    //     const sIndex = findIndex(songList, song);   //  ----- 移动到 batch-actions.service.ts
+    //     // console.log('wy-player.component - onDeleteSong - sIndex', sIndex);
+    //     // 从songList中删除这首歌
+    //     songList.splice(sIndex, 1); //  ----- 移动到 batch-actions.service.ts
+    //     const pIndex = findIndex(playList, song); //  ----- 移动到 batch-actions.service.ts
+    //     // console.log('wy-player.component - onDeleteSong - pIndex', pIndex);
+    //     playList.splice(pIndex, 1); //  ----- 移动到 batch-actions.service.ts
 
-        // 如果 现在播放的歌曲的索引大于要删除歌曲的索引|| 现在播放的歌曲是最后一首歌
-        if(currentIndex > pIndex || currentIndex === playList.length) {
-            currentIndex--; //上述两种情况都需要减一
-            console.log('wy-player.component - onDeleteSong - currentIndex', currentIndex);
-        }
+    //     // 如果 现在播放的歌曲的索引大于要删除歌曲的索引|| 现在播放的歌曲是最后一首歌
+    //     if(currentIndex > pIndex || currentIndex === playList.length) { //  ----- 移动到 batch-actions.service.ts
+    //         currentIndex--; //上述两种情况都需要减一 //  ----- 移动到 batch-actions.service.ts
+    //         console.log('wy-player.component - onDeleteSong - currentIndex', currentIndex); //  ----- 移动到 batch-actions.service.ts
+    //     }
 
-        // 发送值给store
-        this.store$.dispatch(SetSongList({ songList: songList }));
-        this.store$.dispatch(SetPlayList({ playList: playList }));
-        this.store$.dispatch(SetCurrentIndex({ currentIndex: currentIndex }));
+    //     // 发送值给store
+    //     this.store$.dispatch(SetSongList({ songList: songList })); //  ----- 移动到 batch-actions.service.ts
+    //     this.store$.dispatch(SetPlayList({ playList: playList })); //  ----- 移动到 batch-actions.service.ts
+    //     this.store$.dispatch(SetCurrentIndex({ currentIndex: currentIndex })); //  ----- 移动到 batch-actions.service.ts
+
+        this.batchActionServe.deleteSong(song);
+
     }
 
     // 清空歌曲
@@ -472,9 +477,10 @@ export class WyPlayerComponent implements OnInit {
             nzTitle: 'Confirm',
             nzOnOk: ()=> {
                 // 发送值给store
-                this.store$.dispatch(SetSongList({ songList: [] }));
-                this.store$.dispatch(SetPlayList({ playList: [] }));
-                this.store$.dispatch(SetCurrentIndex({ currentIndex: -1 }));
+                // this.store$.dispatch(SetSongList({ songList: [] }));  //  ----- 移动到 batch-actions.service.ts
+                // this.store$.dispatch(SetPlayList({ playList: [] }));  //  ----- 移动到 batch-actions.service.ts
+                // this.store$.dispatch(SetCurrentIndex({ currentIndex: -1 }));  //  ----- 移动到 batch-actions.service.ts
+                this.batchActionServe.clearSong();
             }
         })
     }

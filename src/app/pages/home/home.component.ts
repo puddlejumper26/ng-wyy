@@ -1,14 +1,9 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { select, Store } from '@ngrx/store';
 import { NzCarouselComponent } from "ng-zorro-antd";
 import { map } from "rxjs/internal/operators";
 
-import { AppStoreModule } from 'src/app/store';
-import { findIndex } from 'src/app/utils/array';
-import { shuffle } from 'src/app/utils/array';
-import { SetPlayList, SetCurrentIndex, SetSongList } from './../../store/actions/player.actions';
-
+import { BatchActionsService } from "src/app/store/batch-actions.service";
 import {
     Banner,
     Singer,
@@ -17,8 +12,6 @@ import {
     Song,
 } from "./../../services/data-types/common.types";
 import { SheetService } from "./../../services/sheet.service";
-import { playerReducer, PlayState } from 'src/app/store/reducers/player.reducer';
-import { getPlayer } from 'src/app/store/selectors/player.selector';
 
 @Component({
     selector: "app-home",
@@ -34,7 +27,7 @@ export class HomeComponent implements OnInit {
     songSheetLists: SongSheet[];
     playList: Song[];
 
-    private playerState: PlayState;
+    // private playerState: PlayState; //  ----- 移动到 batch-actions.service.ts
 
     @ViewChild(NzCarouselComponent, { static: true })
     private nzCarousel: NzCarouselComponent;
@@ -42,7 +35,8 @@ export class HomeComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private sheetServe: SheetService,
-        private store$: Store<AppStoreModule>, // Observable
+        // private store$: Store<AppStoreModule>, // Observable      //  ----- 移动到 batch-actions.service.ts
+        private batchActionServe: BatchActionsService,
     ) {
         //这里使用了 解构， 注意要用 ()， ([banners, hotTags, songSheetList, singers])
         // 并且使用了 resolve， 注意这里的 homeDatas 是从 resolve 中来的
@@ -57,7 +51,7 @@ export class HomeComponent implements OnInit {
 
         // 这里通过select操作符，拿到 player 里state的数据,
         // 然后下面的this.playerState.playMode.type === 'random'才能够运作
-        this.store$.pipe(select(getPlayer)).subscribe(res => this.playerState = res);
+        // this.store$.pipe(select(getPlayer)).subscribe(res => this.playerState = res);  //  ----- 移动到 batch-actions.service.ts
     }
 
     ngOnInit() {}
@@ -99,22 +93,24 @@ export class HomeComponent implements OnInit {
             // this.store$.dispatch(SetPlayList({ playList: list}));
             // this.store$.dispatch(SetCurrentIndex({ currentIndex: 0})); // default to play the first song
 
-            this.store$.dispatch(SetSongList({ songList: list}));
+            // this.store$.dispatch(SetSongList({ songList: list}));  //  ----- 移动到 batch-actions.service.ts
 
-            let trueIndex = 0;
-            let trueList = list.slice();
+            // let trueIndex = 0;  //  ----- 移动到 batch-actions.service.ts
+            // let trueList = list.slice();  //  ----- 移动到 batch-actions.service.ts
             // 问题， 接下来因为没有考虑模式的问题，就直接发送歌曲了，那么如果进入页面，先点击模式到随机
             // 然后连续点击下一曲，就会按照顺序播放，因为没有模式的限定。
             // 所以需要添加一个 if
-            if(this.playerState.playMode.type === 'random') {
-                trueList = shuffle(list || []); // [] 兼容一下list 不存在的情况
+            // if(this.playerState.playMode.type === 'random') {  //  ----- 移动到 batch-actions.service.ts
+                // trueList = shuffle(list || []); // [] 兼容一下list 不存在的情况  //  ----- 移动到 batch-actions.service.ts
                 // 上面打乱一下顺序，然后在新的乱掉的列表中，找到正在播放歌曲的index
-                trueIndex = findIndex(trueList, list[trueIndex]);
-            }
-            this.store$.dispatch(SetPlayList({ playList: trueList}));
-            this.store$.dispatch(SetCurrentIndex({ currentIndex: trueIndex}));
+                // trueIndex = findIndex(trueList, list[trueIndex]);  //  ----- 移动到 batch-actions.service.ts
+            // }
+            // this.store$.dispatch(SetPlayList({ playList: trueList}));  //  ----- 移动到 batch-actions.service.ts
+            // this.store$.dispatch(SetCurrentIndex({ currentIndex: trueIndex}));  //  ----- 移动到 batch-actions.service.ts
 
             // 上面这些代码执行之后，reducer中的InitialState的值就发生了变化，这个变化在 Redux插件中可以看到
+
+            this.batchActionServe.selectPlayList({list, index: 0});
         });
     }
 }
