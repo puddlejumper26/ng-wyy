@@ -1,4 +1,10 @@
-<div class="m-player" (click)="selfClick = true">
+<div class="m-player"
+    appClickoutside
+    [bindFlag]="bindFlag"
+    (onClickOutSide)="onClickOutSide()"
+>
+<!--上面的div中因为onClickOutSide的加入所以可以删除 (click)="selfClick = true" -->
+
     <div class="lock">
         <div class="left"><i></i></div>
     </div>
