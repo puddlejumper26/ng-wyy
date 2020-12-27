@@ -397,13 +397,13 @@ export class WyPlayerComponent implements OnInit {
             if (mode.type === "random") {
                 list = shuffle(this.songList);
                 // console.log('wy-player.component - watchPlayMode - list', list); //点击播放，然后点击转换就能够看出来了
-                // 传入最新的 list 和 当前播放的歌曲
-                this.updateCurrentIndex(list, this.currentSong); // -------------- (20)
-                // 更新
-                // 这里dispatch 改变后的list，注意这时候正在播放的歌曲不能改变，所以要在前面添加 updateCurrentIndex
-                // 发射新的歌曲列表
-                this.store$.dispatch(SetPlayList({ playList: list }));
             }
+            // 传入最新的 list 和 当前播放的歌曲
+            this.updateCurrentIndex(list, this.currentSong); // -------------- (20)
+            // 更新
+            // 这里dispatch 改变后的list，注意这时候正在播放的歌曲不能改变，所以要在前面添加 updateCurrentIndex
+            // 发射新的歌曲列表
+            this.store$.dispatch(SetPlayList({ playList: list }));
         }
     }
 

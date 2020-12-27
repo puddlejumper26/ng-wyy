@@ -282,7 +282,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
                 if(lineNum > startLine) {
                     // 滚动到当前这个 li
                     const targetLine = this.lyricRefs[lineNum - startLine];
-                    console.log('【wy-player-panel】 - handleLyric - targetLine', targetLine);
+                    // console.log('【wy-player-panel】 - handleLyric - targetLine', targetLine);
                     if(targetLine) {
                         this.wyScroll.last.scrollToElement(targetLine, 300, false, false);
                     }
