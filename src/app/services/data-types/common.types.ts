@@ -46,6 +46,7 @@ export type SongSheet = {
     id: number;           // 这里是推荐专辑的id
     name: string;        // 推荐专辑的名字， 但是不是专辑的名字
     picUrl: string;      // 推荐专辑的封面
+    coverImgUrl: string; // 照顾到 sheet list 里的数据类型
     playCount: number;   // 推荐专辑的点击数量
     tracks: Song[];
 };
@@ -63,6 +64,13 @@ export type SongUrl = {
 export type Lyric = {
     lyric: string;
     tlyric: string;
+}
+
+// http://localhost:3000/top/playlist?limit=10&offset=1
+// 歌单列表
+export type SheetList = {
+    playlists: SongSheet[];
+    total: number;
 }
 
 export type SliderValue = number | null;

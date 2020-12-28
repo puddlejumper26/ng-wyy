@@ -50,10 +50,10 @@ This is an Angular App Simulation of Netease Cloud Music
 - `ControlValueAccessor` - `writeValue` | `registerOnChange` | `registerOnTouched` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 - `ngOnChanges` - | [clickoutside.directive.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/directives/clickoutside.directive.ts) | [wy-player-panel.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player-panel/wy-player-panel.component.ts) | [wy-scroll.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-scroll/wy-scroll.component.ts) | [clickoutside.directive.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/directives/clickoutside.directive.ts) | [wy-slider-handle.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-handle.component.ts) | [wy-slider-track.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider-track.component.ts)
 - `ngOnDestroy` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
-- `ngModelChange` - [wy-slider.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.html) | [wy-player.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.html)
+- `ngModelChange` - [wy-slider.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.html) | [wy-player.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.html) | [sheet-list.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/sheet-list/sheet-list.component.html)
 - `isPlatformBrowser` | `PLATFORM_ID` - [services.module.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/services.module.ts)
 - `QueryList` | `frist` | `last` | `firstChange` - [wy-player-panel.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player-panel/wy-player-panel.component.ts)
--
+- `snapshot` | `queryParamMap` - [sheet-list.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/sheet-list/sheet-list.component.ts)
 
 ## 4.2 rxjs
 
@@ -93,7 +93,9 @@ This is an Angular App Simulation of Netease Cloud Music
 - `next()`, `pre()` - [Ant] - [Carousel](https://github.com/puddlejumper26/ng-wyy/issues/3)
 - `[ngModel]` - [Ant] - [Slider Bar](https://github.com/puddlejumper26/ng-wyy/issues/8)
 - `on` | `scrollEnd` | `scrollToElement` - [BetterScroll] -  [wy-scroll.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-scroll/wy-scroll.component.ts)
-- `NzModalService - confirm` - [wy-player.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
+- `NzModalService - confirm` - [Ant] - [wy-player.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
+- `[nzPageSize]` | `[nzPageSize]` | `[naTotal]` | `(nzPageIndexChange)` - [Ant] - [sheet-list.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/sheet-list/sheet-list.component.html)
+
 
 ## 4.6 Node.js
 - `queryString` - Object Serialization 对象序列化-[singer.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/singer.service.ts)
@@ -199,6 +201,7 @@ This is an Angular App Simulation of Netease Cloud Music
   - `array.ts` | `number.ts`
 
 ## 5.9 Home page bottom section - Playlist and lyrics
+- [PlayList and Lyrics](https://github.com/puddlejumper26/ng-wyy/issues/10)
 - components / services / directives / etc.
   - Playlist
   - `wy-player-panel.component`
@@ -216,6 +219,10 @@ This is an Angular App Simulation of Netease Cloud Music
   - `wy-player-panel.component`
   - `wy-lyric.ts`
 
+## 5.10 Sheet List component
+- []
+- components / services / directives / etc.
+  - `sheet-list.component`
 # 6.0 Final Demo
 
 ## 6.1 Homepage

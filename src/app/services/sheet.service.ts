@@ -1,17 +1,27 @@
-import { SongService } from "./song.service";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { map, mergeMap, pluck, switchMap } from "rxjs/internal/operators";
 import { Observable } from "rxjs";
+import queryString from 'query-string';
 
 import { API_CONFIG, ServicesModule } from "./services.module";
-import { Song, SongSheet } from "./data-types/common.types";
+import { SheetList, Song, SongSheet } from "./data-types/common.types";
+import { SongService } from "./song.service";
 
 /**
  *    This service could not obtain the tracks play address播放地址,
  *     therefore it has to be used together with
  *                                  song.service.ts
  */
+
+// 为何如此定义可以看这里
+// https://binaryify.github.io/NeteaseCloudMusicApi/#/?id=%e6%ad%8c%e5%8d%95-%e7%bd%91%e5%8f%8b%e7%b2%be%e9%80%89%e7%a2%9f-
+export type SheetParams = {
+    cat: string;
+    order: 'new' | 'hot';
+    offset: number;
+    limit: number;
+}
 
 @Injectable({
     // it means ServiceModule will provide with HomeService
@@ -53,6 +63,15 @@ export class SheetService {
             pluck("tracks"),
             switchMap((tracks) => this.songServe.getSongList(tracks))
         );
+    }
+
+    // 获取歌单列表sheet list, 参考 singer.service.ts 中的设定
+    getSheets(args: SheetParams): Observable<SheetList> {
+        const params = new HttpParams({ fromString: queryString.stringify(args)});
+        return this.http
+                .get(this.uri + 'top/playlist', {params})
+                // 这里用 map 来指明类型
+                .pipe(map(res => res as SheetList));
     }
 }
 
