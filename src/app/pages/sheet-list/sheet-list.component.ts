@@ -1,4 +1,4 @@
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
@@ -23,6 +23,7 @@ export class SheetListComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
+        private router: Router,
         private sheetServe: SheetService,
         private batchActionsServe: BatchActionsService) {
         //这里就通过 route 来获取输入的 params的参数，
@@ -60,5 +61,9 @@ export class SheetListComponent implements OnInit {
         this.sheetServe.playSheet(id).subscribe(list => {
             this.batchActionsServe.selectPlayList({list, index: 0});
         })
+    }
+
+    toInfo(id: number) {
+        this.router.navigate(['/sheetInfo', id])
     }
 }

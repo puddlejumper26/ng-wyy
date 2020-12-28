@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { NzCarouselComponent } from "ng-zorro-antd";
 import { map } from "rxjs/internal/operators";
 
@@ -34,6 +34,7 @@ export class HomeComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
+        private router: Router,
         private sheetServe: SheetService,
         // private store$: Store<AppStoreModule>, // Observable      //  ----- 移动到 batch-actions.service.ts
         private batchActionServe: BatchActionsService,
@@ -112,6 +113,10 @@ export class HomeComponent implements OnInit {
 
             this.batchActionServe.selectPlayList({list, index: 0});
         });
+    }
+
+    toInfo(id: number) {
+        this.router.navigate(['/sheetInfo', id])
     }
 }
 

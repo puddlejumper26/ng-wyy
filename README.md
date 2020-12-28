@@ -220,9 +220,16 @@ This is an Angular App Simulation of Netease Cloud Music
   - `wy-lyric.ts`
 
 ## 5.10 Sheet List component
-- []
+- [](https://github.com/puddlejumper26/ng-wyy/issues/12)
 - components / services / directives / etc.
   - `sheet-list.component`
+
+## 5.11 Sheet Info component
+- [](https://github.com/puddlejumper26/ng-wyy/issues/13)
+- components / services / directives / etc.
+  - `sheet-info component`
+  -
+
 # 6.0 Final Demo
 
 ## 6.1 Homepage
