@@ -49,6 +49,15 @@ export type SongSheet = {
     coverImgUrl: string; // 照顾到 sheet list 里的数据类型
     playCount: number;   // 推荐专辑的点击数量
     tracks: Song[];
+    tags: string[];  //标签，Sheet Info component
+    createTime: number; //时间戳 Sheet Info component
+    creator: {nickname: string; avatarUrl: string} //Sheet Info component
+    description: string; // Sheet Info component
+    subscribedCount: number; // Sheet Info component 订阅数量
+    shareCount: number; //Sheet Info component 分享数量
+    commentCount: number; // Sheet Info component 评论数
+    subscribed: boolean;  // Sheet Info component 当前用户是否订阅了这个歌单
+    userId: number; // Sheet Info component 用户的id
 };
 
 

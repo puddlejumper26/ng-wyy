@@ -54,6 +54,7 @@ This is an Angular App Simulation of Netease Cloud Music
 - `isPlatformBrowser` | `PLATFORM_ID` - [services.module.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/services.module.ts)
 - `QueryList` | `frist` | `last` | `firstChange` - [wy-player-panel.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player-panel/wy-player-panel.component.ts)
 - `snapshot` | `queryParamMap` - [sheet-list.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/sheet-list/sheet-list.component.ts)
+- `paramMap` | `data` - [sheet-info-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/sheet-info/sheet-info-resolve.service.ts)
 
 ## 4.2 rxjs
 
@@ -228,7 +229,9 @@ This is an Angular App Simulation of Netease Cloud Music
 - [](https://github.com/puddlejumper26/ng-wyy/issues/13)
 - components / services / directives / etc.
   - `sheet-info component`
-  -
+  - `sheet-info-resolver`
+  - `sheet.service`
+  - `common.types.ts`
 
 # 6.0 Final Demo
 

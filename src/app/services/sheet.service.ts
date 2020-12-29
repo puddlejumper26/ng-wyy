@@ -39,6 +39,7 @@ export class SheetService {
     ) {}
 
 
+    // 获取歌单详情
     // 因为不能调用歌曲的地址，所以如果 home.component.ts里直接对这个方法进行调用是没有用的， 应该调用下面的palySheet的方法
     getSongSheetDetail(id: number): Observable<SongSheet> {
 
