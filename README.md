@@ -95,8 +95,11 @@ This is an Angular App Simulation of Netease Cloud Music
 - `[ngModel]` - [Ant] - [Slider Bar](https://github.com/puddlejumper26/ng-wyy/issues/8)
 - `on` | `scrollEnd` | `scrollToElement` - [BetterScroll] -  [wy-scroll.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-scroll/wy-scroll.component.ts)
 - `NzModalService - confirm` - [Ant] - [wy-player.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
-- `[nzPageSize]` | `[nzPageSize]` | `[naTotal]` | `(nzPageIndexChange)` - [Ant] - [sheet-list.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/sheet-list/sheet-list.component.html)
-
+- [Ant] - HTML
+- `<nz-radio-group>` | `nzButtonStyle` | `nz-radio-button` | `nz-value` | `<nz-pagination>` | `[nzPageSize]` | `[nzPageSize]` | `[nzTotal]` | `(nzPageIndexChange)` - [sheet-list.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/sheet-list/sheet-list.component.html)
+- `<nz-button-group>` | `<nz-tag>` |`nz-button` | `[nzType]` | `[nzData]` | `[nzFrontPagination]` | `nzBordered` | `nzNoResult` | `nzWidth` | `nzTheme` - [sheet-info.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/sheet-info/sheet-info.component.html)
+- `<nz-input-group>` | `<nz-layout>` | `<nz-header>` | `[nzSuffix]` | `nz-menu` | `nz-menu-item` | `nzMode` | `nz-icon` | `<nz-content>` | `nz-footer` - [app.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/app.component.html)
+- `[nzDotRender]` | `nzAutoPlay` | `nzEffect` | `[nzDotRender]` | `(nzBeforeChange)` | `nz-carousel-content` | `<nz-carousel>` - [home.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home.component.html)
 
 ## 4.6 Node.js
 - `queryString` - Object Serialization 对象序列化-[singer.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/singer.service.ts)

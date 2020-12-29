@@ -41,7 +41,7 @@ export class SheetInfoComponent implements OnInit {
         if(desc.length < 99) {
             this.description = {
                 short: '<b>介绍： </b>' + this.replaceBr(desc),
-                long: desc, //这样能够点击展开之后不会空白
+                long:  '<b>介绍： </b>' + this.replaceBr(desc), //这样能够点击展开之后不会空白
             }
         }else {
             // 如果超过99个字符
