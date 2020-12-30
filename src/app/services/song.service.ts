@@ -70,7 +70,7 @@ export class SongService {
     private generateSongList(songs: Song[], urls: SongUrl[]): Song[] {
         const result = [];
         songs.forEach((song) => {
-            // console.log('urls--', urls);
+            // console.log('【SongService】- generateSongList - urls -', urls);
             const url = urls.find((url) => url.id === song.id).url; //根据ID能找到每一首歌的url
             if (url) {
                 // console.log('...song', song);

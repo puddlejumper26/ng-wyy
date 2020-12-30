@@ -102,7 +102,9 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
             // 这里是 切换歌单，比如点击另外一个专辑的播放按钮
             this.currentIndex = 0; //默认从第一首开始播放
             // this.currentIndex = findIndex(this.songList, this.currentSong);
-            this.updateCurrentIndex();
+            if (this.currentSong) {
+                this.updateCurrentIndex();
+            }
         }
 
         if (changes.currentSong) {                                             // -------------------(4)
