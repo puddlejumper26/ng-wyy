@@ -97,7 +97,7 @@ This is an Angular App Simulation of Netease Cloud Music
 - `NzModalService - confirm` - [Ant] - [wy-player.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
 - [Ant] - HTML
 - `<nz-radio-group>` | `nzButtonStyle` | `nz-radio-button` | `nz-value` | `<nz-pagination>` | `[nzPageSize]` | `[nzPageSize]` | `[nzTotal]` | `(nzPageIndexChange)` - [sheet-list.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/sheet-list/sheet-list.component.html)
-- `<nz-button-group>` | `<nz-tag>` |`nz-button` | `[nzType]` | `[nzData]` | `[nzFrontPagination]` | `nzBordered` | `nzNoResult` | `nzWidth` | `nzTheme` - [sheet-info.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/sheet-info/sheet-info.component.html)
+- `<nz-button-group>` | `<nz-tag>` |`nz-button` | `[nzType]` | `[nzData]` | `[nzFrontPagination]` | `nzBordered` | `nzNoResult` | `nzWidth` | `nzTheme` | `NzMessageService`- [sheet-info.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/sheet-info/sheet-info.component.html)
 - `<nz-input-group>` | `<nz-layout>` | `<nz-header>` | `[nzSuffix]` | `nz-menu` | `nz-menu-item` | `nzMode` | `nz-icon` | `<nz-content>` | `nz-footer` - [app.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/app.component.html)
 - `[nzDotRender]` | `nzAutoPlay` | `nzEffect` | `[nzDotRender]` | `(nzBeforeChange)` | `nz-carousel-content` | `<nz-carousel>` - [home.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home.component.html)
 

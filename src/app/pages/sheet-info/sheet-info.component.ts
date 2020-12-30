@@ -2,6 +2,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { map, takeUntil } from 'rxjs/internal/operators';
 import { Observable, Subject } from 'rxjs';
+import { NzMessageService } from 'ng-zorro-antd';
 import { select, Store } from '@ngrx/store';
 
 import { AppStoreModule } from 'src/app/store';
@@ -41,6 +42,7 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
         private store$: Store<AppStoreModule>,
         private songServe: SongService,
         private batchActionServe: BatchActionsService,
+        private nzMessageServe: NzMessageService,
     ) {
         // 这里的 data 是sheet-info-routing.module.ts 中的 data， 其中包括了title和resolve中sheetInfo的信息
         this.route.data.pipe(map((res) => res.sheetInfo)).subscribe((res) => {
@@ -110,7 +112,7 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
                 if (list.length) {
                     this.batchActionServe.insertSong(list[0], isPlay);
                 }else {
-                    alert('Warning：API has no url，request is denied');
+                    this.nzMessageServe.create('warning', 'Warning：API has no url for this song，request is denied!');
                 }
             })
         }
