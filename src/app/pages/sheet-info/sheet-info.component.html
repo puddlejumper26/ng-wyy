@@ -27,10 +27,10 @@
 
                      <div class="btns">
                          <nz-button-group class="btn">
-                             <button class="play" nz-button nzType="primary">
+                             <button class="play" nz-button nzType="primary" (click)="onAddSongs(sheetInfo.tracks, true)">
                                 <i nz-icon nzType="play-circle" nzTheme="outline"></i>播放
                              </button>
-                             <button class="add" nz-button nzType="primary">+</button>
+                             <button class="add" nz-button nzType="primary" (click)="onAddSongs(sheetInfo.tracks)">+</button>
                          </nz-button-group>
                          <button class="btn like" nz-button>
                             <span>收藏</span>({{sheetInfo.subscribedCount}})

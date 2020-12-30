@@ -1,8 +1,8 @@
-import { Observable, Subject } from 'rxjs';
-import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { select, Store } from '@ngrx/store';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { map, takeUntil } from 'rxjs/internal/operators';
+import { Observable, Subject } from 'rxjs';
+import { select, Store } from '@ngrx/store';
 
 import { AppStoreModule } from 'src/app/store';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
@@ -114,6 +114,20 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
                 }
             })
         }
+    }
+
+    // 添加一张专辑
+    onAddSongs(songs: Song[], isPlay = false) {
+        this.songServe.getSongList(songs).subscribe( list => {
+            if(list.length) {
+                if(isPlay) {
+                    // 这一步和home.component里面 点击专辑播放的icon是的功能是一样的
+                    this.batchActionServe.selectPlayList({ list, index: 0 });
+                }else {
+                    this.batchActionServe.insertSongs(list);
+                }
+            }
+        })
     }
 
     // 这里发射一个值，在 listenCurrent 里的 takeUntil就能够接受到并且停止
