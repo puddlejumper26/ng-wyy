@@ -7,6 +7,7 @@ import { select, Store } from '@ngrx/store';
 
 import { AppStoreModule } from 'src/app/store';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
+import { findIndex } from 'src/app/utils/array';
 import { getCurrentSong, getPlayer } from './../../store/selectors/player.selector';
 import { SongService } from 'src/app/services/song.service';
 import { Song, SongSheet } from './../../services/data-types/common.types';
@@ -36,6 +37,7 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject<void>();
     // 保存正在播放的歌曲
     currentSong: Song;
+    currentIndex = -1;
 
     constructor(
         private route: ActivatedRoute,
@@ -98,6 +100,12 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
             .subscribe(song =>{
                 // console.log('【SheetInfoComponent】 - listenCurrent - song - ', song);
                 this.currentSong = song;
+
+                if(song) {
+                    this.currentIndex = findIndex(this.sheetInfo.tracks, song);
+                }else {
+                    this.currentIndex = -1;
+                }
             })
     }
 

@@ -72,6 +72,9 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
      */
     private lyricRefs: NodeList;
 
+    // 这里选择2 是为了和 handleLyric 方法中的参数保持一致
+    private startLine = 2;
+
     // 这时候再使用 win 就可以 不用 timer ， 而是 this.win.setTimeout
     constructor(
         @Inject(WINDOW) private win: Window,
@@ -159,8 +162,18 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
                  */
 
                 timer(80).subscribe(() => {                                             // -------------------(6)
+                    // 这里是判断面板左边部分
                     if (this.currentSong) {
                         this.scrollToCurrent(0); //这里设置成0，那么点击随机，点击歌曲下一首，点击播放面板，打开之后不会有一个歌曲列表跳转的动作
+                    }
+                    // 这里判断面板右边部分存在，也就是歌词部分
+                    // 先判断如果歌词的li都存在的话
+                    if (this.lyricRefs) {
+                        // const  targetLine = this.lyricRefs[this.currentLineNum - this.startLine]
+                        // if (targetLine) {
+                        //     this.wyScroll.last.scrollToElement(targetLine, 0, false, false);
+                        // }
+                        this.scrollToCurrentLyric(0); // 因为一开始就播放，所以是0
                     }
                 })
 
@@ -200,8 +213,8 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
                 //   2: {txt: "I'm lovin' how I'm floating next to you", txtCn: "我爱我沉浸在你周身的感觉", time: 6270}
 
                 //这里sLine 和 下面引用的时候用的startLine 是一样的，但是如果用同样的变量名字，就会出错
-                const sLine = res.tlyric ? 1 : 2;
-                this.handleLyric(sLine);                                                 // -------------------(10)
+                this.startLine = res.tlyric ? 1 : 2;
+                this.handleLyric();                                                 // -------------------(10)
 
                 // 每一次切一首新歌，都需要导入歌词，并且在面板上自动先滚动到歌词的顶端
                 this.wyScroll.last.scrollTo(0,0);                                   // -------------------(8)
@@ -264,7 +277,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     }
 
     // 这里选择2是反复调试出来的，但是 如果有中外文对应的就需要重新考虑
-    private handleLyric(startLine: number = 2) {                                    // -------------------(10)
+    private handleLyric() {                                    // -------------------(10)
         // console.log('【wy-player-panel】 - this.lyric.handler - ', this.lyric.handler);
         this.lyric.handler.subscribe(({lineNum}) => {
             if(!this.lyricRefs) {
@@ -281,13 +294,14 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
                 this.currentLineNum = lineNum;
 
                 // 要知道从第几行开始滚动
-                if(lineNum > startLine) {
-                    // 滚动到当前这个 li
-                    const targetLine = this.lyricRefs[lineNum - startLine];
-                    // console.log('【wy-player-panel】 - handleLyric - targetLine', targetLine);
-                    if(targetLine) {
-                        this.wyScroll.last.scrollToElement(targetLine, 300, false, false);
-                    }
+                if(lineNum > this.startLine) {
+                    // // 滚动到当前这个 li
+                    // const targetLine = this.lyricRefs[lineNum - startLine];
+                    // // console.log('【wy-player-panel】 - handleLyric - targetLine', targetLine);
+                    // if(targetLine) {
+                    //     this.wyScroll.last.scrollToElement(targetLine, 300, false, false);
+                    // }
+                    this.scrollToCurrentLyric(300);
                 }else {
                     // 保持在最顶端
                     this.wyScroll.last.scrollTo(0, 0);
@@ -316,5 +330,12 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
 
     private updateCurrentIndex() {                                   // -------------------(13)
         this.currentIndex = findIndex(this.songList, this.currentSong);
+    }
+
+    private scrollToCurrentLyric(speed = 300) {
+        const targetLine = this.lyricRefs[this.currentLineNum - this.startLine];
+        if(targetLine) {
+            this.wyScroll.last.scrollToElement(targetLine, speed, false, false);
+        }
     }
 }

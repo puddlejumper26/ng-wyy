@@ -107,7 +107,7 @@
                         <td class="first-col">
                             <span>{{i + 1}}</span>
                             <!-- 这里添加完还要播放，所以还有一个true -->
-                            <i class="ico play-song" title="播放" (click)="onAddSong(item, true)"></i>
+                            <i class="ico play-song" title="播放" [class.current]="currentIndex === i" (click)="onAddSong(item, true)"></i>
                         </td>
                         <td class="song-name">
                             <a>{{item.name}}</a>
