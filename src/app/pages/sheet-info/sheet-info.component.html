@@ -110,7 +110,8 @@
                             <i class="ico play-song" title="播放" [class.current]="currentIndex === i" (click)="onAddSong(item, true)"></i>
                         </td>
                         <td class="song-name">
-                            <a>{{item.name}}</a>
+                            <a [routerLink]="['/songInfo', item.id]">{{item.name}}</a>
+                            <!-- <button (click)="toInfo(item.id)">{{item.name}}</button> 如果是button，就和sheet-info component 的使用是一样的-->
                         </td>
                         <td class="time-col">
                             <span>{{item.dt / 1000 | formatTime}}</span>
