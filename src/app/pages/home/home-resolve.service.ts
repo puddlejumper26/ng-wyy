@@ -28,6 +28,9 @@ import { first } from "rxjs/internal/operators";
 type HomeDataType = [Banner[], HotTag[], SongSheet[], Singer[]];
 
 // The router waits for the data to be resolved before the route is finally activated.
+
+// 和song-info-resolve是一样的
+
 @Injectable()
 export class HomeResolverService implements Resolve<HomeDataType> {
     constructor(
