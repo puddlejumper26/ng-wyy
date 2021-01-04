@@ -72,6 +72,10 @@ export class SongInfoComponent implements OnInit, OnDestroy{
         }
     }
 
+    /***
+     *           和 sheet-info 和 singer-detail 中的方法是一样的,  需要 Refractory
+    */
+
      // 监听当前正在播放的歌曲
     // takeUntil 什么时候停止发射流
     private listenCurrent() {

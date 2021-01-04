@@ -92,6 +92,11 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
         return str.replace(/\n/g, '<br>');
     }
 
+    /***
+     *           和 singer-detail 和 song-info 中的方法是一样的,  需要 Refractory
+     */
+
+
     // 监听当前正在播放的歌曲
     // takeUntil 什么时候停止发射流
     private listenCurrent() {
