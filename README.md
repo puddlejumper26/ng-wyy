@@ -223,12 +223,12 @@ This is an Angular App Simulation of Netease Cloud Music
   - `wy-player-panel.component`
   - `wy-lyric.ts`
 
-## 5.10 Sheet and Song section - Sheet List component
+## 5.10 Sheet, Song and Singer section - Sheet List component
 - [Sheet-List (track list page)](https://github.com/puddlejumper26/ng-wyy/issues/12)
 - components / services / directives / etc.
   - `sheet-list.component`
 
-## 5.11 Sheet and Song section - Sheet Info component
+## 5.11 Sheet, Song and Singer section - Sheet Info component
 - [Sheet-Info (track detail page)](https://github.com/puddlejumper26/ng-wyy/issues/13)
 - components / services / directives / etc.
   - `sheet-info component`
@@ -236,13 +236,23 @@ This is an Angular App Simulation of Netease Cloud Music
   - `sheet.service`
   - `common.types.ts`
 
-## 5.12 Sheet and Song section - Song Info component
+## 5.12 Sheet, Song and Singer section - Song Info component
 - [Song-Info (details of each song)](https://github.com/puddlejumper26/ng-wyy/issues/14)
 - components / services / directives / etc.
   - `song-info component`
   - `song-info-resolver`
   - `song.service`
   - `common.types.ts`
+
+## 5.13 Sheet, Song and Singer section - Singer Detail component
+- [Singer-Detail (details of each singer)](https://github.com/puddlejumper26/ng-wyy/issues/15)
+- components / services / directives / etc.
+  - `singer-detail component`
+  - `singer.module.ts` && `singer-routing.module.ts`
+  - `singer.service`
+  - `home.component.html` && `song-info.component.html`
+  - `common.types.ts`
+
 # 6.0 Final Demo
 
 ## 6.1 Homepage

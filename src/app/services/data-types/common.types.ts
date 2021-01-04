@@ -25,7 +25,15 @@ export type Singer = {
     id: number;
     name: string;
     picUrl: string;
+    alias: string[]; //别名
 };
+
+// 歌手详细信息
+// https://github.com/puddlejumper26/ng-wyy/issues/15
+export type SingerDetail = {
+    artists: Singer,
+    hotSongs: Song[];
+}
 
 
 // localhost:3000/playlist/detail + id <专辑id>

@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 import queryString from "query-string";
 
 import { API_CONFIG, ServicesModule } from "./services.module";
-import { Singer } from "./data-types/common.types";
+import { Singer, SingerDetail } from "./data-types/common.types";
 
 type SingerParams = {
     offset: number; //分页
@@ -57,5 +57,22 @@ export class SingerService {
             // .get(this.uri + "artist/list?offset=0&limit=9&cat=5002")
             .get(this.uri + 'artist/list', { params })
             .pipe(map((res: { artists: Singer[] }) => res.artists));
+    }
+
+    // 获取歌手详情和热门歌曲
+    getSingerDetail(id: string): Observable<SingerDetail> {
+        const params = new HttpParams().set('id', id);
+        return this.http
+            .get(this.uri + 'artists', {params})
+            .pipe(map(res => res as SingerDetail));
+    }
+
+    // 获取相似歌手
+    getSimiSinger(id: string): Observable<Singer[]> {
+        const params = new HttpParams().set('id', id);
+        return this.http
+            .get(this.uri + 'simi/artist', {params})
+            // 注意这里的 artists 是根据 localhost:3000/ 中的 JSON 数据接口中有 data 属性，所以这样定义才能接受到数据
+            .pipe(map( (res: { artists: Singer[] }) => res.artists ));
     }
 }

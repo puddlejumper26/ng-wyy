@@ -62,6 +62,7 @@ export class SongService {
         const params = new HttpParams().set("id", ids);
         return this.http
             .get(this.uri + "song/url", { params })
+            // 注意这里的 data 是根据 localhost:3000/ 中的 JSON 数据接口中有 data 属性，所以这样定义才能接受到数据
             .pipe(map((res: { data: SongUrl[] }) => res.data));
     }
 
@@ -73,8 +74,8 @@ export class SongService {
             // console.log('【SongService】- generateSongList - urls -', urls);
             const url = urls.find((url) => url.id === song.id).url; //根据ID能找到每一首歌的url
             if (url) {
-                // console.log('...song', song);
-                // console.log('url', url)
+                // console.log('【SongService】- generateSongList - ...song', song);
+                // console.log('【SongService】- generateSongList - url-', url);
                 result.push({ ...song, url }); //这里的result就是 两个拼接的结果，并且类型是 Song[]
             }
         });
