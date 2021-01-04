@@ -24,7 +24,18 @@ export class SingleSheetComponent implements OnInit {
     ngOnInit() {}
 
     // 这里的id就是播放列表的id号
-    playSheet(id: number) {
+
+    // 这里使用 stopPropagation ， 否则点击 home 页面的专辑上的播放按钮，就会直接跳转到专辑的详情页面（也会执行相应功能）
+    // 也就是说这个 点击 click 的功能 被 冒泡到 这个组件的最外层， 也就是下面这个 click 上了，所以要阻止
+    //                       <app-single-sheet
+    //                             class="sheet-item"
+    //                             *ngFor="let item of songSheetLists"
+    //                             [sheet]="item"
+    //                             (onPlay)="onPlaySheet($event)"
+    //                             (click)="toInfo(item.id)"
+    //                         ></app-single-sheet>
+    playSheet(evt: MouseEvent, id: number) {
+        evt.stopPropagation();
         this.onPlay.emit(id);
         // console.log('single-sheet emit id - ', id);
     }
