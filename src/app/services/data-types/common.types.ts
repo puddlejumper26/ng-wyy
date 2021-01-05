@@ -91,3 +91,23 @@ export type SheetList = {
 }
 
 export type SliderValue = number | null;
+
+// https://github.com/puddlejumper26/ng-wyy/issues/16
+// 所以这里的数据类型有点乱
+type Album = {
+    id?: number;
+    name?: string;
+    artist?: Singer;
+}
+
+type SearchSong = {
+    id?: number;
+    name: string;
+    artists?: Singer[];
+    album?: Album;
+}
+
+export type SearchResult = {
+    albums?: Album[];
+    searchSongs?: SearchSong[];
+}
