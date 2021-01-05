@@ -1,0 +1,10 @@
+<ng-template #defaultView>
+    <div class="search">
+        <nz-input-group nzSuffixIcon="search">
+                <input type="text" #nzInput nz-input placeholder="List/Singer/Song"/>
+        </nz-input-group>
+    </div>
+</ng-template>
+
+<!-- 这里只要传入一个 templateRef类型就能够进行改变，这样user就可以从外部对这个地方就进行修改 -->
+<ng-container *ngTemplateOutlet="customView ? customView : defaultView"></ng-container>

@@ -9,12 +9,16 @@ export class AppComponent {
     title = "ng-wyy";
     menu = [
         {
-            label: '发现',
-            path: '/home'
+            label: "发现",
+            path: "/home",
         },
         {
-            label: '歌单',
-            path: '/sheet'
-        }
+            label: "歌单",
+            path: "/sheet",
+        },
     ];
+
+    onSearch(keywords: string) {
+        // console.log('【AppComponent】 - onSearch - keywords -', keywords);
+    }
 }

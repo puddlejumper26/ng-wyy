@@ -11,24 +11,28 @@
 
                 <div class="right">
                     <!-- Search -->
-                    <div class="search">
+                    <!-- 直接建立一个 wy-search 组件 -->
+                    <app-wy-search (onSearch)="onSearch($event)"></app-wy-search>
+                    <!-- <div class="search"> -->
                         <!-- here the suffixIconSearch must be with ng-template, 因为nzSuffix必须接受一个TemplateRef类型的值 -->
                         <!-- 而nzSuffix就是在输入框后加图标的一个API， https://ng.ant.design/components/input/zh -->
-                        <nz-input-group [nzSuffix]="suffixIconSearch">
-                            <input
+                        <!-- <nz-input-group nzSuffixIcon="search"> -->
+                        <!-- <nz-input-group [nzSuffix]="suffixIconSearch">
+                                <input
                                 type="text"
                                 nz-input
                                 placeholder="List/Singer/Song"
                             />
-                        </nz-input-group>
+                        </nz-input-group> -->
 
+                        <!-- 上面直接使用[nzSuffixIcon]就可以不用这一段了 -->
                         <!-- to display the search icon -->
                         <!-- 这里使用ng-template同样是因为nzSuffix是 TemplateRef类型 -->
-                        <ng-template #suffixIconSearch>
+                        <!-- <ng-template #suffixIconSearch>
                             <i nz-icon nzType="search"></i>
-                        </ng-template>
+                        </ng-template> -->
 
-                    </div>
+                    <!-- </div> -->
 
                     <div class="member">
                         <div class="no-login">

@@ -55,14 +55,16 @@ This is an Angular App Simulation of Netease Cloud Music
 - `QueryList` | `frist` | `last` | `firstChange` - [wy-player-panel.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player-panel/wy-player-panel.component.ts)
 - `snapshot` | `queryParamMap` - [sheet-list.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/sheet-list/sheet-list.component.ts)
 - `paramMap` | `data` - [sheet-info-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/sheet-info/sheet-info-resolve.service.ts)
+- `ngTemplateOutlet` - [wy-search.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-search/wy-search.component.html)
 
 ## 4.2 rxjs
 
 - `forkJoin()` - [home-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home-resolve.service.ts) | [song-info-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/song-info/song-info-resolve.service.ts)
 - `first()` - [home-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/home/home-resolve.service.ts) | [song-info-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/song-info/song-info-resolve.service.ts)
-- `pluck()` - [sheet.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/sheet.service.ts) | [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
+- `pluck()` - [sheet.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/sheet.service.ts) | [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts) | [wy-search.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-search/wy-search.component.ts)
 - `switchMap()` - [sheet.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/services/sheet.service.ts)
-- `fromEvent` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts) | [wy-player.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
+- `fromEvent` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts) | [wy-player.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts) | [wy-search.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-search/wy-search.component.ts)
+- `debounceTime()` | `distinctUntilChanged()` - [wy-search.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-search/wy-search.component.ts)
 - `distinctUntilChanged()` & `takeUntil()` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 - `merge()` - [wy-slider.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-slider/wy-slider.component.ts)
 - `timer` - [wy-player-panel.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player-panel/wy-player-panel.component.ts)
@@ -252,6 +254,12 @@ This is an Angular App Simulation of Netease Cloud Music
   - `singer.service`
   - `home.component.html` && `song-info.component.html`
   - `common.types.ts`
+
+## 5.14 Search Function
+- [Search Function](https://github.com/puddlejumper26/ng-wyy/issues/16)
+- components / services / directives / etc.
+    - `wy-search component`
+    - `app component`
 
 # 6.0 Final Demo
 
