@@ -21,17 +21,20 @@
 
             <div class="head">
                 <img [src]="picUrl" alt="" />
-                <i class="mask"></i>
+                <!-- 这里写成 currentSong && currentSong.id 是为了兼容，不然没有歌曲点击这里会console报错id不存在 -->
+                <i class="mask" (click)="toInfo(['/songInfo', currentSong && currentSong.id])" ></i>
             </div>
 
             <div class="play">
                 <!-- 就是歌曲和歌手名字 -->
                 <div class="words clearfix">
-                    <p class="ellipsis margin-bottom-none">{{ currentSong?.name}}</p>
+                    <p class="ellipsis margin-bottom-none" (click)="toInfo(['/songInfo', currentSong && currentSong.id])" >{{ currentSong?.name}}</p>
                     <ul class="songs clearfix margin-bottom-none">
                         <!-- 注意这里 last as isLast， 这样 / 在最后 -->
                         <li *ngFor="let item of currentSong?.ar, last as isLast">
-                            <a>{{item.name}}</a>
+                            <a (click)="toInfo(['/singer', item.id])">{{item.name}}</a>
+                             <!-- 下面这种方法也可以 -->
+                            <!-- <a [routerLink]="['/singer', item.id]">{{item.name}}</a> -->
                             <span [hidden]="isLast">/</span>
                         </li>
                     </ul>
@@ -84,6 +87,7 @@
                 (onChangeSong)="onChangeSong($event)"
                 (onDeleteSong)="onDeleteSong($event)"
                 (onClearSong)="onClearSong($event)"
+                (onToInfo)="toInfo($event)"
             ></app-wy-player-panel>
 
         </div>

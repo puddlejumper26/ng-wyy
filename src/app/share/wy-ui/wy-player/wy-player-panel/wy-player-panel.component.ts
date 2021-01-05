@@ -1,4 +1,3 @@
-import { SongSheet } from './../../../../services/data-types/common.types';
 import {
     Component,
     ElementRef,
@@ -46,6 +45,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     @Output() onChangeSong = new EventEmitter<Song>();                             // -------------------(2)
     @Output() onDeleteSong = new EventEmitter<Song>();                             // -------------------(13)
     @Output() onClearSong = new EventEmitter<void>(); //直接清空列表所以 void        // -------------------(13)
+    @Output() onToInfo = new EventEmitter<[string, number]>();                     // -------------------(14)
 
     //因为播放列表和歌词部分都需要用到，所以这里用 ViewChildren
     // @ViewChildren(WyScrollComponent) private wyScroll: QueryList<WyScrollComponent>;
@@ -78,7 +78,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     // 这时候再使用 win 就可以 不用 timer ， 而是 this.win.setTimeout
     constructor(
         @Inject(WINDOW) private win: Window,
-        private songServe: SongService
+        private songServe: SongService,
         ) {}
 
     ngOnInit() {}
@@ -337,5 +337,10 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
         if(targetLine) {
             this.wyScroll.last.scrollToElement(targetLine, speed, false, false);
         }
+    }
+
+    toInfo(evt: MouseEvent, path: [string, number]) {
+        evt.stopPropagation();
+        this.onToInfo.emit(path);
     }
 }

@@ -6,8 +6,9 @@ import {
     OnInit,
     ViewChild,
 } from "@angular/core";
-import { select, Store } from "@ngrx/store";
 import { fromEvent, Subscription } from "rxjs";
+import { Router } from "@angular/router";
+import { select, Store } from "@ngrx/store";
 
 import { AppStoreModule } from "./../../../store/index";
 import {
@@ -96,6 +97,7 @@ export class WyPlayerComponent implements OnInit {
 
     constructor(
         private nzModalServe: NzModalService,
+        private router: Router,
         private store$: Store<AppStoreModule>,
         @Inject(DOCUMENT) private doc: Document,
         private batchActionServe: BatchActionsService
@@ -508,4 +510,16 @@ export class WyPlayerComponent implements OnInit {
         //这里也需要解绑一下
         this.bindFlag = false;
     }
+
+    // 点击跳转到相关的专辑详情页面
+    // 接受一个元组类型的参数
+    toInfo(path: [string, number]) {                                                    // -------------------(26)
+        // console.log('【WyPlayerComponent】 - toInfo - path - ', path);
+        if(path[1]) {
+            this.showPanel = false;
+            this.showVolumnPanel = false;
+            this.router.navigate(path);
+        }
+    }
+
 }
