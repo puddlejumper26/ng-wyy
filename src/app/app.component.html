@@ -12,7 +12,7 @@
                 <div class="right">
                     <!-- Search -->
                     <!-- 直接建立一个 wy-search 组件 -->
-                    <app-wy-search (onSearch)="onSearch($event)"></app-wy-search>
+                    <app-wy-search (onSearch)="onSearch($event)" [searchResult]="searchResult"></app-wy-search>
                     <!-- <div class="search"> -->
                         <!-- here the suffixIconSearch must be with ng-template, 因为nzSuffix必须接受一个TemplateRef类型的值 -->
                         <!-- 而nzSuffix就是在输入框后加图标的一个API， https://ng.ant.design/components/input/zh -->

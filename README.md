@@ -260,6 +260,7 @@ This is an Angular App Simulation of Netease Cloud Music
 - components / services / directives / etc.
     - `wy-search component`
     - `app component`
+    - `tools.ts`
 
 # 6.0 Final Demo
 
