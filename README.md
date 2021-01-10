@@ -60,7 +60,7 @@ This is an Angular App Simulation of Netease Cloud Music
 
 ## 4.1 Angular Material
 
-- `Overlay` | `portal` | `OverlayRef` | `create()` && `hasAttached()` && `dispose()`| [wy-search.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-search/wy-search.component.ts)
+- `Overlay` | `portal` | `OverlayRef` | `create()` && `hasAttached()` && `dispose()`| `hasBackdrop` | `backdropClick()` [wy-search.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-search/wy-search.component.ts)
 -
 ## 4.2 rxjs
 

@@ -18,7 +18,9 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
     @Output() onSearch = new EventEmitter<string>()
     @Input() searchResult: SearchResult;
     @Input() customView: TemplateRef<any>;
+    @Input() connectedRef: ElementRef;
     @ViewChild('nzInput', {static: false}) private nzInput: ElementRef;
+    @ViewChild('search', {static: false}) private defaultRef: ElementRef;
 
     private overlayRef: OverlayRef;
 
@@ -67,11 +69,42 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     private showOverlayPanel() {
-        console.log('【WySearchComponent】 - hideOverlayPanel');
-        this.overlayRef = this.overlay.create();
+        // console.log('【WySearchComponent】 - hideOverlayPanel');
+        // 下面可以通过连续的 . 进行连续调用，是因为这些方法返回的都是 this
+        const positionStrategy = this.overlay.position()
+                                    // this.connectedRef 是可以从parent component上通过输入进行控制
+                                    .flexibleConnectedTo(this.connectedRef || this.defaultRef)  //这个浮层就会根据defaultRef来进行定位
+                                    // 下面的四个参数是必选的. originX, originY 是相对dom的一个点
+                                    // originX: 'start',originY: 'bottom',是指主页面搜索框的左边底部左下角的那个点
+                                    // overlayX: 'start',overlayY: 'top' 是指overlay 左上角的那个点，和上面的点对应
+                                    // 这样就能确定overlay的出现的位置了
+                                    .withPositions([{
+                                        originX: 'start',
+                                        originY: 'bottom',
+                                        overlayX: 'start',
+                                        overlayY: 'top'
+                                    }])
+                                    // 和下面的scrollStrategy合用
+                                    // 把出现的overlay锁定在初始化的地方，不会随着鼠标的滚动而变化
+                                    .withLockedPosition(true);
+
+        // 和上面的.withLockedPosition合用，进行锁定
+        const scrollStrategy = this.overlay.scrollStrategies.reposition();
+
+        this.overlayRef = this.overlay.create({
+            hasBackdrop: true,  // 这个属性会在 搜索框内输入搜索内容之后，除了显示Overlay Panel，还会出现一个笼罩整个UI的隐身的div
+            positionStrategy,
+            scrollStrategy
+        });
         // 这里依赖的数组是viewContainerRef类型，是当前WySearchComponent
         // 也就是WySearchPanelComponent需要依附于this.viewContainerRef
         const panelPortal = new ComponentPortal(WySearchPanelComponent, this.viewContainerRef);
         const panelRef = this.overlayRef.attach(panelPortal);
+        // 注意下面的是一个 Observable， 就是监听是否点击到了Overlay panel 以外的页面，并且这个时候浮层把下面的内容都遮挡住了，没有任何的交互结果
+        this.overlayRef.backdropClick().subscribe((res) => {
+            //  console.log('【WySearchComponent】- showOverlayPanel - this.overlayRef.backgropClick()', res); //这一步在鼠标点击页面时候会打印出来一个MouseEvent
+            // 所以在这里调用 下面的方法就能够在点击Overlay Panel以外的页面时候隐藏这个页面
+            this.hideOverlayPanel();
+        })
     }
 }
