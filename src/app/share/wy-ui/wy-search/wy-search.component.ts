@@ -32,6 +32,7 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
     // 使用这个钩子，来控制面板是如何显示的
     ngOnChanges(changes: SimpleChanges): void {
         if(changes['searchResult'] && !changes['searchResult'].firstChange) {
+            // 这里的 hideOverlayPanel()可以直接在 showOverlayPanel()第一行进行调用，这里删除就好了
             this.hideOverlayPanel();
             // 根据searchResult是否有值来控制下拉的面板
             // 这里判断是否是一个空对象 因为在 app.component.ts中 onSearch 方法中可能会是空
@@ -62,6 +63,7 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     private hideOverlayPanel() {
+        // hasAttached 就是指 overlay 上有内容，是显示的
         if(this.overlayRef && this.overlayRef.hasAttached()){
             // dispose 就是消失的方法
             this.overlayRef.dispose();
@@ -93,8 +95,8 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
 
         this.overlayRef = this.overlay.create({
             hasBackdrop: true,  // 这个属性会在 搜索框内输入搜索内容之后，除了显示Overlay Panel，还会出现一个笼罩整个UI的隐身的div
-            positionStrategy,
-            scrollStrategy
+            positionStrategy: positionStrategy,
+            scrollStrategy: scrollStrategy,
         });
         // 这里依赖的数组是viewContainerRef类型，是当前WySearchComponent
         // 也就是WySearchPanelComponent需要依附于this.viewContainerRef
@@ -106,5 +108,11 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
             // 所以在这里调用 下面的方法就能够在点击Overlay Panel以外的页面时候隐藏这个页面
             this.hideOverlayPanel();
         })
+    }
+
+    onFocus() {
+        if(this.searchResult && !isEmptyObject(this.searchResult)) {
+            this.showOverlayPanel();
+        }
     }
 }
