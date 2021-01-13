@@ -97,17 +97,15 @@ export type SliderValue = number | null;
 type Album = {
     id?: number;
     name?: string;
-    artist?: Singer;
 }
 
 type SearchSong = {
     id?: number;
     name: string;
-    artists?: Singer[];
-    album?: Album;
+    artists?:Singer[];
 }
 
 export type SearchResult = {
     albums?: Album[];
-    searchSongs?: SearchSong[];
+    songs?: SearchSong[];
 }

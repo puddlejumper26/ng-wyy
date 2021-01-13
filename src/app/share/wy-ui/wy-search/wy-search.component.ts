@@ -102,6 +102,11 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
         // 也就是WySearchPanelComponent需要依附于this.viewContainerRef
         const panelPortal = new ComponentPortal(WySearchPanelComponent, this.viewContainerRef);
         const panelRef = this.overlayRef.attach(panelPortal);
+        // console.log('【WySearchComponent】- showOverlayPanel - panelRef', panelRef);
+        // 这里的panelRef是componentRef类型，下面有一个instance的属性,打开就是WySearchPanelComponent所以可以
+        // 等号前面的searchResult是WySearchPanelCompopnent中定义的， 这样就把这里的searchResult中的结果赋值到WySearchPanelComponent中去了
+        panelRef.instance.searchResult = this.searchResult;
+
         // 注意下面的是一个 Observable， 就是监听是否点击到了Overlay panel 以外的页面，并且这个时候浮层把下面的内容都遮挡住了，没有任何的交互结果
         this.overlayRef.backdropClick().subscribe((res) => {
             //  console.log('【WySearchComponent】- showOverlayPanel - this.overlayRef.backgropClick()', res); //这一步在鼠标点击页面时候会打印出来一个MouseEvent
@@ -111,8 +116,15 @@ export class WySearchComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     onFocus() {
+        console.log('【WySearchComponent】- onFocus()');
         if(this.searchResult && !isEmptyObject(this.searchResult)) {
             this.showOverlayPanel();
         }
+    }
+
+    // 当搜索面板渲染好之后，点击搜索出来的内容，跳转到相应的页面，需要自动隐藏搜索面板
+    onBlur() {
+        console.log('【WySearchComponent】- onBlur()');
+        this.hideOverlayPanel();
     }
 }
