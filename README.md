@@ -57,6 +57,7 @@ This is an Angular App Simulation of Netease Cloud Music
 - `paramMap` | `data` - [sheet-info-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/sheet-info/sheet-info-resolve.service.ts)
 - `ngTemplateOutlet` - [wy-search.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-search/wy-search.component.html)
 - `ViewContainerRef` - [wy-search.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-search/wy-search.component.ts)
+- `animations` | `trigger` | `state` | `style` | `(mouseenter)` | `(mouseleave)` - [wy-player.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts) | [wy-player.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.html)
 
 ## 4.1 Angular Material
 

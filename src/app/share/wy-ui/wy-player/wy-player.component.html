@@ -1,12 +1,18 @@
+<!-- 下面的showHide 都是指的同一个在wy-player.component.ts的animations中trigger中定义的 -->
 <div class="m-player"
     appClickoutside
     [bindFlag]="bindFlag"
     (onClickOutSide)="onClickOutSide()"
+    [@showHide]="showPlayer"
+    (mouseenter)="togglePlayer('show')"
+    (mouseleave)="togglePlayer('hide')"
+    (@showHide.start)="animating = true"
+    (@showHide.done)="animating = false"
 >
 <!--上面的div中因为onClickOutSide的加入所以可以删除 (click)="selfClick = true" -->
 
-    <div class="lock">
-        <div class="left"><i></i></div>
+    <div class="lock" (click)="isLocked=!isLocked">
+        <div class="left"><i [class.locked]="isLocked"></i></div>
     </div>
     <!-- hand点击，整体就出现 -->
     <div class="hand"></div>

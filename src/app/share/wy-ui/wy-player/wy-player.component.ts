@@ -1,3 +1,4 @@
+import { animate, state, style, transition, trigger } from "@angular/animations";
 import { DOCUMENT } from "@angular/common";
 import {
     Component,
@@ -7,6 +8,7 @@ import {
     ViewChild,
 } from "@angular/core";
 import { fromEvent, Subscription } from "rxjs";
+import { NzModalService } from "ng-zorro-antd";
 import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 
@@ -29,7 +31,6 @@ import {
 import { Song } from "./../../../services/data-types/common.types";
 import { findIndex, shuffle } from "src/app/utils/array";
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
-import { NzModalService } from "ng-zorro-antd";
 import { BatchActionsService } from "src/app/store/batch-actions.service";
 
 const modeTypes: PlayMode[] = [
@@ -42,6 +43,15 @@ const modeTypes: PlayMode[] = [
     selector: "app-wy-player",
     templateUrl: "./wy-player.component.html",
     styleUrls: ["./wy-player.component.less"],
+    animations: [                                          // -------------------27
+        trigger('showHide', [
+            state('show', style({ bottom: 0 })),
+            state('hide', style({ bottom: -71 })),
+            transition('show=>hide', [animate('0.3s')]),
+            transition('hide=>show', [animate('0.1s')]),
+            // transition('show<=>hide', [animate('0.3s')])    // 如果时间相同的话，是上面两个的简化版本
+        ])
+    ]
 })
 export class WyPlayerComponent implements OnInit {
     percent = 0; //一开始handle 也就是圆点的位置 就是滑块一开始的位置
@@ -71,6 +81,13 @@ export class WyPlayerComponent implements OnInit {
     bindFlag = false;
     // whether to show the list panel
     showPanel = false;
+
+    // 定义一个变量来控制                                 // -------------------27
+    showPlayer = 'hide';
+    // 定义锁定的变量
+    isLocked = false;
+    // 定义一个防止动画抖动的变量, 表示是否正在动画
+    animating = false;
 
     // 绑定 Window 的 click 事件的
     private winClick: Subscription;
@@ -519,6 +536,12 @@ export class WyPlayerComponent implements OnInit {
             this.showPanel = false;
             this.showVolumnPanel = false;
             this.router.navigate(path);
+        }
+    }
+
+    togglePlayer(type: string) {                                                  // -------------------27
+        if(!this.isLocked && !this.animating) {
+            this.showPlayer = type;
         }
     }
 
