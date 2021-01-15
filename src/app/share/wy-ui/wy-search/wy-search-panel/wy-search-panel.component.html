@@ -8,7 +8,8 @@
         </div>
         <ul>
             <!-- 这里使用mousedown而不是click是因为在 wy-search.component.html中使用 blur 会比 click更快，导致没法实现这里的跳转 -->
-          <li class="ellipsis" *ngFor="let item of searchResult?.songs" (mousedown)="toInfo(['/songInfo', item.id])">{{item.name}}</li>
+            <!-- 这里使用 innerHTML 的主要原因是因为在 app.component.ts 中 highlightKeyWords 使用的 replace。 否则可以直接在后面使用 {{item.name}} -->
+          <li class="ellipsis" *ngFor="let item of searchResult?.songs" (mousedown)="toInfo(['/songInfo', item.id])" [innerHTML]="item.name"></li>
         </ul>
       </div>
 
@@ -19,7 +20,7 @@
           <span>歌手</span>
         </div>
         <ul *ngFor="let song of searchResult?.songs">
-          <li class="ellipsis" *ngFor="let singer of song.artists" (mousedown)="toInfo(['/singer', singer.id])">{{singer.name}}</li>
+          <li class="ellipsis" *ngFor="let singer of song.artists" (mousedown)="toInfo(['/singer', singer.id])" [innerHTML]="singer.name"></li>
         </ul>
       </div>
 
@@ -30,7 +31,7 @@
           <span>歌单</span>
         </div>
         <ul>
-          <li class="ellipsis" *ngFor="let item of searchResult?.albums" (mousedown)="toInfo(['/sheetInfo', item.id])">{{item.name}}</li>
+          <li class="ellipsis" *ngFor="let item of searchResult?.albums" (mousedown)="toInfo(['/sheetInfo', item.id])" [innerHTML]="item.name"></li>
         </ul>
       </div>
     </div>
