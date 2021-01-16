@@ -23,11 +23,12 @@ export class ClickoutsideDirective implements OnChanges{
             if(this.bindFlag) {
                // 在全局的doc上绑定一个click事件
                 this.handleClick = this.rd.listen(this.doc, 'click', evt=>{
+                    const target = evt.target;
                     // 当前点击的对象是否包含在el中
-                    const isContain = this.el.nativeElement.contains(evt.target);
+                    const isContain = this.el.nativeElement.contains(target);
                     // console.log('ClickoutsideDirective - isContain', isContain);  //点击播放器以外都返回 false
                     if(!isContain){
-                        this.onClickOutSide.emit();
+                        this.onClickOutSide.emit(target);
                     }
                 });
             }else { //这里解绑一下 传入空的对象

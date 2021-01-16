@@ -537,12 +537,18 @@ export class WyPlayerComponent implements OnInit {
     }
 
     // 点击到播放器外部，那么这个方法就会触发一次
-    onClickOutSide() {                                                 // -------------------(25)
+    onClickOutSide(target: HTMLElement) {                                                 // -------------------(25)
         // console.log('wy-player.component.ts - onClickOutside');
-        this.showVolumnPanel = false;
-        this.showPanel = false;
-        //这里也需要解绑一下
-        this.bindFlag = false;
+
+        // 使用这个if 用来解除 点击删除按钮，播放面板不见的问题
+        // 这里的 haha 和 wy-player-panel.component.html中的 data-haha="delete" 保持一致就好
+        // 自定义的数据属性名称是以 data- 开头的。 详细解释看最后的例子
+        if(target.dataset.haha !== 'delete'){
+            this.showVolumnPanel = false;
+            this.showPanel = false;
+            //这里也需要解绑一下
+            this.bindFlag = false;
+        }
     }
 
     // 点击跳转到相关的专辑详情页面
@@ -603,3 +609,20 @@ export class WyPlayerComponent implements OnInit {
         }
     }
 }
+
+
+
+/**
+ *           dataset &&  data-
+ *
+ *     https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLElement/dataset
+ *
+<div id="user" data-id="1234567890" data-user="johndoe" data-date-of-birth>John Doe</div>
+
+var el = document.querySelector('#user');
+
+// el.id == 'user'
+// el.dataset.id === '1234567890'
+// el.dataset.user === 'johndoe'
+// el.dataset.dateOfBirth === ''
+ */

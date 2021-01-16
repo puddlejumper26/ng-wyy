@@ -2,7 +2,7 @@
 <div class="m-player"
     appClickoutside
     [bindFlag]="bindFlag"
-    (onClickOutSide)="onClickOutSide()"
+    (onClickOutSide)="onClickOutSide($event)"
     [@showHide]="showPlayer"
     (mouseenter)="togglePlayer('show')"
     (mouseleave)="togglePlayer('hide')"
