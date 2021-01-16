@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 
 import { AppStoreModule } from '.';
-import { Song } from '../services/data-types/common.types';
-import { playerReducer, PlayState } from 'src/app/store/reducers/player.reducer';
-import { getPlayer } from 'src/app/store/selectors/player.selector';
-import { SetCurrentIndex, SetPlayList, SetSongList } from './actions/player.actions';
+import { CurrentActions, playerReducer, PlayState } from 'src/app/store/reducers/player.reducer';
 import { findIndex } from 'src/app/utils/array';
+import { getPlayer } from 'src/app/store/selectors/player.selector';
+import { SetCurrentIndex, SetPlayList, SetSongList, SetCurrentAction } from './actions/player.actions';
 import { shuffle } from 'src/app/utils/array';
+import { Song } from '../services/data-types/common.types';
 
 @Injectable({
     providedIn: AppStoreModule,
@@ -32,6 +32,7 @@ export class BatchActionsService {
             }
             this.store$.dispatch(SetPlayList({ playList: trueList}));
             this.store$.dispatch(SetCurrentIndex({ currentIndex: trueIndex}));
+            this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Play }))
     }
 
     // 删除歌曲
@@ -60,6 +61,7 @@ export class BatchActionsService {
         this.store$.dispatch(SetSongList({ songList: songList }));
         this.store$.dispatch(SetPlayList({ playList: playList }));
         this.store$.dispatch(SetCurrentIndex({ currentIndex: currentIndex }));
+        this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Delete }));
     }
 
     // 清除歌曲
@@ -67,6 +69,7 @@ export class BatchActionsService {
         this.store$.dispatch(SetSongList({ songList: [] }));
         this.store$.dispatch(SetPlayList({ playList: [] }));
         this.store$.dispatch(SetCurrentIndex({ currentIndex: -1 }));
+        this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Clear }));
     }
 
     // 添加歌曲
@@ -99,10 +102,14 @@ export class BatchActionsService {
         // 这里要改变currenIndex, 因为在前面的if(isPlay)条件下，insertIndex的值就被改变了
         if (insertIndex !== this.playerState.currentIndex) {
             this.store$.dispatch(SetCurrentIndex({ currentIndex: insertIndex }));
+            this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Play }));
+        }else {
+            // 只添加不播放
+            this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Add }));
         }
     }
 
-    // 添加专辑
+    // 添加专辑 多首歌曲
     insertSongs(songs: Song[]) {
         // 因为要添加到playlist 和 songlist 中去
         const songList = this.playerState.songList.slice();
@@ -119,6 +126,7 @@ export class BatchActionsService {
 
         this.store$.dispatch(SetSongList({ songList: songList }));
         this.store$.dispatch(SetPlayList({ playList: playList }));
+        this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Add }));
     }
 }
 

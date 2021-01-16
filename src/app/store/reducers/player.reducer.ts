@@ -1,7 +1,16 @@
-import { SetCurrentIndex, SetPlaying, SetPlayList, SetPlayMode, SetSongList } from './../actions/player.actions';
 import { Action, createReducer, on } from '@ngrx/store';
+
+import { SetCurrentAction, SetCurrentIndex, SetPlaying, SetPlayList, SetPlayMode, SetSongList } from './../actions/player.actions';
 import { Song } from 'src/app/services/data-types/common.types';
 import { PlayMode } from 'src/app/share/wy-ui/wy-player/player-type';
+
+export enum CurrentActions {
+    Add,
+    Play,
+    Delete,
+    Clear,
+    Other
+}
 
 // 定义播放器的播放状态
 export type PlayState = {
@@ -15,6 +24,8 @@ export type PlayState = {
     playList: Song[]
     // 当前正在播放的索引
     currentIndex: number;
+    // 当前操作
+    currentAction: CurrentActions;
 }
 
 // 定义播放器初始的状态
@@ -23,7 +34,8 @@ export const initialState: PlayState = {
     songList: [],
     playList: [],
     playMode: { type: 'loop', label: '循环'}, //默认是循环播放
-    currentIndex: -1  //因为不知道会从哪一首开始
+    currentIndex: -1,  //因为不知道会从哪一首开始
+    currentAction: CurrentActions.Other,
 }
 
 
@@ -50,6 +62,7 @@ const reducer = createReducer(
     on(SetSongList, (state, {songList}) => ({ ...state, songList})),
     on(SetPlayMode, (state, {playMode}) => ({ ...state, playMode})),
     on(SetCurrentIndex, (state, {currentIndex}) => ({ ...state, currentIndex})),
+    on(SetCurrentAction, (state, { currentAction }) => ({ ...state, currentAction}))
 )
 
 //https://next.ngrx.io/guide/store/

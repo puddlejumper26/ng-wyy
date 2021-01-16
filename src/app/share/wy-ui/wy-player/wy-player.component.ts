@@ -1,3 +1,4 @@
+import { CurrentActions } from './../../../store/reducers/player.reducer';
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { DOCUMENT } from "@angular/common";
 import {
@@ -20,9 +21,11 @@ import {
     getPlayer,
     getPlayMode,
     getCurrentSong,
+    getCurrentAction,
 } from "./../../../store/selectors/player.selector";
 import { PlayMode } from "./player-type";
 import {
+    SetCurrentAction,
     SetCurrentIndex,
     SetPlayList,
     SetPlayMode,
@@ -136,7 +139,9 @@ export class WyPlayerComponent implements OnInit {
         appStore$
             .pipe(select(getCurrentSong))
             .subscribe((song) => this.watchCurrentSong(song)); // 赋值                     // -------------- (1)
-
+        appStore$
+            .pipe(select(getCurrentAction))
+            .subscribe((action) => this.watchCurrentAction(action))                        // -------------------28
         /**
          *         // following is not working under @ngrx/store-devtool@8.6.0 only for 8.3.0
          */
@@ -543,6 +548,13 @@ export class WyPlayerComponent implements OnInit {
         if(!this.isLocked && !this.animating) {
             this.showPlayer = type;
         }
+    }
+
+    private watchCurrentAction(action: CurrentActions) {                         // -------------------28
+        console.log('【WyPlayerComponent】 - watchCurrentAction - action - ', CurrentActions[action]);
+
+        // 一旦发生变化，这里需要重新赋值，不然如果连续添加的话，因为状态是一致的，那么就会只有第一个添加会执行
+        this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Other }));
     }
 
 }
