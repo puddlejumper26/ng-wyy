@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { NgModule } from "@angular/core";
+import { NzToolTipModule } from "ng-zorro-antd";
 import { RouterModule } from "@angular/router";
 
 import { ClickoutsideDirective } from './../../directives/clickoutside.directive';
@@ -12,7 +13,7 @@ import { WyScrollComponent } from './wy-scroll/wy-scroll.component';
 
 @NgModule({
     declarations: [WyPlayerComponent, FormatTimePipe, WyPlayerPanelComponent, WyScrollComponent, ClickoutsideDirective],
-    imports: [CommonModule, RouterModule, WySliderModule, FormsModule],
+    imports: [CommonModule, RouterModule, WySliderModule, FormsModule, NzToolTipModule],
     exports: [WyPlayerComponent, FormatTimePipe, ClickoutsideDirective],
 })
 export class WyPlayerModule {}

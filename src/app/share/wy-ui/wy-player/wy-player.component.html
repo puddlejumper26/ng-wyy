@@ -7,7 +7,7 @@
     (mouseenter)="togglePlayer('show')"
     (mouseleave)="togglePlayer('hide')"
     (@showHide.start)="animating = true"
-    (@showHide.done)="animating = false"
+    (@showHide.done)="onAnimateDone($event)"
 >
 <!--上面的div中因为onClickOutSide的加入所以可以删除 (click)="selfClick = true" -->
 
@@ -70,7 +70,8 @@
                 <!-- 这里都是动态的绑定，随着后面changeMode()带来的变化，而改变currentMode.type和currentMode.label -->
                 <i [ngClass]="currentMode.type" [title]="currentMode.label" (click)="changeMode()"></i>
                 <!-- 展开播放面板的按钮 -->
-                <p class="open" (click)="toggleListPanel()">
+                <!-- nzOverlayClassName 用来增加一个class来深化背景颜色 -->
+                <p nz-tooltip [nzTooltipTitle]="controlTooltip.title" [nzVisible]="controlTooltip.show" nzOverlayClassName="tip-bg" class="open" (click)="toggleListPanel()">
                     <span></span>
                 </p>
 

@@ -1,5 +1,5 @@
 import { CurrentActions } from './../../../store/reducers/player.reducer';
-import { animate, state, style, transition, trigger } from "@angular/animations";
+import { animate, state, style, transition, trigger, AnimationEvent } from "@angular/animations";
 import { DOCUMENT } from "@angular/common";
 import {
     Component,
@@ -8,7 +8,7 @@ import {
     OnInit,
     ViewChild,
 } from "@angular/core";
-import { fromEvent, Subscription } from "rxjs";
+import { fromEvent, Subscription, timer } from "rxjs";
 import { NzModalService } from "ng-zorro-antd";
 import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
@@ -41,6 +41,12 @@ const modeTypes: PlayMode[] = [
     { type: "random", label: "随机" },
     { type: "singleLoop", label: "单曲循环" },
 ];
+
+// Title label 的提示                                          // -------------------29
+enum TipTitles {
+    Add = '已添加到列表',
+    Play = '已开始播放'
+}
 
 @Component({
     selector: "app-wy-player",
@@ -91,6 +97,12 @@ export class WyPlayerComponent implements OnInit {
     isLocked = false;
     // 定义一个防止动画抖动的变量, 表示是否正在动画
     animating = false;
+
+    // 一个变量，下面两个属性，一个title，空的，一个show控制是否显示       // -------------------29
+    controlTooltip = {
+        title: '',
+        show: false,
+    }
 
     // 绑定 Window 的 click 事件的
     private winClick: Subscription;
@@ -551,10 +563,43 @@ export class WyPlayerComponent implements OnInit {
     }
 
     private watchCurrentAction(action: CurrentActions) {                         // -------------------28
-        console.log('【WyPlayerComponent】 - watchCurrentAction - action - ', CurrentActions[action]);
+        // console.log('【WyPlayerComponent】 - watchCurrentAction - action - ', CurrentActions[action]);
+
+        // 通过和上面的enum的数据的转换，这样需要显示的内容就是我们需要的中文了       // -------------------29
+        const title = TipTitles[CurrentActions[action]];
+        if(title) {
+            this.controlTooltip.title = title;
+
+            if(this.showPlayer === 'hide') {
+                this.togglePlayer('show');
+            }else {
+                this.showTooltip();
+            }
+        }
 
         // 一旦发生变化，这里需要重新赋值，不然如果连续添加的话，因为状态是一致的，那么就会只有第一个添加会执行
         this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Other }));
     }
 
+    private showTooltip() {                                                        // -------------------29
+        this.controlTooltip.show = true;
+
+        // 设定一个重置的 timer 1.5秒后生效，就会消失。不然后面的点击添加之类的都无法显示
+        timer(1500).subscribe(() => {
+            this.controlTooltip = {
+                title: '',
+                show: false
+            }
+        })
+
+    }
+
+    onAnimateDone(event: AnimationEvent) {                                                          // -------------------29
+        this.animating = false;
+        if(event.toState === 'show' && this.controlTooltip.title) {
+            //说明动画是从hide 到 show的过程
+            // 这样就和watchCurrentAction中的逻辑合并了
+            this.showTooltip();
+        }
+    }
 }
