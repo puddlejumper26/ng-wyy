@@ -4,6 +4,7 @@ import { playerReducer, PlayState } from './reducers/player.reducer';
 import { StoreModule } from '@ngrx/store';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { memberReducer } from './reducers/member.reducer';
 
 // /**
 //  *           需要导入到 CoreModule 中
@@ -13,7 +14,10 @@ import { CommonModule } from '@angular/common';
   imports: [
     // CommonModule,
     //https://next.ngrx.io/guide/store/configuration/runtime-checks#configuring-runtime-checks
-    StoreModule.forRoot({ player: playerReducer}, {
+    StoreModule.forRoot({
+        player: playerReducer,
+        member: memberReducer
+    }, {
       //检测这些操作是否合法，一些配置
       runtimeChecks: {
         strictStateImmutability: true,
