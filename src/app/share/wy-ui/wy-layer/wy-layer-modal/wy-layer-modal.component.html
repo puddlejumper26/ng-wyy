@@ -1,4 +1,4 @@
-<div class="m-layer">
+<div class="m-layer" *ngIf="showModal">
     <div class="zbar">
         <div class="zttl f-thide">这是标题</div>
     </div>
@@ -6,5 +6,5 @@
     <!-- 这里要一个插槽，因为可能注册，可能登录，所以由外部来决定 -->
     <ng-content></ng-content>
 
-    <div class="zcls" title="关闭"></div>
+    <div class="zcls" title="关闭" (click)="hide()"></div>
 </div>

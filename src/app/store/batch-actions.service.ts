@@ -1,10 +1,13 @@
+import { SetModalType, SetModalVisible } from './actions/member.actions';
 import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 
 import { AppStoreModule } from '.';
 import { CurrentActions, playerReducer, PlayState } from 'src/app/store/reducers/player.reducer';
 import { findIndex } from 'src/app/utils/array';
+import { getMember } from './selectors/member.selector';
 import { getPlayer } from 'src/app/store/selectors/player.selector';
+import { MemberState, ModalTypes } from './reducers/member.reducer';
 import { SetCurrentIndex, SetPlayList, SetSongList, SetCurrentAction } from './actions/player.actions';
 import { shuffle } from 'src/app/utils/array';
 import { Song } from '../services/data-types/common.types';
@@ -15,9 +18,11 @@ import { Song } from '../services/data-types/common.types';
 export class BatchActionsService {
 
     private playerState: PlayState;
+    private memberState: MemberState
 
     constructor( private store$: Store<AppStoreModule>) {
         this.store$.pipe(select(getPlayer)).subscribe(res => this.playerState = res);
+        this.store$.pipe(select(getMember)).subscribe(res => this.memberState = res);
     }
 
     //  播放列表 home.component
@@ -128,6 +133,10 @@ export class BatchActionsService {
         this.store$.dispatch(SetPlayList({ playList: playList }));
         this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Add }));
     }
+
+    // 会员弹窗 显示 隐藏、类型
+    controlModal(modalVisible = true, modalType = ModalTypes.Default) {
+        this.store$.dispatch(SetModalType({ modalType: modalType}))
+        this.store$.dispatch(SetModalVisible({ modalVisible: modalVisible}))
+    }
 }
-
-
