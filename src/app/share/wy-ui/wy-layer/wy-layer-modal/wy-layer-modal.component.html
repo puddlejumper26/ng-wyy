@@ -2,11 +2,16 @@
 <!-- <div class="m-layer" *ngIf="showModal" #modalContainer> -->
 <!-- 使用下面的 [style.visibility]就可以让getHideDomSize拿到dom了-->
 <!-- <div class="m-layer" [style.visibility]="showModal ? 'visible' : 'hidden'" #modalContainer> -->
+
+<!-- 通过 angular cdk来限定拖拽范围 https://material.angular.io/cdk/drag-drop/overview#restricting-movement-within-an-element-->
+<!--  .cdk-overlay-container 是通过 ts 文件中ngAfterViewInit中console来找到的-->
 <div class="m-layer"
     #modalContainer
     [@showHide]="showModal"
+    cdkDrag
+    cdkDragBoundary=".cdk-overlay-container"
 >
-        <div class="zbar">
+        <div class="zbar" cdkDragHandle>
         <div class="zttl f-thide">这是标题</div>
     </div>
 
