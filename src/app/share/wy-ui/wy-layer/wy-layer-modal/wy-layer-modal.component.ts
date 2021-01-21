@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, ViewChild, AfterViewInit, Renderer2 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Overlay, OverlayRef, OverlayKeyboardDispatcher, BlockScrollStrategy } from '@angular/cdk/overlay';
 import { ESCAPE } from '@angular/cdk/keycodes';
@@ -26,6 +26,8 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
     private overlayRef: OverlayRef;
     showModal = false;
     private scrollStrategy: BlockScrollStrategy;
+    // 通过点击listen来得知其返回的类型 是  () => void
+    private resizeHandler: () => void;
 
     @ViewChild('modalContainer', { static: false }) private modalRef: ElementRef;
 
@@ -35,7 +37,8 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
         private overlay: Overlay,
         private overlayKeyboardDispatcher: OverlayKeyboardDispatcher,
         private cdr: ChangeDetectorRef,
-        private batchActionsServe: BatchActionsService
+        private batchActionsServe: BatchActionsService,
+        private rd: Renderer2
     ) {
         const appStore$ = this.store$.pipe(select(getMember));
         appStore$.pipe(select(getModalVisible)).subscribe((visible) => {
@@ -51,12 +54,22 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
+        this.listenResizeToCenter();
+    }
+
+    private listenResizeToCenter() {
         const modal = this.modalRef.nativeElement;
         const modalSize = this.getHideDomSize(modal);
         // console.log('【WyLayerModalComponent】 - ngAfterViewInit - modalSize - ', modalSize);
         //打印出来 {w:530, h:233}
         //那么这里就获得了 modal 和 modalSize 的值，可以用这些来对窗口进行居中
         this.keepCenter(modal, modalSize);
+
+        /**
+         *   监听 resize 事件
+         */
+        // 居中之后还需要监听一下，这样在弹窗出来之后，对窗体进行改变，那么弹窗的位置也会进行改变
+        this.resizeHandler = this.rd.listen('window','resize', ()=>{this.keepCenter(modal, modalSize);})
     }
 
     ngOnInit() {
@@ -131,9 +144,13 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
             this.scrollStrategy.enable();
             // 在overlayRef上监听键盘事件 https://material.angular.io/cdk/overlay/api#OverlayKeyboardDispatcher
             this.overlayKeyboardDispatcher.add(this.overlayRef);
+            // 显示的时候调用一下
+            this.listenResizeToCenter();
         } else {
             this.scrollStrategy.disable();
             this.overlayKeyboardDispatcher.remove(this.overlayRef);
+            // 需要解绑一下
+            this.resizeHandler();
         }
 
         // 因为这个component里是用 OnPush 策略，所以需要手动触发检测，要么就不用OnPush策略
