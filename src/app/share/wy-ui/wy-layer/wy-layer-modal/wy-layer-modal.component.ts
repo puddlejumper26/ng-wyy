@@ -3,6 +3,7 @@ import { DOCUMENT } from '@angular/common';
 import { select, Store } from '@ngrx/store';
 import { Overlay, OverlayContainer, OverlayRef, OverlayKeyboardDispatcher, BlockScrollStrategy } from '@angular/cdk/overlay';
 import { ESCAPE } from '@angular/cdk/keycodes';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 import { AppStoreModule } from './../../../../store/index';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
@@ -16,7 +17,15 @@ import { WINDOW } from 'src/app/services/services.module';
     styleUrls: ['./wy-layer-modal.component.less'],
 
     //   注意这里是 OnPush的策略， 考虑到因为是登录才需要，所以其他时候不需要对这里的检测
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+
+    // 动画特效的名字是 showHide
+    animations: [trigger('showHide', [
+        // scale是缩放的特效
+        state('show', style({ transform: 'scale(1)', opacity: 1})),
+        state('hide', style({ transform: 'scale(0)', opacity: 0})),
+        transition('show <=> hide', animate('0.1s')),
+    ])]
 })
 
 /**
@@ -26,7 +35,7 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
     private visible = false;
     private currentModalType = ModalTypes.Default;
     private overlayRef: OverlayRef;
-    showModal = false;
+    showModal = 'hide';
     private scrollStrategy: BlockScrollStrategy;
     // 通过点击listen来得知其返回的类型 是  () => void
     private resizeHandler: () => void;
@@ -149,9 +158,9 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
 
     private handleVisibleChange(visib: boolean) {
         // console.log('【WyLayerModalComponent】 - handleVisibleChange - visib -', visib);
-        this.showModal = visib;
         if (visib) {
             // 显示弹窗, 并且锁住滚动
+            this.showModal = 'show';
             this.scrollStrategy.enable();
             // 在overlayRef上监听键盘事件 https://material.angular.io/cdk/overlay/api#OverlayKeyboardDispatcher
             this.overlayKeyboardDispatcher.add(this.overlayRef);
@@ -160,6 +169,7 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
             // 屏蔽掉点击， 这样在pop window 弹出的时候，在背景其他地方的点击就是无效的
             this.changePointerEvents('auto');
         } else {
+            this.showModal = 'hide';
             this.scrollStrategy.disable();
             this.overlayKeyboardDispatcher.remove(this.overlayRef);
             // 需要解绑一下

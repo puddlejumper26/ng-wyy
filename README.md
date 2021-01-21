@@ -58,13 +58,13 @@ This is an Angular App Simulation of Netease Cloud Music
 - `paramMap` | `data` - [sheet-info-resolve.service.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/pages/sheet-info/sheet-info-resolve.service.ts)
 - `ngTemplateOutlet` - [wy-search.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-search/wy-search.component.html)
 - `ViewContainerRef` - [wy-search.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-search/wy-search.component.ts)
-- `animations` | `trigger` | `state` | `style` | `(mouseenter)` | `(mouseleave)` - [wy-player.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts) | [wy-player.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.html)
-- `OverlayContainer` | `getContainerElement()` | `pointerEvents`
+- `animations` | `trigger` | `state` | `style` | `(mouseenter)` | `(mouseleave)` - [wy-player.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts) | [wy-player.component.html](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.html) | [wy-layer-modal.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-layer/wy-layer-modal/wy-layer-modal.component.ts)
+- `OverlayContainer` | `getContainerElement()` | `pointerEvents` | [wy-layer-modal.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-layer/wy-layer-modal/wy-layer-modal.component.ts)
 
 ## 4.1 Angular Material
 
 - `Overlay` | `portal` | `OverlayRef` | `create()` && `hasAttached()` && `dispose()`| `hasBackdrop` | `backdropClick()` [wy-search.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-search/wy-search.component.ts)
-- `Overlay` | `OverlayKeyboardDispatcher` - `add()` - `remove()`| `BatchActionsService` | `BlockScrollStrategy` - `enable()` - `disable()` | [wy-layer-modal.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-layer/wy-layer-modal/wy-layer-modal.component.ts) | [wy-layer-modal.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-layer/wy-layer-modal/wy-layer-modal.component.ts)
+- `Overlay` | `OverlayKeyboardDispatcher` - `add()` - `remove()`| `BatchActionsService` | `BlockScrollStrategy` - `enable()` - `disable()` | [wy-layer-modal.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-layer/wy-layer-modal/wy-layer-modal.component.ts)
 -
 ## 4.2 rxjs
 
