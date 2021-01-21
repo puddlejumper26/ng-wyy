@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, ViewChild, AfterViewInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Overlay, OverlayRef, OverlayKeyboardDispatcher, BlockScrollStrategy } from '@angular/cdk/overlay';
 import { ESCAPE } from '@angular/cdk/keycodes';
@@ -20,12 +20,14 @@ import { ModalTypes } from 'src/app/store/reducers/member.reducer';
 /**
  *      这里会有对ngrx member.selector, reducer and acitons 的监听，和player那里是一样的
  */
-export class WyLayerModalComponent implements OnInit {
+export class WyLayerModalComponent implements OnInit, AfterViewInit {
     private visible = false;
     private currentModalType = ModalTypes.Default;
     private overlayRef: OverlayRef;
     showModal = false;
     private scrollStrategy: BlockScrollStrategy;
+
+    @ViewChild('modalContainer', { static: false }) private modalRef: ElementRef;
 
     constructor(
         private store$: Store<AppStoreModule>,
@@ -48,9 +50,43 @@ export class WyLayerModalComponent implements OnInit {
         this.scrollStrategy = this.overlay.scrollStrategies.block();
     }
 
+    ngAfterViewInit() {
+        const modal = this.modalRef.nativeElement;
+        const modalSize = this.getHideDomSize(modal);
+        // console.log('【WyLayerModalComponent】 - ngAfterViewInit - modalSize - ', modalSize);
+        //打印出来 {w:530, h:233}
+        //那么这里就获得了 modal 和 modalSize 的值，可以用这些来对窗口进行居中
+        this.keepCenter(modal, modalSize);
+    }
+
     ngOnInit() {
         // 这里给弹窗建立一个容器, 并且这个容器默认是隐藏的
         this.createOverlay();
+    }
+
+    // 这个方法是dom 的操作， 如果dom 操作很多的话，还是需要放入到一个utils文件中
+    private getHideDomSize(dom: HTMLElement) {
+        // console.log('【WyLayerModalComponent】 - getHideDomSize - dom -', dom);
+        return {
+            w: dom.offsetWidth,
+            h: dom.offsetHeight
+        }
+    }
+
+    private keepCenter(modal: HTMLElement, size: {w: number, h: number}) {
+        // 用整个窗口的宽度减去弹窗的宽度，然后除以2
+        const left =  (this.getWindowSize().w - size.w) / 2;
+        const top = (this.getWindowSize().h - size.h) / 2;
+        modal.style.left = left + 'px';
+        modal.style.top = top + 'px';
+    }
+
+    private getWindowSize() {
+        return {
+            // 各种兼容的方法
+            w: window.innerWidth || document.documentElement.clientWidth || document.body.offsetWidth,
+            h: window.innerHeight || document.documentElement.clientHeight || document.body.offsetHeight
+        }
     }
 
     // 用之前的 Angular Material CDK的方法来创建

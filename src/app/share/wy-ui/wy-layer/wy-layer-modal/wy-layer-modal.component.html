@@ -1,5 +1,8 @@
-<div class="m-layer" *ngIf="showModal">
-    <div class="zbar">
+<!-- 这里使用 ngIf会在ngAfterViewInit中无法拿到这个dom -->
+<!-- <div class="m-layer" *ngIf="showModal" #modalContainer> -->
+<!-- 使用下面的 [style.visibility]就可以让getHideDomSize拿到dom了-->
+<div class="m-layer" [style.visibility]="showModal ? 'visible' : 'hidden'" #modalContainer>
+        <div class="zbar">
         <div class="zttl f-thide">这是标题</div>
     </div>
 

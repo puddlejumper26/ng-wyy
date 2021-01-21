@@ -90,6 +90,7 @@ This is an Angular App Simulation of Netease Cloud Music
 -  `HTMLAudioElement` | `play()` | `pause()` | `currentTime` | `buffered`| `end` - [wy-player.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player.component.ts)
 -  `HTMLElement` | `el` | `querySelectorAll` | `NodeList`- [wy-player-panel.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-player/wy-player-panel/wy-player-panel.component.ts)
 -  `padStart` - [format-time.pipe.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/pipes/format-time.pipe.ts)
+-  `window.innerWidth` | `document.documentElement.clientWidth` | `document.body.offsetWidth` | `window.innerHeight` | `document.documentElement.clientHeight` | `document.body.offsetHeight` | - [wy-layer-modal.component.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/share/wy-ui/wy-layer/wy-layer-modal/wy-layer-modal.component.ts)
 
 ## 4.4 NgRx
 - `createReducer` & `Action`- [player.reducer.ts](https://github.com/puddlejumper26/ng-wyy/blob/main/src/app/store/reducer/play.reducer.ts)
