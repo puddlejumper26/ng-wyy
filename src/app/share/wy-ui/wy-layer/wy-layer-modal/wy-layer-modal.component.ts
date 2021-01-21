@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, ViewChild, AfterViewInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, ViewChild, AfterViewInit, Renderer2, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { select, Store } from '@ngrx/store';
 import { Overlay, OverlayRef, OverlayKeyboardDispatcher, BlockScrollStrategy } from '@angular/cdk/overlay';
 import { ESCAPE } from '@angular/cdk/keycodes';
@@ -7,6 +8,7 @@ import { AppStoreModule } from './../../../../store/index';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
 import { getMember, getModalVisible, getModalType } from './../../../../store/selectors/member.selector';
 import { ModalTypes } from 'src/app/store/reducers/member.reducer';
+import { WINDOW } from 'src/app/services/services.module';
 
 @Component({
     selector: 'app-wy-layer-modal',
@@ -32,6 +34,9 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
     @ViewChild('modalContainer', { static: false }) private modalRef: ElementRef;
 
     constructor(
+        // 注意这里的DOCUMENT和WINDOW是不同的，前者是ANGULAR自带的，后者不是，但是也是通过Angular中的方法new InjectionToken获得
+        @Inject(DOCUMENT) private doc: Document,
+        @Inject(WINDOW) private win: Window,
         private store$: Store<AppStoreModule>,
         private elementRef: ElementRef,
         private overlay: Overlay,
@@ -97,8 +102,8 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
     private getWindowSize() {
         return {
             // 各种兼容的方法
-            w: window.innerWidth || document.documentElement.clientWidth || document.body.offsetWidth,
-            h: window.innerHeight || document.documentElement.clientHeight || document.body.offsetHeight
+            w: this.win.innerWidth || this.doc.documentElement.clientWidth || this.doc.body.offsetWidth,
+            h: this.win.innerHeight || this.doc.documentElement.clientHeight || this.doc.body.offsetHeight
         }
     }
 

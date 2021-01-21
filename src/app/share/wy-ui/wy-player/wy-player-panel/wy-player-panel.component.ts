@@ -75,7 +75,7 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     // 这里选择2 是为了和 handleLyric 方法中的参数保持一致
     private startLine = 2;
 
-    // 这时候再使用 win 就可以 不用 timer ， 而是 this.win.setTimeout
+    // 这时候再使用 win 就可以 不用 timer ， 而是 this.win.setTimeout (搜索this.win.setTimeout)
     constructor(
         @Inject(WINDOW) private win: Window,
         private songServe: SongService,
@@ -150,7 +150,8 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
 
                /**
                 * 如果无法避免要使用window上的其他对象，除了setTimeout和setInterval之外的对象或者属性
-                *  可以在 constructor 中 注入 DOCUMENT 的令牌 constructor(@Inject(DOCUMENT ))
+                *  可以在 constructor 中 注入 WINDOW 的令牌 constructor(@Inject(WINDOW))
+                *   就是这里的替换方法(二)
                 *   是angular自带的一个令牌
                 *   查看 services.moduel.ts
                 */
