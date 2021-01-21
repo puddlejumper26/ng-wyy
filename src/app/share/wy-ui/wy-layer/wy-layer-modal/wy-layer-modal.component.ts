@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, ViewChild, AfterViewInit, Renderer2, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { select, Store } from '@ngrx/store';
-import { Overlay, OverlayRef, OverlayKeyboardDispatcher, BlockScrollStrategy } from '@angular/cdk/overlay';
+import { Overlay, OverlayContainer, OverlayRef, OverlayKeyboardDispatcher, BlockScrollStrategy } from '@angular/cdk/overlay';
 import { ESCAPE } from '@angular/cdk/keycodes';
 
 import { AppStoreModule } from './../../../../store/index';
@@ -30,6 +30,8 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
     private scrollStrategy: BlockScrollStrategy;
     // 通过点击listen来得知其返回的类型 是  () => void
     private resizeHandler: () => void;
+    // 查看这里得知其返回类型是HTMLElement https://material.angular.io/cdk/overlay/api#OverlayContainer
+    private overlayContainerEl: HTMLElement;
 
     @ViewChild('modalContainer', { static: false }) private modalRef: ElementRef;
 
@@ -43,7 +45,8 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
         private overlayKeyboardDispatcher: OverlayKeyboardDispatcher,
         private cdr: ChangeDetectorRef,
         private batchActionsServe: BatchActionsService,
-        private rd: Renderer2
+        private rd: Renderer2,
+        private overlayContainerServe: OverlayContainer
     ) {
         const appStore$ = this.store$.pipe(select(getMember));
         appStore$.pipe(select(getModalVisible)).subscribe((visible) => {
@@ -59,6 +62,9 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
+        this.overlayContainerEl = this.overlayContainerServe.getContainerElement();
+        // console.log('【WyLayerModalComponent】- ngAfterViewInit - overlayContainerEl -', this.overlayContainerEl);
+        // 这里就能拿到 <div class="cdk-overlay-container"> 是一个覆盖全窗口的layer
         this.listenResizeToCenter();
     }
 
@@ -151,16 +157,27 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
             this.overlayKeyboardDispatcher.add(this.overlayRef);
             // 显示的时候调用一下
             this.listenResizeToCenter();
+            // 屏蔽掉点击， 这样在pop window 弹出的时候，在背景其他地方的点击就是无效的
+            this.changePointerEvents('auto');
         } else {
             this.scrollStrategy.disable();
             this.overlayKeyboardDispatcher.remove(this.overlayRef);
             // 需要解绑一下
             this.resizeHandler();
+            // 解除屏蔽
+            this.changePointerEvents('none');
         }
 
         // 因为这个component里是用 OnPush 策略，所以需要手动触发检测，要么就不用OnPush策略
         // 否则点击 主页 中的 用户登录（home.component.html > member-card.component.html），不会有窗口弹出
         this.cdr.markForCheck();
+    }
+
+    // 用来屏蔽事件，或者解除屏蔽
+    private changePointerEvents(type: 'none' | 'auto') {
+        if(this.overlayContainerEl) {
+            this.overlayContainerEl.style.pointerEvents = type;
+        }
     }
 
     hide() {
