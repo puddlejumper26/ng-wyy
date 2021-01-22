@@ -1,8 +1,12 @@
+import { SetModalType } from './store/actions/member.actions';
 import { Component } from "@angular/core";
+import { Store } from "@ngrx/store";
 
 import { isEmptyObject } from "./utils/tools";
 import { SearchResult } from "./services/data-types/common.types";
 import { SearchService } from './services/search.service';
+import { ModalTypes } from "./store/reducers/member.reducer";
+import { AppStoreModule } from "./store";
 
 @Component({
     selector: "app-root",
@@ -24,7 +28,10 @@ export class AppComponent {
 
     searchResult: SearchResult;
 
-    constructor(private searchServe: SearchService) {}
+    constructor(
+        private searchServe: SearchService,
+        private store$: Store<AppStoreModule>
+        ) {}
 
     onSearch(keywords: string) {
         // console.log('【AppComponent】 - onSearch - keywords -', keywords);
@@ -59,5 +66,13 @@ export class AppComponent {
             })
         }
         return result;
+    }
+
+    // 改变弹窗类型, 下面的方法可以改变modalType，
+    // 一旦改变之后，在wy-layer-modal.component.ts中的watchModalType就能够监听到modalType的改变，
+    // 并将改变的值传递给currentModalType，这个值就可以传递给wy-layer-modal.componenthtml中的ng-container
+    // 从而进行不同的组件的显示转换
+    onChangeModalType(modalType = ModalTypes.Default) {
+        this.store$.dispatch(SetModalType({ modalType }));
     }
 }

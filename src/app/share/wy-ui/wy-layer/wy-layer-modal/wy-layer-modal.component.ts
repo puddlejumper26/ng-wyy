@@ -33,7 +33,7 @@ import { WINDOW } from 'src/app/services/services.module';
  */
 export class WyLayerModalComponent implements OnInit, AfterViewInit {
     private visible = false;
-    private currentModalType = ModalTypes.Default;
+    currentModalType = ModalTypes.Default;
     private overlayRef: OverlayRef;
     showModal = 'hide';
     private scrollStrategy: BlockScrollStrategy;
@@ -153,6 +153,7 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
     private watchModalType(type: ModalTypes) {
         if (this.currentModalType !== type) {
             this.currentModalType = type;
+            this.cdr.markForCheck();
         }
     }
 
