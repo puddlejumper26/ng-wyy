@@ -102,6 +102,17 @@ export class AppComponent {
             this.bachActionsServe.controlModal(false);
             // 弹出窗口显示信息
             this.alertMessage('success', '登录成功');
+            // 登录成功将数据存储在当地
+            localStorage.setItem('wyUserId', user.profile.userId.toString());
+
+            // 如果用户勾选了记住密码 把密码也放到 浏览器的缓存里
+            if(params.remember) {
+                localStorage.setItem('wyRememberLogin', JSON.stringify(params));
+            }else {
+                localStorage.removeItem('wyRememberLogin');
+            }
+        }, error => {
+            this.alertMessage('error', error.message ||'登录失败');
         })
     }
 

@@ -26,6 +26,8 @@ export class MemberService {
     login(formValue: LoginParams): Observable<User> {
         const params = new HttpParams({ fromString: queryString.stringify(formValue)})
         return this.http.get(this.uri + "login/cellphone", { params })
-                .pipe(map((res: { profile: User }) => res.profile))
+            // .pipe(map((res: { profile: User }) => res.profile))
+            //  因为之后的User中可能会有除了profile以外的属性也会使用，所以这里改变一下
+            .pipe(map((res) => res as User))
     }
 }

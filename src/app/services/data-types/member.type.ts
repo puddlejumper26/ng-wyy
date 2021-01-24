@@ -1,6 +1,6 @@
 // 主要就是https://github.com/puddlejumper26/ng-wyy/issues/19 中 profile 中的字段
 export type User = {
-    profiel: {
+    profile: {
         userId: number;
         nickname: string;
         avatarUrl: string;
