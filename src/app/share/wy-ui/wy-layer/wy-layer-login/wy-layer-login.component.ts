@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, EventEmitter, Output } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
     selector: "app-wy-layer-login",
@@ -9,7 +10,29 @@ import { Component, OnInit, ChangeDetectionStrategy, EventEmitter, Output } from
 export class WyLayerLoginComponent implements OnInit {
     // 和wy-layer-default.component.ts中的设定是一样的
     @Output() onChangeModalType = new EventEmitter<string | void>();
-    constructor() {}
+    formModel: FormGroup;
+
+    constructor(
+        private fb: FormBuilder,
+    ) {
+        this.formModel = this.fb.group({
+            // 这里的 key 的 值一定要和  html 中 formControlName保持一致
+            // 这里给出的是默认值 和 验证规则
+            phone: ['', [Validators.required, Validators.pattern(/^1\d{10}$/)]],
+            password: ['', [Validators.required, Validators.minLength(6)]],
+            remember: [false]
+        })
+    }
 
     ngOnInit() {}
+
+    onSubmit() {
+        // 这里的 点击button和回车都可以打印出来，因为html中的button默认 type是submit，如果改成type="button"就不行了
+        // console.log('【WyLayerLoginComponent】 - onSubmit - this.formModel.value -', this.formModel.value);
+
+        const model = this.formModel;
+        if(model.valid) {
+            console.log('【WyLayerLoginComponent】 - onSubmit - model.value - ', model.value);
+        }
+    }
 }
