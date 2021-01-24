@@ -47,7 +47,7 @@
                                         ></i>
                                     </div>
                                     <ul>
-                                        <li nz-menu-item>
+                                        <li nz-menu-item (click)="openModal('loginByPhone')">
                                             <i
                                                 nz-icon
                                                 nzType="mobile"
@@ -55,7 +55,7 @@
                                             ></i>
                                             手机登录
                                         </li>
-                                        <li nz-menu-item>
+                                        <li nz-menu-item (click)="openModal('register')">
                                             <i
                                                 nz-icon
                                                 nzType="user-add"

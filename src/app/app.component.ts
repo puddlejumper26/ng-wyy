@@ -7,6 +7,7 @@ import { SearchResult } from "./services/data-types/common.types";
 import { SearchService } from './services/search.service';
 import { ModalTypes } from "./store/reducers/member.reducer";
 import { AppStoreModule } from "./store";
+import { BatchActionsService } from './store/batch-actions.service';
 
 @Component({
     selector: "app-root",
@@ -30,7 +31,8 @@ export class AppComponent {
 
     constructor(
         private searchServe: SearchService,
-        private store$: Store<AppStoreModule>
+        private store$: Store<AppStoreModule>,
+        private bachActionsServe: BatchActionsService
         ) {}
 
     onSearch(keywords: string) {
@@ -41,7 +43,7 @@ export class AppComponent {
                 .subscribe( res => {
                     // console.log('【AppComponent】 - onSearch - res', res)
                     this.searchResult = this.highlightKeyWords(keywords, res);
-                    console.log('【AppComponent】 - onSearch - searchResult', this.searchResult)
+                    // console.log('【AppComponent】 - onSearch - searchResult', this.searchResult)
                 })
         }else {
             this.searchResult = {};
@@ -74,5 +76,10 @@ export class AppComponent {
     // 从而进行不同的组件的显示转换
     onChangeModalType(modalType = ModalTypes.Default) {
         this.store$.dispatch(SetModalType({ modalType }));
+    }
+
+    // 打开不同的弹窗, 这里可以引入BatchActionsService里面封装好的controlModal
+    openModal(type: ModalTypes) {
+        this.bachActionsServe.controlModal(true, type);
     }
 }
