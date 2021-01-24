@@ -1,3 +1,4 @@
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { SetModalType } from './store/actions/member.actions';
 import { Component } from "@angular/core";
 import { Store } from "@ngrx/store";
@@ -9,6 +10,8 @@ import { ModalTypes } from "./store/reducers/member.reducer";
 import { AppStoreModule } from "./store";
 import { BatchActionsService } from './store/batch-actions.service';
 import { LoginParams } from './share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
+import { MemberService } from './services/member.service';
+import { User } from './services/data-types/member.type';
 
 @Component({
     selector: "app-root",
@@ -30,10 +33,14 @@ export class AppComponent {
 
     searchResult: SearchResult;
 
+    user: User;
+
     constructor(
         private searchServe: SearchService,
         private store$: Store<AppStoreModule>,
-        private bachActionsServe: BatchActionsService
+        private bachActionsServe: BatchActionsService,
+        private memberServe: MemberService,
+        private nzMessageServe: NzMessageService
         ) {}
 
     onSearch(keywords: string) {
@@ -56,7 +63,7 @@ export class AppComponent {
             // 需要全局匹配 RegExp g 修饰符全局匹配, i 大小写不敏感
             const reg = new RegExp(keywords, 'ig');
             ['albums','songs', 'artists'].forEach(type => {
-                console.log('【AppComponent】- highlightKeyWords - type - ', type);
+                // console.log('【AppComponent】- highlightKeyWords - type - ', type);
                 if(result[type]){
                     result[type].forEach(item => {
                         // console.log('【AppComponent】- highlightKeyWords - item - ', item);
@@ -87,6 +94,18 @@ export class AppComponent {
     // 登录的方法
     onLogin(params: LoginParams) {
         // 这里就可以获得 wy-layer-login 中输入的信息
-        console.log('AppComponent】- onLogin - params - ', params);
+        // console.log('【AppComponent】- onLogin - params - ', params);
+        this.memberServe.login(params).subscribe(user => {
+            // console.log('【AppComponent】- onLogin - user - ', user);
+            this.user = user;
+            // 登录成功，需要隐藏窗口
+            this.bachActionsServe.controlModal(false);
+            // 弹出窗口显示信息
+            this.alertMessage('success', '登录成功');
+        })
+    }
+
+    private alertMessage(type: string, msg: string) {
+        this.nzMessageServe.create(type, msg)
     }
 }
