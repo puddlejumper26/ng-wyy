@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy, EventEmitter, Output } from "@angular/core";
 
 @Component({
     selector: "app-wy-layer-login",
@@ -7,6 +7,8 @@ import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WyLayerLoginComponent implements OnInit {
+    // 和wy-layer-default.component.ts中的设定是一样的
+    @Output() onChangeModalType = new EventEmitter<string | void>();
     constructor() {}
 
     ngOnInit() {}

@@ -1,1 +1,41 @@
-<p>wy-layer-login works!</p>
+<div class="login-phone modal-content">
+    <div class="modal-wrap">
+        <form nz-form class="login-form">
+            <nz-form-item>
+                <!-- nzHasFeedback会给一个显示的图标 -->
+                <nz-form-control nzHasFeedback nzErrorTip="请输入正确的手机号">
+                    <nz-input-group nzPrefixIcon="mobile">
+                        <input type="tel" nz-input placeholder="请输入手机号">
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <!-- nzHasFeedback会给一个显示的图标 -->
+                <nz-form-control nzHasFeedback nzErrorTip="请输入正确的密码">
+                    <nz-input-group nzPrefixIcon="lock">
+                        <input type="password" nz-input placeholder="请输入密码">
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <!-- nzHasFeedback会给一个显示的图标 -->
+                <nz-form-control nzHasFeedback nzErrorTip="请输入正确的密码">
+                    <div class="tools">
+                        <label nz-checkbox class="remember">
+                            <span>记住密码</span>
+                        </label>
+                    </div>
+                    <!-- nzBlock 让其变成块级元素 -->
+                    <button nz-button class="login-form-button" nzType="primary" nzBlock></button>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </div>
+</div>
+
+<div class="m-footer clearfix">
+    <a (click)="onChangeModalType.emit('default')">< 其他登录方式</a>
+    <a (click)="onChangeModalType.emit('register')">没有账户？ 免费注册</a>
+</div>
