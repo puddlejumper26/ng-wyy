@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
 
 import { API_CONFIG, ServicesModule } from "./services.module";
 import { LoginParams } from "../share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component";
-import { User } from "./data-types/member.type";
+import { sampleBack, User } from "./data-types/member.type";
 
 @Injectable({
     // it means ServiceModule will provide with HomeService
@@ -29,5 +29,21 @@ export class MemberService {
             // .pipe(map((res: { profile: User }) => res.profile))
             //  因为之后的User中可能会有除了profile以外的属性也会使用，所以这里改变一下
             .pipe(map((res) => res as User))
+    }
+
+    // 获取用户详情, 需要的是一个uid
+    // https://github.com/puddlejumper26/ng-wyy/issues/19#issuecomment-766440990
+    getUserDetail(uid: string): Observable<User>{
+        const params = new HttpParams({ fromString: queryString.stringify({ uid })})
+        return this.http.get(this.uri + "user/detail", { params })
+            .pipe(map((res) => res as User))
+    }
+
+    // 退出接口
+    // https://github.com/puddlejumper26/ng-wyy/issues/19#issuecomment-766449849
+    // 返回的是状态码
+    logout(): Observable<sampleBack> {
+        return this.http.get(this.uri + "logout")
+            .pipe(map(res => res as sampleBack))
     }
 }

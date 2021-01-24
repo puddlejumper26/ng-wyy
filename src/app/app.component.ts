@@ -41,7 +41,19 @@ export class AppComponent {
         private bachActionsServe: BatchActionsService,
         private memberServe: MemberService,
         private nzMessageServe: NzMessageService
-        ) {}
+        ) {
+            // 添加一个自动登录的逻辑
+
+            const userId = localStorage.getItem('wyUserId');
+            if(userId) {
+                // 如果能够拿到，说明已经登录过了，并且是可以自动登录的
+                this.memberServe.getUserDetail(userId).subscribe( user => {
+                    // console.log('【AppComponent】- constructor - user - ', user);
+                    // 下面这里的赋值就可以直接自动登录了
+                    this.user = user;
+                })
+            }
+        }
 
     onSearch(keywords: string) {
         // console.log('【AppComponent】 - onSearch - keywords -', keywords);
@@ -118,5 +130,19 @@ export class AppComponent {
 
     private alertMessage(type: string, msg: string) {
         this.nzMessageServe.create(type, msg)
+    }
+
+    // 退出登录状态
+    onLogout() {
+        // console.log('【Appcomponent】- onLogout');
+        this.memberServe.logout().subscribe( res => {
+            // console.log('【Appcomponent】- onLogout - res - ', res);
+            // 返回的 是 code: 200
+            this.user = null;
+            localStorage.removeItem('wyUserId');
+            this.alertMessage('success', '退出成功');
+        }, error => {
+            this.alertMessage('error', error.message ||'退出失败');
+        });
     }
 }

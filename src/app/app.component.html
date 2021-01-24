@@ -76,14 +76,14 @@
                                     <li nz-submenu>
                                         <div title>
                                             <nz-avatar nzIcon="user" [nzSrc]="user.profile.avatarUrl"></nz-avatar>
-                                            <i nz-icon type="down" nzTheme="outline"></i>
+                                            <i nz-icon nzType="down" nzTheme="outline"></i>
                                         </div>
                                         <ul>
                                             <li nz-menu-item>
                                                 <i nz-icon nzType="user" nzTheme="outline"></i>我的主页
                                             </li>
                                             <!-- 退出的选项 -->
-                                            <li nz-menu-item>
+                                            <li nz-menu-item (click)="onLogout()">
                                                 <i nz-icon nzType="close-circle" nzTheme="outline"></i>退出
                                             </li>
                                         </ul>
