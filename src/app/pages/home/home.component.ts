@@ -11,6 +11,7 @@ import {
     SongSheet,
     Song,
 } from "./../../services/data-types/common.types";
+import { ModalTypes } from "src/app/store/reducers/member.reducer";
 import { SheetService } from "./../../services/sheet.service";
 
 @Component({
@@ -120,7 +121,7 @@ export class HomeComponent implements OnInit {
     }
 
     openModal() {
-        this.batchActionServe.controlModal();
+        this.batchActionServe.controlModal(true, ModalTypes.Default);
     }
 }
 

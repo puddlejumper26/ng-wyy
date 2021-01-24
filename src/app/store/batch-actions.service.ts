@@ -135,8 +135,12 @@ export class BatchActionsService {
     }
 
     // 会员弹窗 显示 隐藏、类型
-    controlModal(modalVisible = true, modalType = ModalTypes.Default) {
-        this.store$.dispatch(SetModalType({ modalType: modalType}))
+    // 下面重新设置，这样当页面在登录页面时，关闭窗口，就不会先跳转到Default的界面再关闭掉
+    // controlModal(modalVisible = true, modalType = ModalTypes.Default) {
+    controlModal(modalVisible = true, modalType?: ModalTypes) {
+        if (modalType) {
+            this.store$.dispatch(SetModalType({ modalType: modalType}))
+        }
         this.store$.dispatch(SetModalVisible({ modalVisible: modalVisible}))
     }
 }
