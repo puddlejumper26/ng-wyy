@@ -1,6 +1,12 @@
 import { Component, OnInit, ChangeDetectionStrategy, EventEmitter, Output } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
+export type LoginParams = {
+    phone: string;
+    password: string;
+    remember: boolean;
+}
+
 @Component({
     selector: "app-wy-layer-login",
     templateUrl: "./wy-layer-login.component.html",
@@ -10,6 +16,9 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 export class WyLayerLoginComponent implements OnInit {
     // 和wy-layer-default.component.ts中的设定是一样的
     @Output() onChangeModalType = new EventEmitter<string | void>();
+    // 这里login 的逻辑也是发到外面，不在这里做
+    @Output() onLogin = new EventEmitter<LoginParams>();
+
     formModel: FormGroup;
 
     constructor(
@@ -32,7 +41,9 @@ export class WyLayerLoginComponent implements OnInit {
 
         const model = this.formModel;
         if(model.valid) {
-            console.log('【WyLayerLoginComponent】 - onSubmit - model.value - ', model.value);
+            // console.log('【WyLayerLoginComponent】 - onSubmit - model.value - ', model.value);
+            // 这样在外面一层就能够接受到这个onLogin 事件
+            this.onLogin.emit(model.value);
         }
     }
 }

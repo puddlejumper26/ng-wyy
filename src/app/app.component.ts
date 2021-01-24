@@ -8,6 +8,7 @@ import { SearchService } from './services/search.service';
 import { ModalTypes } from "./store/reducers/member.reducer";
 import { AppStoreModule } from "./store";
 import { BatchActionsService } from './store/batch-actions.service';
+import { LoginParams } from './share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
 
 @Component({
     selector: "app-root",
@@ -81,5 +82,11 @@ export class AppComponent {
     // 打开不同的弹窗, 这里可以引入BatchActionsService里面封装好的controlModal
     openModal(type: ModalTypes) {
         this.bachActionsServe.controlModal(true, type);
+    }
+
+    // 登录的方法
+    onLogin(params: LoginParams) {
+        // 这里就可以获得 wy-layer-login 中输入的信息
+        console.log('AppComponent】- onLogin - params - ', params);
     }
 }
