@@ -38,4 +38,3 @@ export interface AnyJson {
 export interface SampleBack extends AnyJson{
     code: number;
 }
-

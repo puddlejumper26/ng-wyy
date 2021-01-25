@@ -1,6 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, EventEmitter, Output, Input, OnChanges, SimpleChanges } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
+import { codeJson } from "src/app/utils/base64";
+
 export type LoginParams = {
     phone: string;
     password: string;
@@ -45,9 +47,10 @@ export class WyLayerLoginComponent implements OnInit, OnChanges {
             let phone = '';
             let password = '';
             let remember = false;
-            const value = userLoginParams.currentValue;
             // 下面的就可以达到一个回写的效果
-            if(value) {
+            if(userLoginParams.currentValue) {
+                // 首先需要解码，不然不能直接回写
+                const value = codeJson(userLoginParams.currentValue, 'decode');
                 phone = value.phone;
                 password = value.password;
                 remember = value.remember;
