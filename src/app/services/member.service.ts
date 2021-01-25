@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
 
 import { API_CONFIG, ServicesModule } from "./services.module";
 import { LoginParams } from "../share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component";
-import { sampleBack, User } from "./data-types/member.type";
+import { SampleBack, User } from "./data-types/member.type";
 
 @Injectable({
     // it means ServiceModule will provide with HomeService
@@ -42,8 +42,8 @@ export class MemberService {
     // 退出接口
     // https://github.com/puddlejumper26/ng-wyy/issues/19#issuecomment-766449849
     // 返回的是状态码
-    logout(): Observable<sampleBack> {
+    logout(): Observable<SampleBack> {
         return this.http.get(this.uri + "logout")
-            .pipe(map(res => res as sampleBack))
+            .pipe(map(res => res as SampleBack))
     }
 }

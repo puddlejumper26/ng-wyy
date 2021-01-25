@@ -12,6 +12,7 @@ import { BatchActionsService } from './store/batch-actions.service';
 import { LoginParams } from './share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
 import { MemberService } from './services/member.service';
 import { User } from './services/data-types/member.type';
+import { codeJson } from './utils/base64';
 
 @Component({
     selector: "app-root",
@@ -124,7 +125,8 @@ export class AppComponent {
 
             // 如果用户勾选了记住密码 把密码也放到 浏览器的缓存里
             if(params.remember) {
-                localStorage.setItem('wyRememberLogin', JSON.stringify(params));
+                // 这里使用codeJson来对数据加密
+                localStorage.setItem('wyRememberLogin', JSON.stringify(codeJson(params)));
             }else {
                 localStorage.removeItem('wyRememberLogin');
             }
