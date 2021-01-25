@@ -6,6 +6,7 @@ import { Store } from "@ngrx/store";
 import { isEmptyObject } from "./utils/tools";
 import { SearchResult } from "./services/data-types/common.types";
 import { SearchService } from './services/search.service';
+import { StorageService } from './services/storage.service';
 import { ModalTypes } from "./store/reducers/member.reducer";
 import { AppStoreModule } from "./store";
 import { BatchActionsService } from './store/batch-actions.service';
@@ -41,11 +42,13 @@ export class AppComponent {
         private store$: Store<AppStoreModule>,
         private bachActionsServe: BatchActionsService,
         private memberServe: MemberService,
-        private nzMessageServe: NzMessageService
+        private nzMessageServe: NzMessageService,
+        private storageServe: StorageService
         ) {
             // 添加一个自动登录的逻辑
 
-            const userId = localStorage.getItem('wyUserId');
+            // const userId = localStorage.getItem('wyUserId');
+            const userId = this.storageServe.getStorage('wyUserId');
             if(userId) {
                 // 如果能够拿到，说明已经登录过了，并且是可以自动登录的
                 this.memberServe.getUserDetail(userId).subscribe( user => {
@@ -55,7 +58,8 @@ export class AppComponent {
                 })
             }
 
-            const wyRememberLogin = localStorage.getItem('wyRememberLogin');
+            // const wyRememberLogin = localStorage.getItem('wyRememberLogin');
+            const wyRememberLogin = this.storageServe.getStorage('wyRememberLogin');
             if(wyRememberLogin) {
                 this.wyRememberLogin = JSON.parse(wyRememberLogin);
             }
@@ -121,14 +125,23 @@ export class AppComponent {
             // 弹出窗口显示信息
             this.alertMessage('success', '登录成功');
             // 登录成功将数据存储在当地
-            localStorage.setItem('wyUserId', user.profile.userId.toString());
+            // localStorage.setItem('wyUserId', user.profile.userId.toString());
+            this.storageServe.setStorage({
+                key:'wyUserId',
+                value: user.profile.userId.toString()
+            });
 
             // 如果用户勾选了记住密码 把密码也放到 浏览器的缓存里
             if(params.remember) {
                 // 这里使用codeJson来对数据加密
-                localStorage.setItem('wyRememberLogin', JSON.stringify(codeJson(params)));
+                // localStorage.setItem('wyRememberLogin', JSON.stringify(codeJson(params)));
+                this.storageServe.setStorage({
+                    key: 'wyRememberLogin',
+                    value: JSON.stringify(codeJson(params))
+                });
             }else {
-                localStorage.removeItem('wyRememberLogin');
+                // localStorage.removeItem('wyRememberLogin');
+                this.storageServe.removeStorage('wyRememberLogin');
             }
         }, error => {
             this.alertMessage('error', error.message ||'登录失败');
@@ -146,7 +159,8 @@ export class AppComponent {
             // console.log('【Appcomponent】- onLogout - res - ', res);
             // 返回的 是 code: 200
             this.user = null;
-            localStorage.removeItem('wyUserId');
+            // localStorage.removeItem('wyUserId');
+            this.storageServe.removeStorage('wyUserId');
             this.alertMessage('success', '退出成功');
         }, error => {
             this.alertMessage('error', error.message ||'退出失败');
