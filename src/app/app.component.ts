@@ -32,7 +32,7 @@ export class AppComponent {
     ];
 
     searchResult: SearchResult;
-
+    wyRememberLogin: LoginParams;
     user: User;
 
     constructor(
@@ -52,6 +52,11 @@ export class AppComponent {
                     // 下面这里的赋值就可以直接自动登录了
                     this.user = user;
                 })
+            }
+
+            const wyRememberLogin = localStorage.getItem('wyRememberLogin');
+            if(wyRememberLogin) {
+                this.wyRememberLogin = JSON.parse(wyRememberLogin);
             }
         }
 
