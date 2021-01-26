@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
 
 import { API_CONFIG, ServicesModule } from "./services.module";
 import { LoginParams } from "../share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component";
-import { SampleBack, User } from "./data-types/member.type";
+import { SampleBack, Signin, User } from "./data-types/member.type";
 
 @Injectable({
     // it means ServiceModule will provide with HomeService
@@ -45,5 +45,13 @@ export class MemberService {
     logout(): Observable<SampleBack> {
         return this.http.get(this.uri + "logout")
             .pipe(map(res => res as SampleBack))
+    }
+
+    // 签到
+    signin(): Observable<Signin> {
+        // 这里暂时用 type: 1 是PC的签到
+        const params = new HttpParams({ fromString: queryString.stringify({ type: 1})})
+        return this.http.get(this.uri + 'daily_signin', { params })
+            .pipe(map(res => res as Signin))
     }
 }

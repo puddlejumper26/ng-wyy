@@ -38,3 +38,12 @@ export interface AnyJson {
 export interface SampleBack extends AnyJson{
     code: number;
 }
+
+// 签到数据类型
+// https://github.com/puddlejumper26/ng-wyy/issues/20
+export type Signin = {
+    msg?: string;
+    point?: number;
+    code: number;
+}
+
