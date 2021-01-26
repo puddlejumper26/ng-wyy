@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NzCarouselComponent } from "ng-zorro-antd";
 import { map } from "rxjs/internal/operators";
+import { select, Store } from "@ngrx/store";
 
 import { BatchActionsService } from "src/app/store/batch-actions.service";
 import {
@@ -11,8 +12,11 @@ import {
     SongSheet,
     Song,
 } from "./../../services/data-types/common.types";
+import { getMember, getUserId } from './../../store/selectors/member.selector';
+import { MemberService } from './../../services/member.service';
 import { ModalTypes } from "src/app/store/reducers/member.reducer";
 import { SheetService } from "./../../services/sheet.service";
+import { AppStoreModule } from "src/app/store";
 import { User } from "src/app/services/data-types/member.type";
 
 @Component({
@@ -40,25 +44,42 @@ export class HomeComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private sheetServe: SheetService,
-        // private store$: Store<AppStoreModule>, // Observable      //  ----- 移动到 batch-actions.service.ts
+        private store$: Store<AppStoreModule>, // Observable      //  ----- 移动到 batch-actions.service.ts
         private batchActionServe: BatchActionsService,
+        private memberServe: MemberService,
     ) {
         //这里使用了 解构， 注意要用 ()， ([banners, hotTags, songSheetList, singers])
         // 并且使用了 resolve， 注意这里的 homeDatas 是从 resolve 中来的
         this.route.data
             .pipe(map((res) => res.homeDatas))
-            .subscribe(([banners, hotTags, songSheetList, singers, user]) => {
+            // .subscribe(([banners, hotTags, songSheetList, singers, user]) => {
+            .subscribe(([banners, hotTags, songSheetList, singers]) => {
                 this.banners = banners;
                 this.singers = singers;
                 this.hotTags = hotTags;
                 this.songSheetLists = songSheetList;
-                this.user = user;
+                // this.user = user;
                 // console.log('【HomeComponent】- constructor - user - ', user)
             });
+
+            // 这里通过 store 来监听 userId 的变化
+            this.store$.pipe(select(getMember), select(getUserId)).subscribe( id => {
+                // console.log('【HomeComponent】 - constructor - store$ - id- ', id);
+                if(id) {
+                    this.getUserDetail(id);
+                }else {
+                    // 有这一步才能够在登出之后，通过store 直接改变主页面右边中间的 用户登录 部分登出
+                    this.user = null;
+                }
+            })
 
         // 这里通过select操作符，拿到 player 里state的数据,
         // 然后下面的this.playerState.playMode.type === 'random'才能够运作
         // this.store$.pipe(select(getPlayer)).subscribe(res => this.playerState = res);  //  ----- 移动到 batch-actions.service.ts
+    }
+
+    private getUserDetail(id: string) {
+        this.memberServe.getUserDetail(id).subscribe(user => this.user = user);
     }
 
     ngOnInit() {}

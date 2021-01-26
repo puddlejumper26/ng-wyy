@@ -1,5 +1,5 @@
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { SetModalType } from './store/actions/member.actions';
+import { SetModalType, SetUserId } from './store/actions/member.actions';
 import { Component } from "@angular/core";
 import { Store } from "@ngrx/store";
 
@@ -50,6 +50,10 @@ export class AppComponent {
             // const userId = localStorage.getItem('wyUserId');
             const userId = this.storageServe.getStorage('wyUserId');
             if(userId) {
+
+                // 这里和下面的登录成功的时候一样，都需要提交一下，之后就可以在 home component中监听一下变化
+                this.store$.dispatch(SetUserId({ id: userId}));
+
                 // 如果能够拿到，说明已经登录过了，并且是可以自动登录的
                 this.memberServe.getUserDetail(userId).subscribe( user => {
                     // console.log('【AppComponent】- constructor - user - ', user);
@@ -130,6 +134,9 @@ export class AppComponent {
                 key:'wyUserId',
                 value: user.profile.userId.toString()
             });
+            // 登录成功之后 这里要提交一下 , 还有在刷新页面的时候，constructor中也要提交一下
+            this.store$.dispatch(SetUserId({ id: user.profile.userId.toString()}));
+
 
             // 如果用户勾选了记住密码 把密码也放到 浏览器的缓存里
             if(params.remember) {
@@ -161,6 +168,8 @@ export class AppComponent {
             this.user = null;
             // localStorage.removeItem('wyUserId');
             this.storageServe.removeStorage('wyUserId');
+            // store里的信息也要为空
+            this.store$.dispatch(SetUserId({id: ''}));
             this.alertMessage('success', '退出成功');
         }, error => {
             this.alertMessage('error', error.message ||'退出失败');

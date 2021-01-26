@@ -28,7 +28,8 @@ import { StorageService } from './../../services/storage.service';
 import { User } from "src/app/services/data-types/member.type";
 
 //这里是一个类型的定义， 返回的数据的集合
-type HomeDataType = [Banner[], HotTag[], SongSheet[], Singer[], User];
+// type HomeDataType = [Banner[], HotTag[], SongSheet[], Singer[], User];
+type HomeDataType = [Banner[], HotTag[], SongSheet[], Singer[]];
 
 // The router waits for the data to be resolved before the route is finally activated.
 
@@ -39,8 +40,8 @@ export class HomeResolverService implements Resolve<HomeDataType> {
     constructor(
         private homeServe: HomeService,
         private singerServe: SingerService,
-        private memberServe: MemberService,
-        private storageServe: StorageService
+        // private memberServe: MemberService,
+        // private storageServe: StorageService
     ) {}
     /**
      *  forkJoin 接受一个数组，数组的每一个参数都返回一个Observable对象，
@@ -54,11 +55,13 @@ export class HomeResolverService implements Resolve<HomeDataType> {
      */
     resolve(): Observable<HomeDataType> {
         // 这里做的目的是为了在登录后，在主页面的 用户登录 部分能够显示相对于的用户信息
-        const userId = this.storageServe.getStorage('wyUserId');
-        let detail$ = of(null);
-        if(userId) {
-            detail$ = this.memberServe.getUserDetail(userId)
-        }
+        // 下面的这种写法-如果在主页面登录，home页面不会有UI的变化，那么这里监听不到
+        //  所以通过 NGRX 来做
+        // const userId = this.storageServe.getStorage('wyUserId');
+        // let detail$ = of(null);
+        // if(userId) {
+            // detail$ = this.memberServe.getUserDetail(userId)
+        // }
 
         return forkJoin([
             this.homeServe.getBanner(),
@@ -66,7 +69,7 @@ export class HomeResolverService implements Resolve<HomeDataType> {
             this.homeServe.getPersonalSheetList(),
             this.singerServe.getEnterSinger(),
             // 这里再加一个流，之后就可以在 home.component里使用了
-            detail$
+            // detail$
         ]).pipe(first());
     }
 }

@@ -1,6 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 
-import { SetModalType, SetModalVisible } from './../actions/member.actions';
+import { SetModalType, SetModalVisible, SetUserId } from './../actions/member.actions';
 
 // 弹窗的类型
 export enum ModalTypes {
@@ -16,13 +16,15 @@ export type MemberState = {
     // 弹窗显示还是隐藏
     modalVisible: boolean;
     modalType: ModalTypes;
+    userId: string
 }
 
 // 定义初始的状态
 export const initialState: MemberState = {
     // 因为一开始是隐藏的，所以是false
     modalVisible: false,
-    modalType: ModalTypes.Default
+    modalType: ModalTypes.Default,
+    userId: '',
 }
 
 // 设置动作
@@ -30,6 +32,7 @@ const reducer = createReducer(
     initialState,
     on(SetModalVisible, (state, {modalVisible}) => ({ ...state, modalVisible})),
     on(SetModalType, (state, {modalType}) => ({ ...state, modalType})),
+    on(SetUserId, (state, {id}) => ({...state, userId:id})),
 )
 
 //https://next.ngrx.io/guide/store/
