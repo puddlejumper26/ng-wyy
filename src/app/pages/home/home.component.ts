@@ -13,6 +13,7 @@ import {
 } from "./../../services/data-types/common.types";
 import { ModalTypes } from "src/app/store/reducers/member.reducer";
 import { SheetService } from "./../../services/sheet.service";
+import { User } from "src/app/services/data-types/member.type";
 
 @Component({
     selector: "app-home",
@@ -27,6 +28,8 @@ export class HomeComponent implements OnInit {
     hotTags: HotTag[];
     songSheetLists: SongSheet[];
     playList: Song[];
+
+    user: User;
 
     // private playerState: PlayState; //  ----- 移动到 batch-actions.service.ts
 
@@ -44,11 +47,13 @@ export class HomeComponent implements OnInit {
         // 并且使用了 resolve， 注意这里的 homeDatas 是从 resolve 中来的
         this.route.data
             .pipe(map((res) => res.homeDatas))
-            .subscribe(([banners, hotTags, songSheetList, singers]) => {
+            .subscribe(([banners, hotTags, songSheetList, singers, user]) => {
                 this.banners = banners;
                 this.singers = singers;
                 this.hotTags = hotTags;
                 this.songSheetLists = songSheetList;
+                this.user = user;
+                // console.log('【HomeComponent】- constructor - user - ', user)
             });
 
         // 这里通过select操作符，拿到 player 里state的数据,
