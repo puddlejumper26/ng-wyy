@@ -1,6 +1,8 @@
 import { InjectionToken, NgModule, PLATFORM_ID } from "@angular/core";
 import { CommonModule, isPlatformBrowser } from "@angular/common";
 
+import { httpInterceptorProvides } from './http-interceptors/index';
+
 // 这里的ApiConfigToken是 任意的一个 参数， 作为这个 token 的标识
 // 这里的Token 的作用
 // Angular自身提供的服务，都有一个 token， 以及这个token 对应的值 (useValue)
@@ -28,7 +30,8 @@ export const WINDOW = new InjectionToken("WindowToken");
                 return isPlatformBrowser(platformId) ? window : {}
             },
             deps: [PLATFORM_ID], //依赖PLATFORM_ID， 是一个常量，代表平台的ID，是浏览器的还是服务端的
-        }
+        },
+        httpInterceptorProvides
     ],
 })
 export class ServicesModule {}
