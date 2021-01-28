@@ -17,7 +17,13 @@
                             {{user.level}}<i class="lvright u-icn2"></i>
                         </span>
                     </p>
-                    <div class="btnwrap f-pr">
+                    <!-- nz-tooltip nzTitle 当鼠标移动到‘签到’按钮上时会显示一个tooltip框 -->
+                    <div class="btnwrap f-pr"
+                        nz-tooltip
+                        [nzTitle]="tipTitle"
+                        nzTooltipPlacement="bottom"
+                        [nzVisible]="showTip"
+                        >
                         <button nz-button nzType="primary" nzBlock (click)="onSignin()">签到 </button>
                     </div>
                 </div>
