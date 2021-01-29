@@ -7,8 +7,15 @@ import { Observable } from "rxjs";
 
 import { API_CONFIG, ServicesModule } from "./services.module";
 import { LoginParams } from "../share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component";
-import { SampleBack, Signin, User } from "./data-types/member.type";
+import { recordVal, SampleBack, Signin, User, UserRecord, UserSheet } from "./data-types/member.type";
+import { SongSheet } from './data-types/common.types';
 
+export enum RecordType {
+    allData,
+    weekData,
+};
+
+const records = ['allData', 'weekData'];
 @Injectable({
     // it means ServiceModule will provide with HomeService
     // same as put HomeService into the proviers inside ServiceModule
@@ -54,4 +61,25 @@ export class MemberService {
         return this.http.get(this.uri + 'daily_signin', { params })
             .pipe(map(res => res as Signin))
     }
+
+    // 听歌记录， 放在个人主页上的
+    //  type 因为 分为 一周的还有所有时间, 默认是一周的
+    getUserRecord(uid: string, type = RecordType.weekData): Observable<recordVal[]> {
+        const params = new HttpParams({ fromString: queryString.stringify({ uid, type })});
+        return this.http.get(this.uri + "user/record", { params })
+            .pipe(map((res: UserRecord) => res[records[type]]))
+    }
+
+    // 用户歌单
+    getUserSheets(uid: string): Observable<UserSheet> {
+        const params = new HttpParams({ fromString: queryString.stringify({ uid })});
+        return this.http.get(this.uri + "user/playlist", { params })
+            .pipe(map((res: { playlist: SongSheet[]}) => {
+                const list = res.playlist;
+                return {
+                    self: list.filter(item => !item.subscribed),
+                    subscribed: list.filter(item => item.subscribed)
+                };
+            }))
+        }
 }
