@@ -60,6 +60,7 @@
                     *ngFor="let item of userSheet.self"
                     [sheet]="item"
                     [routerLink]="['/sheetInfo', item.id]"
+                    (onPlay)="onPlaySheet($event)"
                     >
                  </app-single-sheet>
             </div>
@@ -81,6 +82,7 @@
                     *ngFor="let item of userSheet.subscribed"
                     [sheet]="item"
                     [routerLink]="['/sheetInfo', item.id]"
+                    (onPlay)="onPlaySheet($event)"
                     >
                  </app-single-sheet>
             </div>
