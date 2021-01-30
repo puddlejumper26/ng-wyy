@@ -1,5 +1,7 @@
+import { select, Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 import { map } from 'rxjs/internal/operators/map';
 import { MemberService } from 'src/app/services/member.service';
@@ -7,6 +9,11 @@ import { RecordVal, User, UserSheet } from 'src/app/services/data-types/member.t
 import { RecordType } from './../../../services/member.service';
 import { SheetService } from 'src/app/services/sheet.service';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
+import { SongService } from 'src/app/services/song.service';
+import { Song } from 'src/app/services/data-types/common.types';
+import { AppStoreModule } from 'src/app/store';
+import { getCurrentSong, getPlayer } from 'src/app/store/selectors/player.selector';
+import { findIndex } from 'src/app/utils/array';
 
 @Component({
     selector: "app-center",
@@ -20,11 +27,17 @@ export class CenterComponent implements OnInit {
     userSheet: UserSheet;
     recordType = RecordType.allData;
 
+    private currentSong: Song;
+    currentIndex = -1; //当前播放的索引
+
     constructor(
         private route: ActivatedRoute,
         private sheetServe: SheetService,
         private batchActionServe: BatchActionsService,
         private memberServe: MemberService,
+        private songServe: SongService,
+        private nzMessageServe: NzMessageService,
+        private store$: Store<AppStoreModule>,
     ) {
         // console.log('【CenterComponent】- consctructor');
         // 这里的subscribe可看成解构赋值
@@ -35,10 +48,29 @@ export class CenterComponent implements OnInit {
             this.user = user;
             this.userRecord = userRecord.slice(0,10);
             this.userSheet = userSheet;
+            this.listenCurrentSong();
         });
     }
 
     ngOnInit() {}
+
+    // 和 sheet-info.component.ts中类似
+    private listenCurrentSong() {
+        this.store$.pipe(select(getPlayer), select(getCurrentSong))
+            .subscribe(song =>{
+                // console.log('【CenterComponent】 - listenCurrent - song - ', song);
+                this.currentSong = song;
+
+                if(song) {
+                    // 如果song存在，要求一下当前播放歌曲在这个列表中的索引
+                    // 首先拿到列表
+                    const songs = this.userRecord.map(item => item.song);
+                    this.currentIndex = findIndex(songs, song);
+                }else {
+                    this.currentIndex = -1;
+                }
+            })
+    }
 
     // 和 home.component.ts 中是一样的
     onPlaySheet(id: number) {
@@ -54,6 +86,24 @@ export class CenterComponent implements OnInit {
             this.memberServe.getUserRecord(this.user.profile.userId.toString(), type).subscribe(res => {
                 // console.log('【CenterComponent】 - onChangeType - res -', res)
                 this.userRecord = res.slice(0,10);
+            })
+        }
+    }
+
+    // 和 sheet-info.component.ts中一样
+    // 添加一首歌曲
+    onAddSong([song, isPlay]) {
+        // 首先判断是否是正在播放的歌曲
+        if (!this.currentSong || this.currentSong.id !== song.id) {
+            // 这里需要通过getSongList来获得歌曲的播放url,这个返回的是一个歌曲数组
+            // 因为就添加一首歌，所以这一取 [0]
+            this.songServe.getSongList(song).subscribe(list => {
+                // console.log('【SheetInfoComponent】- onAddSong - list -', list)
+                if (list.length) {
+                    this.batchActionServe.insertSong(list[0], isPlay);
+                }else {
+                    this.nzMessageServe.create('warning', 'Warning：API has no url for this song，request is denied!');
+                }
             })
         }
     }

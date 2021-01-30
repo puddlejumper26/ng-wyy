@@ -46,7 +46,9 @@
             [records]="userRecord"
             [recordType]="recordType"
             [listenSongs]="user.listenSongs"
+            [currentIndex]="currentIndex"
             (onChangeType)="onChangeType($event)"
+            (onAddSong)="onAddSong($event)"
         ></app-records>
 
         <a class="look-more">查看更多&gt;</a>
