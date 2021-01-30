@@ -5,9 +5,10 @@
             累计听歌{{listenSongs}}首
         </span>
         <div class="more tab-type">
-            <span >最近一周</span>
+            <!-- 注意这里的 0 和 1 是根据API的设定进行设置的 https://github.com/puddlejumper26/ng-wyy/issues/22-->
+            <span [class.active]="recordType === 1" (click)="onChangeType.emit(1)">最近一周</span>
             <nz-divider nzType="vertical"></nz-divider>
-            <span class="active">所有时间</span>
+            <span [class.active]="recordType === 0" (click)="onChangeType.emit(0)">所有时间</span>
         </div>
     </div>
 
