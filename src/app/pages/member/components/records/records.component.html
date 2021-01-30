@@ -1,0 +1,67 @@
+<div class="wy-sec">
+    <div class="u-title wy-sec-wrap clearfix">
+        <h3 class="wy-sec-tit"><span class="f-ff2">听歌排行</span></h3>
+        <span class="sub s-fc3">
+            累计听歌{{listenSongs}}首
+        </span>
+        <div class="more tab-type">
+            <span class="active ">最近一周</span>
+            <nz-divider nzType="vertical"></nz-divider>
+            <span>所有时间</span>
+        </div>
+    </div>
+
+    <!-- 下面这里和歌单的表格是一样的  sheet-info.component.html -->
+    <nz-table
+    class="wy-table"
+    #basicTable
+    [nzData]="records"
+    [nzFrontPagination]="false"
+    nzBordered
+    nzNoResult="暂无音乐">
+    <thead>
+        <tr>
+            <th nzWidth="80px"></th>
+            <th>标题</th>
+            <th nzWidth="120px">时长</th>
+            <th nzWidth="80px">歌手</th>
+            <th>播放次数</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of basicTable.data; index as i">
+            <td class="first-col">
+                <span>{{i + 1}}</span>
+                <!-- 这里添加完还要播放，所以还有一个true -->
+                <i class="ico play-song" title="播放" ></i>
+            </td>
+            <td class="song-name">
+                <a [routerLink]="['/songInfo', item.id]">{{item.song.name}}</a>
+                <!-- <button (click)="toInfo(item.id)">{{item.name}}</button> 如果是button，就和sheet-info component 的使用是一样的-->
+            </td>
+            <td class="time-col">
+                <span>{{item.song.dt / 1000 | formatTime}}</span>
+                <p class="icons">
+                    <i class="ico add" title="添加" ></i>
+                    <i class="ico like" title="收藏"></i>
+                    <i class="ico share" title="分享"></i>
+                </p>
+            </td>
+            <td>
+                <!-- 这里需要ng-container来循环歌手的数组
+                    ng-container不会输出任何的字符串
+                    不会输出任何的html标签
+                -->
+                <ng-container *ngFor="let singer of item.song.ar; last as isLast">
+                    <a [routerLink]="['/singer', singer.id]">{{singer.name}}</a>
+                    <em [hidden]="isLast">/</em>
+                </ng-container>
+            </td>
+            <td>
+                {{item.playCount}}
+            </td>
+        </tr>
+    </tbody>
+ </nz-table>
+
+</div>

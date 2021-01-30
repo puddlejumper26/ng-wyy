@@ -50,7 +50,7 @@ export type Signin = {
 }
 
 // https://github.com/puddlejumper26/ng-wyy/issues/22
-export type recordVal = {
+export type RecordVal = {
     playCount: number;
     score: number;
     song: Song;
@@ -59,7 +59,7 @@ export type recordVal = {
 type recordKeys = 'weekData' | 'allData';
 // 同样是根据上面22的数据进行设计
 export type UserRecord = {
-    [key in recordKeys]: recordVal[];
+    [key in recordKeys]: RecordVal[];
 }
 
 export type UserSheet = {

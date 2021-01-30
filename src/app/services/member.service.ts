@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
 
 import { API_CONFIG, ServicesModule } from "./services.module";
 import { LoginParams } from "../share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component";
-import { recordVal, SampleBack, Signin, User, UserRecord, UserSheet } from "./data-types/member.type";
+import { RecordVal, SampleBack, Signin, User, UserRecord, UserSheet } from "./data-types/member.type";
 import { SongSheet } from './data-types/common.types';
 
 export enum RecordType {
@@ -64,7 +64,8 @@ export class MemberService {
 
     // 听歌记录， 放在个人主页上的
     //  type 因为 分为 一周的还有所有时间, 默认是一周的
-    getUserRecord(uid: string, type = RecordType.weekData): Observable<recordVal[]> {
+    // 这里用 allData， 因为使用的模拟账户很可能在一周内没有听歌记录
+    getUserRecord(uid: string, type = RecordType.allData): Observable<RecordVal[]> {
         const params = new HttpParams({ fromString: queryString.stringify({ uid, type })});
         return this.http.get(this.uri + "user/record", { params })
             .pipe(map((res: UserRecord) => res[records[type]]))

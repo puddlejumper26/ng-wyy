@@ -42,6 +42,13 @@
         </div>
 
         <!-- 听歌记录， 需要封装 -->
+        <app-records
+            [records]="userRecord"
+            [recordType]="recordType"
+            [listenSongs]="user.listenSongs"
+        ></app-records>
+
+        <a class="look-more">查看更多&gt;</a>
 
         <!-- 歌单部分 -->
         <!-- 自己创建的歌单 -->
