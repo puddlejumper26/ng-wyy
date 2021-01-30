@@ -33,7 +33,7 @@ export class CenterComponent implements OnInit {
             // console.log('【CenterComponent】- consctructor - userRecord - ', userRecord);
             // console.log('【CenterComponent】- consctructor - userSheet - ', userSheet);
             this.user = user;
-            this.userRecord = userRecord;
+            this.userRecord = userRecord.slice(0,10);
             this.userSheet = userSheet;
         });
     }
@@ -53,7 +53,7 @@ export class CenterComponent implements OnInit {
             this.recordType = type;
             this.memberServe.getUserRecord(this.user.profile.userId.toString(), type).subscribe(res => {
                 // console.log('【CenterComponent】 - onChangeType - res -', res)
-                this.userRecord = res;
+                this.userRecord = res.slice(0,10);
             })
         }
     }
