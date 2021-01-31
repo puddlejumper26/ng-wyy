@@ -1,9 +1,11 @@
 import { select, Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
-
+import { Subject } from 'rxjs/internal/Subject';
+import { takeUntil } from 'rxjs/internal/operators';
 import { map } from 'rxjs/internal/operators/map';
+
 import { MemberService } from 'src/app/services/member.service';
 import { RecordVal, User, UserSheet } from 'src/app/services/data-types/member.type';
 import { RecordType } from './../../../services/member.service';
@@ -20,7 +22,7 @@ import { findIndex } from 'src/app/utils/array';
     templateUrl: "./center.component.html",
     styleUrls: ["./center.component.less"],
 })
-export class CenterComponent implements OnInit {
+export class CenterComponent implements OnInit, OnDestroy {
 
     user: User;
     userRecord: RecordVal[];
@@ -29,6 +31,9 @@ export class CenterComponent implements OnInit {
 
     private currentSong: Song;
     currentIndex = -1; //当前播放的索引
+
+    // 用来取消下面的select中的订阅，和 sheet-info中一样的功能
+    private destroy$ = new Subject();
 
     constructor(
         private route: ActivatedRoute,
@@ -56,7 +61,7 @@ export class CenterComponent implements OnInit {
 
     // 和 sheet-info.component.ts中类似
     private listenCurrentSong() {
-        this.store$.pipe(select(getPlayer), select(getCurrentSong))
+        this.store$.pipe(select(getPlayer), select(getCurrentSong), takeUntil(this.destroy$))
             .subscribe(song =>{
                 // console.log('【CenterComponent】 - listenCurrent - song - ', song);
                 this.currentSong = song;
@@ -106,5 +111,11 @@ export class CenterComponent implements OnInit {
                 }
             })
         }
+    }
+
+    // 这里发射一个值，在 listenCurrent 里的 takeUntil就能够接受到并且停止
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete(); //结束
     }
 }
