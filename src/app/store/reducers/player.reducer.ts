@@ -1,8 +1,8 @@
 import { Action, createReducer, on } from '@ngrx/store';
 
+import { PlayMode } from 'src/app/share/wy-ui/wy-player/player-type';
 import { SetCurrentAction, SetCurrentIndex, SetPlaying, SetPlayList, SetPlayMode, SetSongList } from './../actions/player.actions';
 import { Song } from 'src/app/services/data-types/common.types';
-import { PlayMode } from 'src/app/share/wy-ui/wy-player/player-type';
 
 export enum CurrentActions {
     Add,

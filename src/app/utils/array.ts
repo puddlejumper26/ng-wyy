@@ -1,5 +1,5 @@
-import { Song } from '../services/data-types/common.types';
-import { getRandomInt } from './number';
+import { Song } from "../services/data-types/common.types";
+import { getRandomInt } from "./number";
 
 // target在传入的数组中存在
 export function inArray(arr: any[], target: any): boolean {
@@ -19,5 +19,5 @@ export function shuffle<T>(arr: T[]): T[] {
 
 //在数组当中找到索引, 并返回
 export function findIndex(list: Song[], currentSong: Song): number {
-    return list.findIndex(item => item.id === currentSong.id);
+    return list.findIndex((item) => item.id === currentSong.id);
 }

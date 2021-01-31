@@ -1,6 +1,7 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
+
 /**
  *  Manage the components could be used in many places
  */
@@ -13,7 +14,19 @@ import { WySearchModule } from './wy-search/wy-search.module';
 
 @NgModule({
     declarations: [PlayCountPipe, SingleSheetComponent],
-    imports: [BrowserModule, CommonModule, WyLayerModule, WyPlayerModule, WySearchModule],
-    exports: [PlayCountPipe, SingleSheetComponent, WyLayerModule, WyPlayerModule, WySearchModule],
+    imports: [
+        BrowserModule,
+        CommonModule,
+        WyLayerModule,
+        WyPlayerModule,
+        WySearchModule,
+    ],
+    exports: [
+        PlayCountPipe,
+        SingleSheetComponent,
+        WyLayerModule,
+        WyPlayerModule,
+        WySearchModule,
+    ],
 })
 export class WyUiModule {}

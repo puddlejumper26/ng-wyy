@@ -1,10 +1,10 @@
-import { environment } from './../../environments/environment';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { playerReducer, PlayState } from './reducers/player.reducer';
-import { StoreModule } from '@ngrx/store';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreModule } from '@ngrx/store';
+
+import { environment } from './../../environments/environment';
 import { memberReducer } from './reducers/member.reducer';
+import { playerReducer } from './reducers/player.reducer';
 
 // /**
 //  *           需要导入到 CoreModule 中

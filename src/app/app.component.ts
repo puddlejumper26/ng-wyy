@@ -1,19 +1,19 @@
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { SetModalType, SetUserId } from './store/actions/member.actions';
 import { Component } from "@angular/core";
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { Store } from "@ngrx/store";
 
-import { isEmptyObject } from "./utils/tools";
-import { SearchResult } from "./services/data-types/common.types";
-import { SearchService } from './services/search.service';
-import { StorageService } from './services/storage.service';
-import { ModalTypes } from "./store/reducers/member.reducer";
 import { AppStoreModule } from "./store";
 import { BatchActionsService } from './store/batch-actions.service';
+import { codeJson } from './utils/base64';
+import { isEmptyObject } from "./utils/tools";
 import { LoginParams } from './share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
 import { MemberService } from './services/member.service';
+import { ModalTypes } from "./store/reducers/member.reducer";
+import { SearchResult } from "./services/data-types/common.types";
+import { SearchService } from './services/search.service';
+import { SetModalType, SetUserId } from './store/actions/member.actions';
+import { StorageService } from './services/storage.service';
 import { User } from './services/data-types/member.type';
-import { codeJson } from './utils/base64';
 
 @Component({
     selector: "app-root",

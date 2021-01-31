@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 
 import { AppStoreModule } from '.';
-import { CurrentActions, playerReducer, PlayState } from 'src/app/store/reducers/player.reducer';
+import { CurrentActions, PlayState } from 'src/app/store/reducers/player.reducer';
 import { findIndex } from 'src/app/utils/array';
 import { getMember } from './selectors/member.selector';
 import { getPlayer } from 'src/app/store/selectors/player.selector';

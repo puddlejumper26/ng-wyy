@@ -2,7 +2,6 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 
 import { MemberState } from '../reducers/member.reducer';
 
-
 // 首先要拿到 state 里的所有的数据
 const selectMemberStates = (state: MemberState) => state;
 

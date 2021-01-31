@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { PlayState } from '../reducers/player.reducer';
 
+import { PlayState } from '../reducers/player.reducer';
 
 // 首先要拿到 state 里的所有的数据
 const selectPlayerStates = (state: PlayState) => state;
