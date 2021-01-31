@@ -51,7 +51,7 @@
             (onAddSong)="onAddSong($event)"
         ></app-records>
 
-        <a class="look-more">查看更多&gt;</a>
+        <a class="look-more" [routerLink]="['/records', user.profile.userId]">查看更多&gt;</a>
 
         <!-- 歌单部分 -->
         <!-- 自己创建的歌单 -->
