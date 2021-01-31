@@ -8,7 +8,7 @@ import { Singer } from 'src/app/services/data-types/common.types';
 import { SingerDetail } from '../../../services/data-types/common.types';
 import { SingerService } from '../../../services/singer.service';
 
-type SingerDetailDataModel = SingerDetail; // 为Singer[]需要登录才能用的上，目前我们先用一个就好
+type SingerDetailDataModel = [SingerDetail, Singer[]]; // 为Singer[]需要登录才能用的上，目前我们先用一个就好
 
 // 因为这个页面需要两个接口，所以这里的类型是一个组合的类型
 
@@ -23,10 +23,10 @@ export class SingerResolverService implements Resolve<SingerDetailDataModel> {
         // console.log('【SingerResolverService】 - resolve - route.paramMap.get("id") - ', route.paramMap.get('id'))
         // 拿到url数据中的id, route.paramMap.get('id') 得到的是一个string，所以要用Number
         const id = route.paramMap.get('id');
-        // return forkJoin([
-        //     this.singerServe.getSingerDetail(id),
-        //     this.singerServe.getSimiSinger(id),
-        // ]).pipe(first());
-        return this.singerServe.getSingerDetail(id);
+        return forkJoin([
+            this.singerServe.getSingerDetail(id),
+            this.singerServe.getSimiSinger(id),
+        ]).pipe(first());
+        // return this.singerServe.getSingerDetail(id);
     }
 }

@@ -22,6 +22,7 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
     // singerDetail: SingerDetail;
     singer: Singer;
     hotSongs: Song[];
+    simiSingers: Singer[];
 
     // 用来发射流，如果发射一个流，就停止监听
     private destroy$ = new Subject<void>();
@@ -38,11 +39,13 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
         ) {
             this.route.data
               .pipe(map(res => res.singerDetail))
-              .subscribe(detail => {
+              .subscribe(([detail, simiSingers]) => {
                 //   这么写不起作用，所以只能用下面的写法
                 //   this.singerDetail = detail;
                   this.singer = detail.artist;
                   this.hotSongs = detail.hotSongs;
+                  this.simiSingers = simiSingers;
+                  console.log('【SingerDetailComponent】- constructor - simiSingers - ', simiSingers);
                   this.listenCurrent();
               })
         }
