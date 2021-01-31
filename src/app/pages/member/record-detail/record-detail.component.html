@@ -1,1 +1,13 @@
-<p>record-detail works!</p>
+<div class="record-detail wrap-feature-wrap">
+    <div class="page-wrap">
+         <!-- 听歌记录， 需要封装 和 center.html中一样的-->
+         <app-records
+            [records]="userRecord"
+            [recordType]="recordType"
+            [listenSongs]="user.listenSongs"
+            [currentIndex]="currentIndex"
+            (onChangeType)="onChangeType($event)"
+            (onAddSong)="onAddSong($event)"
+        ></app-records>
+    </div>
+</div>
