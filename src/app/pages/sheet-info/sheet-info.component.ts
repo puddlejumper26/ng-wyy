@@ -11,6 +11,7 @@ import { findIndex } from 'src/app/utils/array';
 import { getCurrentSong, getPlayer } from './../../store/selectors/player.selector';
 import { SongService } from 'src/app/services/song.service';
 import { Song, SongSheet } from './../../services/data-types/common.types';
+import { ModalTypes } from 'src/app/store/reducers/member.reducer';
 @Component({
     selector: "app-sheet-info",
     templateUrl: "./sheet-info.component.html",
@@ -145,10 +146,17 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
         })
     }
 
+    // 收藏歌曲
+    onLikeSong(id: string) {
+        // 要把弹窗的类型设置为like，打开visible
+
+        // 这里直接用这个有问题，因为如果用户没有登录的情况下点击歌单里的收藏按钮，应该先出现登录界面
+        this.batchActionServe.controlModal(true, ModalTypes.Like);
+    }
+
     // 这里发射一个值，在 listenCurrent 里的 takeUntil就能够接受到并且停止
     ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete(); //结束
     }
-
 }

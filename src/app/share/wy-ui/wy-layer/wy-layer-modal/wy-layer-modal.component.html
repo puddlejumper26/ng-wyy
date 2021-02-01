@@ -24,10 +24,20 @@
         <ng-container *ngSwitchCase="'loginByPhone'">
             <ng-content select="[name=login]"></ng-content>
         </ng-container>
+
         <!-- 如果currentModalType是register的时候 -->
         <ng-container *ngSwitchCase="'register'">
-            <p>registerregisterregisterregisterregisterregister</p>
+            <ng-content select="[name=reister]"></ng-content>
         </ng-container>
+
+        <ng-container *ngSwitchCase="'like'">
+            <ng-content select="[name=like]"></ng-content>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'share'">
+            <ng-content select="[name=share]"></ng-content>
+        </ng-container>
+
         <!-- 否则的话显示的是default -->
         <ng-container *ngSwitchDefault>
             <ng-content ></ng-content>

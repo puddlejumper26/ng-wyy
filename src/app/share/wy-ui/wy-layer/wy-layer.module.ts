@@ -7,9 +7,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WyLayerModalComponent } from './wy-layer-modal/wy-layer-modal.component';
 import { WyLayerDefaultComponent } from './wy-layer-default/wy-layer-default.component';
 import { WyLayerLoginComponent } from './wy-layer-login/wy-layer-login.component';
+import { WyLayerLikeComponent } from './wy-layer-like/wy-layer-like.component';
 
 @NgModule({
-    declarations: [WyLayerModalComponent, WyLayerDefaultComponent, WyLayerLoginComponent],
+    declarations: [WyLayerModalComponent, WyLayerDefaultComponent, WyLayerLoginComponent, WyLayerLikeComponent],
     // angular cdk 的拖拽功能 https://material.angular.io/cdk/drag-drop/api
     imports: [
         CommonModule,
@@ -25,6 +26,6 @@ import { WyLayerLoginComponent } from './wy-layer-login/wy-layer-login.component
         NzIconModule,
         NzFormModule
     ],
-    exports: [WyLayerModalComponent, WyLayerDefaultComponent, WyLayerLoginComponent]
+    exports: [WyLayerModalComponent, WyLayerDefaultComponent, WyLayerLoginComponent, WyLayerLikeComponent]
 })
 export class WyLayerModule {}
