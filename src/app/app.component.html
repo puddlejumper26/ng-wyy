@@ -114,7 +114,7 @@
 <app-wy-player></app-wy-player>
 
 <!-- 登录弹窗的socket -->
-<app-wy-layer-modal>
+<app-wy-layer-modal (onLoadMySheets)="onLoadMySheets()">
     <app-wy-layer-login
         name="login"
         [wyRememberLogin] = "wyRememberLogin"
@@ -124,6 +124,7 @@
 
     <app-wy-layer-like
         name='like'
+        [mySheets]="mySheets"
     ></app-wy-layer-like>
 
     <app-wy-layer-default (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-default>

@@ -9,9 +9,9 @@ import { isEmptyObject } from "./utils/tools";
 import { LoginParams } from './share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
 import { MemberService } from './services/member.service';
 import { ModalTypes } from "./store/reducers/member.reducer";
-import { SearchResult } from "./services/data-types/common.types";
+import { SearchResult, SongSheet } from "./services/data-types/common.types";
 import { SearchService } from './services/search.service';
-import { SetModalType, SetUserId } from './store/actions/member.actions';
+import { SetModalType, SetModalVisible, SetUserId } from './store/actions/member.actions';
 import { StorageService } from './services/storage.service';
 import { User } from './services/data-types/member.type';
 
@@ -36,6 +36,8 @@ export class AppComponent {
     searchResult: SearchResult;
     wyRememberLogin: LoginParams;
     user: User;
+
+    mySheets: SongSheet[];
 
     constructor(
         private searchServe: SearchService,
@@ -114,6 +116,7 @@ export class AppComponent {
 
     // 打开不同的弹窗, 这里可以引入BatchActionsService里面封装好的controlModal
     openModal(type: ModalTypes) {
+        // console.log('【AppComponent】 - openModal - type - ', type);
         this.bachActionsServe.controlModal(true, type);
     }
 
@@ -174,5 +177,23 @@ export class AppComponent {
         }, error => {
             this.alertMessage('error', error.message ||'退出失败');
         });
+    }
+
+    // 获取当前用户的歌单 和在 用户中心中的操作一样
+    onLoadMySheets() {
+        // 首先判断 user 是否存在， 也就是用户是否登录
+        if(this.user) {
+            // 登录的情况下，请求歌单列表
+            this.memberServe.getUserSheets(this.user.profile.userId.toString()).subscribe(userSheet => {
+                console.log('【AppComponent】 - onLoadMySheets - userSheet - ', userSheet);
+                this.mySheets = userSheet.self;
+                // 这个值拿到之后要传到 app-wy-layer-like 组件里去
+                // 有了值之后就可以用 store$, 因为之前只是改变了弹窗类型，现在可以打开弹窗（batch-action.service 中的 likeSong）
+                this.store$.dispatch(SetModalVisible({ modalVisible: true }))
+            })
+        } else{
+            // 打开默认弹窗
+            this.openModal(ModalTypes.Default);
+        }
     }
 }

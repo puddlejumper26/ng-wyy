@@ -143,4 +143,11 @@ export class BatchActionsService {
         }
         this.store$.dispatch(SetModalVisible({ modalVisible: modalVisible}))
     }
+
+    //收藏歌曲
+    likeSong(id: string) {
+        // 先改掉弹窗类型
+        this.store$.dispatch(SetModalType({ modalType: ModalTypes.Like }))
+        // 之后在wy-layer-modal.component.ts中的watchModal中就能watch到type了
+    }
 }

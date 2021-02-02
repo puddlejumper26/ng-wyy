@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, ViewChild, AfterViewInit, Renderer2, Inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, ViewChild, AfterViewInit, Renderer2, Inject, Output, EventEmitter } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { select, Store } from '@ngrx/store';
 import { Overlay, OverlayContainer, OverlayRef, OverlayKeyboardDispatcher, BlockScrollStrategy } from '@angular/cdk/overlay';
@@ -43,6 +43,8 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
     private overlayContainerEl: HTMLElement;
 
     @ViewChild('modalContainer', { static: false }) private modalRef: ElementRef;
+
+    @Output() onLoadMySheets = new EventEmitter<void>();
 
     constructor(
         // 注意这里的DOCUMENT和WINDOW是不同的，前者是ANGULAR自带的，后者不是，但是也是通过Angular中的方法new InjectionToken获得
@@ -152,6 +154,12 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
 
     private watchModalType(type: ModalTypes) {
         if (this.currentModalType !== type) {
+            // 如果打开的是收藏的弹窗
+            if(type === ModalTypes.Like) {
+                // 这里就要发射一个自定义事件，请求当前用户自己建的歌单列表
+                this.onLoadMySheets.emit();
+                // 然后在 app.component.html中接受这个事件
+            }
             this.currentModalType = type;
             this.cdr.markForCheck();
         }
