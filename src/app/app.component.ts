@@ -185,7 +185,7 @@ export class AppComponent {
         if(this.user) {
             // 登录的情况下，请求歌单列表
             this.memberServe.getUserSheets(this.user.profile.userId.toString()).subscribe(userSheet => {
-                console.log('【AppComponent】 - onLoadMySheets - userSheet - ', userSheet);
+                // console.log('【AppComponent】 - onLoadMySheets - userSheet - ', userSheet);
                 this.mySheets = userSheet.self;
                 // 这个值拿到之后要传到 app-wy-layer-like 组件里去
                 // 有了值之后就可以用 store$, 因为之前只是改变了弹窗类型，现在可以打开弹窗（batch-action.service 中的 likeSong）

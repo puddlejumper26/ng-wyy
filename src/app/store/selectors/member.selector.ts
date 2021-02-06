@@ -15,3 +15,4 @@ export const getModalType = createSelector(selectMemberStates, (state: MemberSta
 // 这里设定好了，就需要到 app.component.ts中提交一下
 export const getUserId = createSelector(selectMemberStates, (state: MemberState) => state.userId);
 
+export const getLikeId = createSelector(selectMemberStates, (state: MemberState) => state.likeId);

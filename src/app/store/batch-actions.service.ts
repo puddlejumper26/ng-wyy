@@ -1,4 +1,4 @@
-import { SetModalType, SetModalVisible } from './actions/member.actions';
+import { SetModalType, SetModalVisible, SetLikeId } from './actions/member.actions';
 import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 
@@ -149,5 +149,8 @@ export class BatchActionsService {
         // 先改掉弹窗类型
         this.store$.dispatch(SetModalType({ modalType: ModalTypes.Like }))
         // 之后在wy-layer-modal.component.ts中的watchModal中就能watch到type了
+
+        // 这里还要传入歌曲的ID，这样在 wy-layer-like 组件中就能监听到 id 的变化
+        this.store$.dispatch(SetLikeId({ id }))
     }
 }

@@ -151,7 +151,12 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
         // 要把弹窗的类型设置为like，打开visible
 
         // 这里直接用这个有问题，因为如果用户没有登录的情况下点击歌单里的收藏按钮，应该先出现登录界面
-        this.batchActionServe.controlModal(true, ModalTypes.Like);
+        // this.batchActionServe.controlModal(true, ModalTypes.Like);
+
+        // 再加上现在已经开始需要传入歌曲的id，所以要调用  likeSong
+        if(id) {
+            this.batchActionServe.likeSong(id);
+        }
     }
 
     // 这里发射一个值，在 listenCurrent 里的 takeUntil就能够接受到并且停止
