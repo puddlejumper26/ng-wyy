@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { Store } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 
 import { AppStoreModule } from "./store";
 import { BatchActionsService } from './store/batch-actions.service';
@@ -14,6 +14,7 @@ import { SearchService } from './services/search.service';
 import { SetModalType, SetModalVisible, SetUserId } from './store/actions/member.actions';
 import { StorageService } from './services/storage.service';
 import { User } from './services/data-types/member.type';
+import { getLikeId, getMember } from "./store/selectors/member.selector";
 
 @Component({
     selector: "app-root",
@@ -36,7 +37,7 @@ export class AppComponent {
     searchResult: SearchResult;
     wyRememberLogin: LoginParams;
     user: User;
-
+    likeId: string; //被搜藏歌曲的id
     mySheets: SongSheet[];
 
     constructor(
@@ -69,6 +70,8 @@ export class AppComponent {
             if(wyRememberLogin) {
                 this.wyRememberLogin = JSON.parse(wyRememberLogin);
             }
+
+            this.listenStates();
         }
 
     onSearch(keywords: string) {
@@ -194,6 +197,25 @@ export class AppComponent {
         } else{
             // 打开默认弹窗
             this.openModal(ModalTypes.Default);
+        }
+    }
+
+    // 用的方法和 wy-player 中是一样的
+    private listenStates() {
+        const appStore$ = this.store$.pipe(select(getMember));
+        const stateArr = [{
+            type: getLikeId,
+            cb: id => this.watchLikeId(id)
+        }];
+
+        stateArr.forEach(item => {
+            appStore$.pipe(select(item.type)).subscribe(item.cb);
+        })
+    }
+
+    private watchLikeId(id: string) {
+        if(id) {
+            this.likeId = id;
         }
     }
 }

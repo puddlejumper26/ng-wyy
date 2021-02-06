@@ -82,5 +82,12 @@ export class MemberService {
                     subscribed: list.filter(item => item.subscribed)
                 };
             }))
-        }
+    }
+
+    // 收藏歌曲的接口 playlist/tracks
+    likeSong(pid: string, tracks, op = 'add'): Observable<number> {
+        const params = new HttpParams({ fromString: queryString.stringify({ pid, tracks, op })});
+        return this.http.get(this.uri + "playlist/tracks", { params })
+            .pipe(map((res: SampleBack) => res.code))
+    }
 }

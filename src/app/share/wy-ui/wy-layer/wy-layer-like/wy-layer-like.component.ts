@@ -1,8 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, OnChanges, SimpleChanges } from "@angular/core";
-import { Store, select } from '@ngrx/store';
-
-import { AppStoreModule } from "src/app/store";
-import { getLikeId, getMember } from "src/app/store/selectors/member.selector";
+import { MemberService } from 'src/app/services/member.service';
 import { SongSheet } from "src/app/services/data-types/common.types";
 
 @Component({
@@ -13,22 +10,27 @@ import { SongSheet } from "src/app/services/data-types/common.types";
 })
 export class WyLayerLikeComponent implements OnInit, OnChanges {
 
-    private likeId: string;
-
+    @Input() likeId: string;
     @Input() mySheets: SongSheet[];
 
     constructor(
-        private store$: Store<AppStoreModule>
+        private memberServe: MemberService,
     ) {
-        this.store$.pipe(select(getMember), select(getLikeId)).subscribe( id => {
-            console.log('【WyLayerLikeComponent】- constructor - store$ - id -', id);
-            this.likeId = id;
-        })
+        // 从parent 直接传入进来会更好，更加方便管理, 也就是 app.component.ts - listenStates()
+        // this.store$.pipe(select(getMember), select(getLikeId)).subscribe( id => {
+        //     console.log('【WyLayerLikeComponent】- constructor - store$ - id -', id);
+        //     this.likeId = id;
+        // })
     }
 
     ngOnChanges(changes: SimpleChanges): void {
         // console.log('【WyLayerLikeComponent】- ngOnChanges - changes["mySheets"].currentValue - ', changes["mySheets"].currentValue);
+        console.log('【WyLayerLikeComponent】- ngOnChanges - changes["likeId"].currentValue - ', changes["likeId"].currentValue);
     }
 
     ngOnInit() {}
+
+    onLike(id: string) {
+        this.memberServe.likeSong(id);
+    }
 }

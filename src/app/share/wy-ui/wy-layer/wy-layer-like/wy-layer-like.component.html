@@ -12,7 +12,7 @@
             <!-- 这里的 let-item 和 搜索里的一样，就是用 ng-template 和 ng-container 配合使用的自定义模板的方式，这个item就是mySheets里的每一个值 -->
             <ng-template #itemTpl let-item>
                 <!-- 这里面就写自己的布局了 -->
-                <nz-list-item class="list-item">
+                <nz-list-item class="list-item" (click)="onLike(item.id.toString())">
                     <nz-list-item-meta [nzTitle]="nzTitle" [nzDescription]="item.trackCount" [nzAvatar]="item.coverImgUrl">
                         <ng-template #nzTitle>
                             <span>{{item.name}}</span>
