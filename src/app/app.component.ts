@@ -253,8 +253,15 @@ export class AppComponent {
     }
 
     // 收藏歌曲
-    onLikeSong( args: LikeSongParams) {
+    onLikeSong(args: LikeSongParams) {
         // 这时候点击收藏，并且点击选择的歌单，就能够打印出来下面的两个参数
-        console.log('【AppComponent】- onLikeSong - args -', args);
+        // console.log('【AppComponent】- onLikeSong - args -', args);
+        this.memberServe.likeSong(args).subscribe(code => {
+            // 调用成功就关掉
+            this.bachActionsServe.controlModal(false);
+            this.alertMessage('success', '收藏成功');
+        }, error => {
+            this.alertMessage('error', error.msg ||'收藏失败');
+        })
     }
 }
