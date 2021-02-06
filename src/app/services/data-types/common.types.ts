@@ -66,6 +66,7 @@ export type SongSheet = {
     commentCount: number; // Sheet Info component 评论数
     subscribed: boolean;  // Sheet Info component 当前用户是否订阅了这个歌单
     userId: number; // Sheet Info component 用户的id
+    trackCount: number; // 歌单里面的歌曲， https://github.com/puddlejumper26/ng-wyy/issues/22
 };
 
 

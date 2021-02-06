@@ -1,1 +1,25 @@
-<p>wy-layer-like works!</p>
+<div class="like">
+    <div class="sheet-list">
+        <div class="header">
+            <i nz-icon nzType="folder-add" nzTheme="outline"></i>
+            <span>新建歌单</span>
+        </div>
+        <!-- 下面的这个组件在 wy-layer-module中引入的 -->
+        <!-- 下面nzItemLayout其实默认值就是horizontal，不用设置也可以 -->
+        <!-- 要设置数据源，和表格类似 -->
+        <!-- nzRenderItem需要一个模板的名称 -->
+        <nz-list nzItemLayout="horizontal" [nzDataSource]="mySheets" [nzRenderItem]="itemTpl">
+            <!-- 这里的 let-item 和 搜索里的一样，就是用 ng-template 和 ng-container 配合使用的自定义模板的方式，这个item就是mySheets里的每一个值 -->
+            <ng-template #itemTpl let-item>
+                <!-- 这里面就写自己的布局了 -->
+                <nz-list-item class="list-item">
+                    <nz-list-item-meta [nzTitle]="nzTitle" [nzDescription]="item.trackCount" [nzAvatar]="item.coverImgUrl">
+                        <ng-template #nzTitle>
+                            <span>{{item.name}}</span>
+                        </ng-template>
+                    </nz-list-item-meta>
+                </nz-list-item>
+            </ng-template>
+        </nz-list>
+    </div>
+</div>
