@@ -95,4 +95,11 @@ export class MemberService {
         return this.http.get(this.uri + "playlist/tracks", { params })
             .pipe(map((res: SampleBack) => res.code))
     }
+
+    // 新建歌单
+    createSheet(name: String): Observable<string> {
+        const params = new HttpParams({ fromString: queryString.stringify({ name })});
+        return this.http.get(this.uri + "playlist/create", { params })
+            .pipe(map((res: SampleBack) => res.id.toString()))
+    }
 }
