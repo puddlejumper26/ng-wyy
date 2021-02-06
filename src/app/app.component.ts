@@ -264,4 +264,9 @@ export class AppComponent {
             this.alertMessage('error', error.msg ||'收藏失败');
         })
     }
+
+    // 新建歌单
+    onCreateSheet(sheetName: string) {
+        console.log('【AppComponent】- onCreateSheet - sheetName -', sheetName);
+    }
 }
