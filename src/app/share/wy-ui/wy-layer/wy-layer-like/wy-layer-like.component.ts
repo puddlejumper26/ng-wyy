@@ -15,6 +15,9 @@ export class WyLayerLikeComponent implements OnInit, OnChanges {
     @Input() mySheets: SongSheet[];
     @Output() onLikeSong = new EventEmitter<LikeSongParams>();
 
+    // 是否是正在创建，用这个属性来控制显示哪一个面板
+    creating = false;
+
     constructor(
         private memberServe: MemberService,
     ) {
