@@ -1,6 +1,7 @@
 import { SetModalType, SetModalVisible, SetLikeId } from './actions/member.actions';
 import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
+import { timer } from 'rxjs';
 
 import { AppStoreModule } from '.';
 import { CurrentActions, PlayState } from 'src/app/store/reducers/player.reducer';
@@ -142,6 +143,9 @@ export class BatchActionsService {
             this.store$.dispatch(SetModalType({ modalType: modalType}))
         }
         this.store$.dispatch(SetModalVisible({ modalVisible: modalVisible}))
+        if(!modalVisible) {
+            timer(500).subscribe(() => this.store$.dispatch(SetModalType({ modalType: ModalTypes.Default})));
+        }
     }
 
     //收藏歌曲
@@ -149,7 +153,7 @@ export class BatchActionsService {
         // 先改掉弹窗类型
         this.store$.dispatch(SetModalType({ modalType: ModalTypes.Like }))
         // 这样登录之后，每次点击不同的收藏，才都会有窗口弹出
-        this.store$.dispatch(SetModalVisible({ modalVisible: true}))
+        // this.store$.dispatch(SetModalVisible({ modalVisible: true}))
         // 之后在wy-layer-modal.component.ts中的watchModal中就能watch到type了
 
         // 这里还要传入歌曲的ID，这样在 wy-layer-like 组件中就能监听到 id 的变化
