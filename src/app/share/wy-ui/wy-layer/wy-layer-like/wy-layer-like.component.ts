@@ -21,16 +21,20 @@ export class WyLayerLikeComponent implements OnInit, OnChanges {
         //     console.log('【WyLayerLikeComponent】- constructor - store$ - id -', id);
         //     this.likeId = id;
         // })
+
+        // console.log('【WyLayerLikeComponent】- constructor - likeId - ', this.likeId);
     }
 
     ngOnChanges(changes: SimpleChanges): void {
         // console.log('【WyLayerLikeComponent】- ngOnChanges - changes["mySheets"].currentValue - ', changes["mySheets"].currentValue);
-        console.log('【WyLayerLikeComponent】- ngOnChanges - changes["likeId"].currentValue - ', changes["likeId"].currentValue);
+        if(changes["likeId"]){
+            console.log('【WyLayerLikeComponent】- ngOnChanges - changes["likeId"].currentValue - ', changes["likeId"].currentValue);
+        }
     }
 
     ngOnInit() {}
 
     onLike(id: string) {
-        this.memberServe.likeSong(id);
+        // this.memberServe.likeSong(id);
     }
 }

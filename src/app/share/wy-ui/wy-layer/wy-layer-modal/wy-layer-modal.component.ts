@@ -1,13 +1,10 @@
-import { Component, OnInit, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, ViewChild, AfterViewInit, Renderer2, Inject, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, ViewChild, AfterViewInit, Renderer2, Inject, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { select, Store } from '@ngrx/store';
 import { Overlay, OverlayContainer, OverlayRef, OverlayKeyboardDispatcher, BlockScrollStrategy } from '@angular/cdk/overlay';
 import { ESCAPE } from '@angular/cdk/keycodes';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
-import { AppStoreModule } from './../../../../store/index';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
-import { getMember, getModalVisible, getModalType } from './../../../../store/selectors/member.selector';
 import { ModalTypes } from 'src/app/store/reducers/member.reducer';
 import { WINDOW } from 'src/app/services/services.module';
 
@@ -31,9 +28,10 @@ import { WINDOW } from 'src/app/services/services.module';
 /**
  *      这里会有对ngrx member.selector, reducer and acitons 的监听，和player那里是一样的
  */
-export class WyLayerModalComponent implements OnInit, AfterViewInit {
-    private visible = false;
-    currentModalType = ModalTypes.Default;
+export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
+    @Input() visible = false;
+    @Input() currentModalType = ModalTypes.Default;
+
     private overlayRef: OverlayRef;
     showModal = 'hide';
     private scrollStrategy: BlockScrollStrategy;
@@ -50,7 +48,6 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
         // 注意这里的DOCUMENT和WINDOW是不同的，前者是ANGULAR自带的，后者不是，但是也是通过Angular中的方法new InjectionToken获得
         @Inject(DOCUMENT) private doc: Document,
         @Inject(WINDOW) private win: Window,
-        private store$: Store<AppStoreModule>,
         private elementRef: ElementRef,
         private overlay: Overlay,
         private overlayKeyboardDispatcher: OverlayKeyboardDispatcher,
@@ -59,17 +56,25 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
         private rd: Renderer2,
         private overlayContainerServe: OverlayContainer
     ) {
-        const appStore$ = this.store$.pipe(select(getMember));
-        appStore$.pipe(select(getModalVisible)).subscribe((visible) => {
-            //   console.log('【WyLayerModalComponent】- constructor - visible - ', visible)
-            this.watchModalVisible(visible);
-        });
-        appStore$.pipe(select(getModalType)).subscribe((type) => {
-            // console.log('【WyLayerModalComponent】- constructor - type - ', type)
-            this.watchModalType(type);
-        });
+        // 整体搬迁到 app.component 中 去了
+
+        // const appStore$ = this.store$.pipe(select(getMember));
+        // appStore$.pipe(select(getModalVisible)).subscribe((visible) => {
+        //     //   console.log('【WyLayerModalComponent】- constructor - visible - ', visible)
+        //     this.watchModalVisible(visible);
+        // });
+        // appStore$.pipe(select(getModalType)).subscribe((type) => {
+        //     // console.log('【WyLayerModalComponent】- constructor - type - ', type)
+        //     this.watchModalType(type);
+        // });
         // https://material.angular.io/cdk/overlay/api#BlockScrollStrategy
         this.scrollStrategy = this.overlay.scrollStrategies.block();
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if(changes['visible'] && !changes['visible'].firstChange) {
+            this.handleVisibleChange(this.visible);
+        }
     }
 
     ngAfterViewInit() {
@@ -145,25 +150,29 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit {
         }
     }
 
-    private watchModalVisible(visib: boolean) {
-        if (this.visible !== visib) {
-            this.visible = visib;
-            this.handleVisibleChange(this.visible);
-        }
-    }
+    /**
+     *   整体搬迁到 app.component 中去了
+     */
 
-    private watchModalType(type: ModalTypes) {
-        if (this.currentModalType !== type) {
-            // 如果打开的是收藏的弹窗
-            if(type === ModalTypes.Like) {
-                // 这里就要发射一个自定义事件，请求当前用户自己建的歌单列表
-                this.onLoadMySheets.emit();
-                // 然后在 app.component.html中接受这个事件
-            }
-            this.currentModalType = type;
-            this.cdr.markForCheck();
-        }
-    }
+    // private watchModalVisible(visib: boolean) {
+    //     if (this.visible !== visib) {
+    //         this.visible = visib;
+    //         this.handleVisibleChange(this.visible);
+    //     }
+    // }
+
+    // private watchModalType(type: ModalTypes) {
+    //     if (this.currentModalType !== type) {
+    //         // 如果打开的是收藏的弹窗
+    //         if(type === ModalTypes.Like) {
+    //             // 这里就要发射一个自定义事件，请求当前用户自己建的歌单列表
+    //             this.onLoadMySheets.emit();
+    //             // 然后在 app.component.html中接受这个事件
+    //         }
+    //         this.currentModalType = type;
+    //         this.cdr.markForCheck();
+    //     }
+    // }
 
     private handleVisibleChange(visib: boolean) {
         // console.log('【WyLayerModalComponent】 - handleVisibleChange - visib -', visib);

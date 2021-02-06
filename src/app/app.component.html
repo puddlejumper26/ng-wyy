@@ -114,7 +114,11 @@
 <app-wy-player></app-wy-player>
 
 <!-- 登录弹窗的socket -->
-<app-wy-layer-modal (onLoadMySheets)="onLoadMySheets()">
+<app-wy-layer-modal
+    (onLoadMySheets)="onLoadMySheets()"
+    [visible]="visible"
+    [currentModalType]="currentModalType"
+>
     <app-wy-layer-login
         name="login"
         [wyRememberLogin] = "wyRememberLogin"

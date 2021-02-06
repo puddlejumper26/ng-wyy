@@ -148,6 +148,8 @@ export class BatchActionsService {
     likeSong(id: string) {
         // 先改掉弹窗类型
         this.store$.dispatch(SetModalType({ modalType: ModalTypes.Like }))
+        // 这样登录之后，每次点击不同的收藏，才都会有窗口弹出
+        this.store$.dispatch(SetModalVisible({ modalVisible: true}))
         // 之后在wy-layer-modal.component.ts中的watchModal中就能watch到type了
 
         // 这里还要传入歌曲的ID，这样在 wy-layer-like 组件中就能监听到 id 的变化

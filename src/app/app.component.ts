@@ -14,7 +14,7 @@ import { SearchService } from './services/search.service';
 import { SetModalType, SetModalVisible, SetUserId } from './store/actions/member.actions';
 import { StorageService } from './services/storage.service';
 import { User } from './services/data-types/member.type';
-import { getLikeId, getMember } from "./store/selectors/member.selector";
+import { getLikeId, getMember, getModalType, getModalVisible } from "./store/selectors/member.selector";
 
 @Component({
     selector: "app-root",
@@ -37,8 +37,11 @@ export class AppComponent {
     searchResult: SearchResult;
     wyRememberLogin: LoginParams;
     user: User;
-    likeId: string; //被搜藏歌曲的id
     mySheets: SongSheet[];
+
+    likeId: string; //被搜藏歌曲的id
+    visible = false;
+    currentModalType = ModalTypes.Default;
 
     constructor(
         private searchServe: SearchService,
@@ -203,19 +206,49 @@ export class AppComponent {
     // 用的方法和 wy-player 中是一样的
     private listenStates() {
         const appStore$ = this.store$.pipe(select(getMember));
-        const stateArr = [{
-            type: getLikeId,
-            cb: id => this.watchLikeId(id)
-        }];
+        appStore$.pipe(select(getLikeId)).subscribe(id => this.watchLikeId(id));
+        appStore$.pipe(select(getModalVisible)).subscribe(visib => this.watchModalVisible(visib));
+        appStore$.pipe(select(getModalType)).subscribe(type => this.watchModalType(type));
+        // const stateArr = [{
+        //     type: getLikeId,
+        //     cb: id => this.watchLikeId(id)
+        // }, {
+        //     type: getModalVisible,
+        //     cb: visib => this.watchModalVisible(visib)
+        // }, {
+        //     type: getModalType,
+        //     cb: type => this.watchModalType(type)
+        // }];
 
-        stateArr.forEach(item => {
-            appStore$.pipe(select(item.type)).subscribe(item.cb);
-        })
+        // stateArr.forEach(item => {
+        //     appStore$.pipe(select(item.type)).subscribe(item.cb);
+        // })
     }
 
     private watchLikeId(id: string) {
         if(id) {
             this.likeId = id;
+
+        }
+    }
+
+    private watchModalVisible(visib: boolean) {
+        if (this.visible !== visib) {
+            this.visible = visib;
+        }
+    }
+
+    private watchModalType(type: ModalTypes) {
+        if (this.currentModalType !== type) {
+            // 如果打开的是收藏的弹窗
+            if(type === ModalTypes.Like) {
+                // 这里就要发射一个自定义事件，请求当前用户自己建的歌单列表
+                this.onLoadMySheets();
+                // 然后在 app.component.html中接受这个事件
+            }
+            this.currentModalType = type;
+            // 这里因为不是OnPush策略，所不需要这个
+            // this.cdr.markForCheck();
         }
     }
 }
