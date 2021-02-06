@@ -7,7 +7,7 @@ import { BatchActionsService } from './store/batch-actions.service';
 import { codeJson } from './utils/base64';
 import { isEmptyObject } from "./utils/tools";
 import { LoginParams } from './share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
-import { MemberService } from './services/member.service';
+import { LikeSongParams, MemberService } from './services/member.service';
 import { ModalTypes } from "./store/reducers/member.reducer";
 import { SearchResult, SongSheet } from "./services/data-types/common.types";
 import { SearchService } from './services/search.service';
@@ -250,5 +250,11 @@ export class AppComponent {
             // 这里因为不是OnPush策略，所不需要这个
             // this.cdr.markForCheck();
         }
+    }
+
+    // 收藏歌曲
+    onLikeSong( args: LikeSongParams) {
+        // 这时候点击收藏，并且点击选择的歌单，就能够打印出来下面的两个参数
+        console.log('【AppComponent】- onLikeSong - args -', args);
     }
 }

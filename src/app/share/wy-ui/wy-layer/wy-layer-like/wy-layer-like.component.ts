@@ -1,5 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, OnChanges, SimpleChanges } from "@angular/core";
-import { MemberService } from 'src/app/services/member.service';
+import { Component, OnInit, ChangeDetectionStrategy, Input, OnChanges, SimpleChanges, Output, EventEmitter } from "@angular/core";
+
+import { LikeSongParams, MemberService } from 'src/app/services/member.service';
 import { SongSheet } from "src/app/services/data-types/common.types";
 
 @Component({
@@ -12,6 +13,7 @@ export class WyLayerLikeComponent implements OnInit, OnChanges {
 
     @Input() likeId: string;
     @Input() mySheets: SongSheet[];
+    @Output() onLikeSong = new EventEmitter<LikeSongParams>();
 
     constructor(
         private memberServe: MemberService,
@@ -34,7 +36,8 @@ export class WyLayerLikeComponent implements OnInit, OnChanges {
 
     ngOnInit() {}
 
-    onLike(id: string) {
-        // this.memberServe.likeSong(id);
+    onLike(pid: string) {
+        this.onLikeSong.emit({pid, tracks: this.likeId });
+        // 接下来就可以在app.component.ts中接受到这两个参数了
     }
 }

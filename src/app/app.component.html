@@ -130,6 +130,7 @@
         name='like'
         [mySheets]="mySheets"
         [likeId] = "likeId"
+        (onLikeSong)="onLikeSong($event)"
     ></app-wy-layer-like>
 
     <app-wy-layer-default (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-default>
