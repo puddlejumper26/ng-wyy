@@ -48,6 +48,8 @@ export class WyLayerLikeComponent implements OnInit, OnChanges {
         if(changes["visible"]){
             if(!this.visible) {
                 // 弹窗已经关闭的状态下
+                // 这里使用formControl的reset功能来设定每次打开新建歌单的弹窗，输入框的状态都是未填写
+                this.formModel.get('sheetName').reset();
                 this.creating = false;
             }
         }
