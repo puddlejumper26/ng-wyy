@@ -9,6 +9,7 @@ import { AppStoreModule } from 'src/app/store';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
 import { findIndex } from 'src/app/utils/array';
 import { getCurrentSong, getPlayer } from './../../store/selectors/player.selector';
+import { SetShareInfo } from './../../store/actions/member.actions';
 import { SongService } from 'src/app/services/song.service';
 import { Singer, Song, SongSheet } from './../../services/data-types/common.types';
 import { MemberService } from 'src/app/services/member.service';
@@ -187,7 +188,10 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
             txt = this.makeTxt('歌曲', resource.name, (<Song>resource).ar);
         }
 
-        console.log('【SheetInfoComponent】 - shareResource - txt -', txt);
+        // console.log('【SheetInfoComponent】 - shareResource - txt -', txt);
+
+        // 这样就把这些信息加入到 store 的state 里面去了，之后就可以在 app.component 里进行watch 了
+        this.store$.dispatch(SetShareInfo({ info: {id: resource.id.toString(), type, txt}}))
     }
 
     // 返回的是一个字符串，可以用来直接显示的, makeBy,如果是歌曲，就是歌手名字，如果是歌单，就是歌单创建者

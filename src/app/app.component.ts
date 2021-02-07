@@ -8,13 +8,13 @@ import { codeJson } from './utils/base64';
 import { isEmptyObject } from "./utils/tools";
 import { LoginParams } from './share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
 import { LikeSongParams, MemberService } from './services/member.service';
-import { ModalTypes } from "./store/reducers/member.reducer";
+import { ModalTypes, ShareInfo } from "./store/reducers/member.reducer";
 import { SearchResult, SongSheet } from "./services/data-types/common.types";
 import { SearchService } from './services/search.service';
 import { SetModalType, SetModalVisible, SetUserId } from './store/actions/member.actions';
 import { StorageService } from './services/storage.service';
 import { User } from './services/data-types/member.type';
-import { getLikeId, getMember, getModalType, getModalVisible } from "./store/selectors/member.selector";
+import { getLikeId, getMember, getModalType, getModalVisible, getShareInfo } from "./store/selectors/member.selector";
 
 @Component({
     selector: "app-root",
@@ -38,7 +38,7 @@ export class AppComponent {
     wyRememberLogin: LoginParams;
     user: User;
     mySheets: SongSheet[];
-
+    shareInfo: ShareInfo;
     likeId: string; //被搜藏歌曲的id
     visible = false;
     currentModalType = ModalTypes.Default;
@@ -209,6 +209,7 @@ export class AppComponent {
         appStore$.pipe(select(getLikeId)).subscribe(id => this.watchLikeId(id));
         appStore$.pipe(select(getModalVisible)).subscribe(visib => this.watchModalVisible(visib));
         appStore$.pipe(select(getModalType)).subscribe(type => this.watchModalType(type));
+        appStore$.pipe(select(getShareInfo)).subscribe(info => this.watchShareInfo(info));
         // const stateArr = [{
         //     type: getLikeId,
         //     cb: id => this.watchLikeId(id)
@@ -249,6 +250,14 @@ export class AppComponent {
             this.currentModalType = type;
             // 这里因为不是OnPush策略，所不需要这个
             // this.cdr.markForCheck();
+        }
+    }
+
+    private watchShareInfo(info: ShareInfo) {
+        //这样这里就能够从sheet-info的 store$的数据中拿取那里dispatch的数据了
+        // console.log('【AppComponent】- watchShareInfo - info -', info);
+        if(info){
+            this.shareInfo = info;
         }
     }
 
