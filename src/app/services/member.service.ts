@@ -20,6 +20,12 @@ export type LikeSongParams = {
     tracks: string;
 }
 
+export type ShareParams = {
+    id: string;
+    msg: string;
+    type: string;
+}
+
 // const records = ['allData', 'weekData'];
 @Injectable({
     // it means ServiceModule will provide with HomeService
@@ -115,7 +121,7 @@ export class MemberService {
 
     // 分享
     // 注意这里返回直接是一个 code ，表示是否成功
-    shareResource(id: string, type: 'song', msg: string): Observable<number> {
+    shareResource({id, msg, type}: ShareParams): Observable<number> {
         const params = new HttpParams({ fromString: queryString.stringify({ id, type, msg })});
         return this.http.get(this.uri + "share/resources", { params })
             .pipe(map((res: SampleBack) => res.code))

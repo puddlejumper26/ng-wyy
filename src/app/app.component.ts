@@ -7,7 +7,7 @@ import { BatchActionsService } from './store/batch-actions.service';
 import { codeJson } from './utils/base64';
 import { isEmptyObject } from "./utils/tools";
 import { LoginParams } from './share/wy-ui/wy-layer/wy-layer-login/wy-layer-login.component';
-import { LikeSongParams, MemberService } from './services/member.service';
+import { LikeSongParams, MemberService, ShareParams } from './services/member.service';
 import { ModalTypes, ShareInfo } from "./store/reducers/member.reducer";
 import { SearchResult, SongSheet } from "./services/data-types/common.types";
 import { SearchService } from './services/search.service';
@@ -271,6 +271,16 @@ export class AppComponent {
             // 调用成功就关掉
             this.bachActionsServe.controlModal(false);
             this.alertMessage('success', '收藏成功');
+        }, error => {
+            this.alertMessage('error', error.msg ||'收藏失败');
+        })
+    }
+
+    //分享
+    onShare(arg: ShareParams) {
+        this.memberServe.shareResource(arg).subscribe(() => {
+            this.alertMessage('success', '收藏成功');
+            this.closeModal();
         }, error => {
             this.alertMessage('error', error.msg ||'收藏失败');
         })
