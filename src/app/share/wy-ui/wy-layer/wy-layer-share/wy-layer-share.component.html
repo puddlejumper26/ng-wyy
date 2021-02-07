@@ -1,9 +1,9 @@
 <div class="share">
     <div class="u-txtwrap">
-        <form nz-form>
+        <form nz-form [formGroup]="formModel">
             <nz-form-item>
-                <nz-form-control>
-                    <textarea nz-input rows="6"></textarea>
+                <nz-form-control nzErrorTip="不能超过140个字">
+                    <textarea nz-input rows="6" formControlName="msg"></textarea>
                 </nz-form-control>
             </nz-form-item>
         </form>
@@ -18,8 +18,9 @@
         <span class="txt-count">140</span>
         <div class="btns">
             <button nz-button>取消</button>
-            <button nz-button nzType="primary">分享</button>
+            <button nz-button nzType="primary" [disabled]="!formModel.valid" (click)="onSubmit()">分享</button>
         </div>
     </div>
-    <nz-alert nzType="error" nzMessage="不能超过140个字" nzShowIcon></nz-alert>
+    <!-- 用自带的表单提示就好了，不用这个了 -->
+    <!-- <nz-alert nzType="error" nzMessage="不能超过140个字" nzShowIcon></nz-alert> -->
 </div>
