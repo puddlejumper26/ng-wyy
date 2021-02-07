@@ -258,6 +258,8 @@ export class AppComponent {
         // console.log('【AppComponent】- watchShareInfo - info -', info);
         if(info){
             this.shareInfo = info;
+            //打开窗口
+            this.openModal(ModalTypes.Share);
         }
     }
 
