@@ -1,7 +1,9 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, OnInit, ChangeDetectionStrategy, Input } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from "@angular/core";
 
 import { ShareInfo } from './../../../../store/reducers/member.reducer';
+
+const MAX_MSG = 140;
 
 @Component({
     selector: "app-wy-layer-share",
@@ -12,14 +14,25 @@ import { ShareInfo } from './../../../../store/reducers/member.reducer';
 export class WyLayerShareComponent implements OnInit {
 
     @Input() shareInfo: ShareInfo;
-    formModel: FormGroup
+
+    @Output() onCancel = new EventEmitter<void>();
+
+    formModel: FormGroup;
+    surplusMsgCount = MAX_MSG;
 
     constructor(
         private fb: FormBuilder,
     ) {
         // console.log('【WyLayerShareComponent】- constructor - this.shareInfo -', this.shareInfo)
         this.formModel = this.fb.group({
-            msg:['', Validators.maxLength(140)]
+            msg:['', Validators.maxLength(MAX_MSG)]
+        });
+
+        // 下面的 valueChanges 就是当值改变时，会发射出一个流
+        this.formModel.get('msg').valueChanges.subscribe( msg => {
+            // console.log('【WyLayerShareComponent】 - constructor - msg -', msg);
+
+            this.surplusMsgCount = MAX_MSG - msg.length;
         })
 
         /**

@@ -138,6 +138,7 @@
     <app-wy-layer-share
         name="share"
         [shareInfo]="shareInfo"
+        (onCancel)="closeModal()"
     ></app-wy-layer-share>
 
     <app-wy-layer-default (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-default>

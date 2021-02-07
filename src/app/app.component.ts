@@ -285,4 +285,9 @@ export class AppComponent {
             this.alertMessage('error', error.msg ||'新建失败');
         })
     }
+
+    // 关闭弹窗
+    closeModal() {
+        this.bachActionsServe.controlModal(false);
+    }
 }
