@@ -1,4 +1,3 @@
-import { CurrentActions } from './../../../store/reducers/player.reducer';
 import { animate, state, style, transition, trigger, AnimationEvent } from "@angular/animations";
 import { DOCUMENT } from "@angular/common";
 import {
@@ -23,6 +22,7 @@ import {
     getCurrentSong,
     getCurrentAction,
 } from "./../../../store/selectors/player.selector";
+import { CurrentActions } from './../../../store/reducers/player.reducer';
 import { PlayMode } from "./player-type";
 import {
     SetCurrentAction,
@@ -31,10 +31,11 @@ import {
     SetPlayMode,
     SetSongList,
 } from "./../../../store/actions/player.actions";
-import { Song } from "./../../../services/data-types/common.types";
+import { Singer, Song, SongSheet } from "./../../../services/data-types/common.types";
 import { findIndex, shuffle } from "src/app/utils/array";
 import { WyPlayerPanelComponent } from './wy-player-panel/wy-player-panel.component';
 import { BatchActionsService } from "src/app/store/batch-actions.service";
+import { SetShareInfo } from 'src/app/store/actions/member.actions';
 
 const modeTypes: PlayMode[] = [
     { type: "loop", label: "循环" },
@@ -608,6 +609,27 @@ export class WyPlayerComponent implements OnInit {
             this.showTooltip();
         }
     }
+
+     // 收藏歌曲
+     onLikeSong(id: string) {
+        if(id) {
+            this.batchActionServe.likeSong(id);
+        }
+    }
+
+     // 分享 这里只是分享歌曲
+     onShareSong(resource: Song, type = 'song') {
+        const txt = this.makeTxt('歌曲', resource.name, resource.ar);
+        this.store$.dispatch(SetShareInfo({ info: {id: resource.id.toString(), type, txt}}))
+    }
+
+    // 返回的是一个字符串，可以用来直接显示的, makeBy一定传入的是一个数组
+    private makeTxt(type: string, name: string, makeBy: Singer[]): string {
+        const makeByStr = makeBy.map(item => item.name).join('/');;
+
+        return `${type}:${name} - ${makeByStr}`;
+    }
+
 }
 
 
