@@ -9,10 +9,11 @@ import { BaseLyricLine } from 'src/app/share/wy-ui/wy-player/wy-player-panel/wy-
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
 import { findIndex } from 'src/app/utils/array';
 import { getCurrentSong, getPlayer } from 'src/app/store/selectors/player.selector';
-import { Song } from 'src/app/services/data-types/common.types';
+import { Singer, Song } from 'src/app/services/data-types/common.types';
 import { SongService } from 'src/app/services/song.service';
 import { WyLyric } from './../../share/wy-ui/wy-player/wy-player-panel/wy-lyric';
 import { NzMessageService } from 'ng-zorro-antd';
+import { SetShareInfo } from 'src/app/store/actions/member.actions';
 
 
 /**
@@ -108,5 +109,30 @@ export class SongInfoComponent implements OnInit, OnDestroy{
     ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete(); //结束
+    }
+
+/**
+ *      下面的 onLikeSong 和 onShareSong 和 wy-player.component.ts中是一样的
+ *
+ */
+
+     // 收藏歌曲
+     onLikeSong(id: string) {
+        if(id) {
+            this.batchActionServe.likeSong(id);
+        }
+    }
+
+     // 分享 这里只是分享歌曲
+     onShareSong(resource: Song, type = 'song') {
+        const txt = this.makeTxt('歌曲', resource.name, resource.ar);
+        this.store$.dispatch(SetShareInfo({ info: {id: resource.id.toString(), type, txt}}))
+    }
+
+    // 返回的是一个字符串，可以用来直接显示的, makeBy一定传入的是一个数组
+    private makeTxt(type: string, name: string, makeBy: Singer[]): string {
+        const makeByStr = makeBy.map(item => item.name).join('/');;
+
+        return `${type}:${name} - ${makeByStr}`;
     }
 }
