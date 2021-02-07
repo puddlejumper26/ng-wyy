@@ -11,6 +11,7 @@ import { findIndex } from 'src/app/utils/array';
 import { getCurrentSong, getPlayer } from './../../store/selectors/player.selector';
 import { SongService } from 'src/app/services/song.service';
 import { Song, SongSheet } from './../../services/data-types/common.types';
+import { MemberService } from 'src/app/services/member.service';
 import { ModalTypes } from 'src/app/store/reducers/member.reducer';
 @Component({
     selector: "app-sheet-info",
@@ -46,6 +47,7 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
         private songServe: SongService,
         private batchActionServe: BatchActionsService,
         private nzMessageServe: NzMessageService,
+        private memberServe: MemberService,
     ) {
         // 这里的 data 是sheet-info-routing.module.ts 中的 data， 其中包括了title和resolve中sheetInfo的信息
         this.route.data.pipe(map((res) => res.sheetInfo)).subscribe((res) => {
@@ -115,6 +117,10 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
             })
     }
 
+    private alertMessage(type: string, msg: string) {
+        this.nzMessageServe.create(type, msg)
+    }
+
     // 添加一首歌曲
     onAddSong(song: Song, isPlay = false) {
         // 首先判断是否是正在播放的歌曲
@@ -126,7 +132,7 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
                 if (list.length) {
                     this.batchActionServe.insertSong(list[0], isPlay);
                 }else {
-                    this.nzMessageServe.create('warning', 'Warning：API has no url for this song，request is denied!');
+                    this.alertMessage('warning', 'Warning：API has no url for this song，request is denied!');
                 }
             })
         }
@@ -156,6 +162,17 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
         // 再加上现在已经开始需要传入歌曲的id，所以要调用  likeSong
         if(id) {
             this.batchActionServe.likeSong(id);
+        }
+    }
+
+    // 收藏歌单
+    onLikeSheet(id: string) {
+        if(id) {
+            this.memberServe.likeSheet(id).subscribe(() => {
+                this.alertMessage('success', '收藏成功');
+            }, error => {
+                this.alertMessage('error', error.msg || '收藏失败')
+            });
         }
     }
 

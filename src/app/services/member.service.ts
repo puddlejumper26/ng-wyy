@@ -96,10 +96,18 @@ export class MemberService {
             .pipe(map((res: SampleBack) => res.code))
     }
 
-    // 新建歌单
+    // 新建歌单 - 收藏单个歌曲
     createSheet(name: String): Observable<string> {
         const params = new HttpParams({ fromString: queryString.stringify({ name })});
         return this.http.get(this.uri + "playlist/create", { params })
             .pipe(map((res: SampleBack) => res.id.toString()))
+    }
+
+    // 新建歌单 - 收藏歌单,  t默认是1，代表收藏
+    // https://github.com/puddlejumper26/ng-wyy/issues/23#issuecomment-774656858
+    likeSheet(id: string, t = 1): Observable<number> {
+        const params = new HttpParams({ fromString: queryString.stringify({ id, t })});
+        return this.http.get(this.uri + "playlist/subscribe", { params })
+            .pipe(map((res: SampleBack) => res.code))
     }
 }
