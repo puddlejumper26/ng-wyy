@@ -47,6 +47,9 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     @Output() onClearSong = new EventEmitter<void>(); //直接清空列表所以 void        // -------------------(13)
     @Output() onToInfo = new EventEmitter<[string, number]>();                     // -------------------(14)
 
+    @Output() onLikeSong = new EventEmitter<string>();
+    @Output() onShareSong = new EventEmitter<Song>();
+
     //因为播放列表和歌词部分都需要用到，所以这里用 ViewChildren
     // @ViewChildren(WyScrollComponent) private wyScroll: QueryList<WyScrollComponent>;
     @ViewChildren(WyScrollComponent) private wyScroll: QueryList<WyScrollComponent>;
@@ -343,5 +346,17 @@ export class WyPlayerPanelComponent implements OnInit, OnChanges {
     toInfo(evt: MouseEvent, path: [string, number]) {
         evt.stopPropagation();
         this.onToInfo.emit(path);
+    }
+
+    // 下面两个都不能直接在模板里添加 emit， 因为这样会造成冒泡事件，这样点击这个 收藏或者分享 的时候，也会触发 播放 的事件
+    // 所以这里需要取消冒泡
+    likeSong(evt: MouseEvent, id: string) {
+        evt.stopPropagation();
+        this.onLikeSong.emit(id)
+    }
+
+    shareSong(evt: MouseEvent, song: Song) {
+        evt.stopPropagation();
+        this.onShareSong.emit(song);
     }
 }
