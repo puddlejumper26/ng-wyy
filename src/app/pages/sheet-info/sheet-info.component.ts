@@ -10,7 +10,7 @@ import { BatchActionsService } from 'src/app/store/batch-actions.service';
 import { findIndex } from 'src/app/utils/array';
 import { getCurrentSong, getPlayer } from './../../store/selectors/player.selector';
 import { SongService } from 'src/app/services/song.service';
-import { Song, SongSheet } from './../../services/data-types/common.types';
+import { Singer, Song, SongSheet } from './../../services/data-types/common.types';
 import { MemberService } from 'src/app/services/member.service';
 import { ModalTypes } from 'src/app/store/reducers/member.reducer';
 @Component({
@@ -174,6 +174,32 @@ export class SheetInfoComponent implements OnInit, OnDestroy {
                 this.alertMessage('error', error.msg || '收藏失败')
             });
         }
+    }
+
+    // 分享
+    shareResource(resource: Song | SongSheet, type = 'song') {
+        let txt = '';
+        if(type === 'playlist') {
+            // 说明分享的是一个歌单
+            // 注意这里要类型断言一下，不然找不到对应的属性
+            txt = this.makeTxt('歌单', resource.name, (<SongSheet>resource).creator.nickname);
+        }else {
+            txt = this.makeTxt('歌曲', resource.name, (<Song>resource).ar);
+        }
+
+        console.log('【SheetInfoComponent】 - shareResource - txt -', txt);
+    }
+
+    // 返回的是一个字符串，可以用来直接显示的, makeBy,如果是歌曲，就是歌手名字，如果是歌单，就是歌单创建者
+    private makeTxt(type: string, name: string, makeBy: string | Singer[]): string {
+        let makeByStr = '';
+        if(Array.isArray(makeBy)) {
+            makeByStr = makeBy.map(item => item.name).join('/');
+        }else {
+            makeByStr = makeBy;
+        }
+
+        return `${type}:${name} - ${makeByStr}`;
     }
 
     // 这里发射一个值，在 listenCurrent 里的 takeUntil就能够接受到并且停止
