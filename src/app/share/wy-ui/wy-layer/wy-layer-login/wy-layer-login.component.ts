@@ -18,6 +18,9 @@ export type LoginParams = {
 export class WyLayerLoginComponent implements OnInit, OnChanges {
     // 这个值要在app.component.ts的constructor中进行解析
     @Input() wyRememberLogin: LoginParams;
+
+    @Input() visible = false;
+
     // 和wy-layer-default.component.ts中的设定是一样的
     @Output() onChangeModalType = new EventEmitter<string | void>();
     // 这里login 的逻辑也是发到外面，不在这里做
@@ -43,6 +46,7 @@ export class WyLayerLoginComponent implements OnInit, OnChanges {
     // 这里监听属性的变化
     ngOnChanges(changes: SimpleChanges): void {
         const userLoginParams = changes['wyRememberLogin'];
+        const visible = changes['visible'];
         if(userLoginParams) {
             let phone = '';
             let password = '';
@@ -57,6 +61,10 @@ export class WyLayerLoginComponent implements OnInit, OnChanges {
             }
             // 下面传入刚刚获得的参数
             this.setModel({phone, password, remember});
+        }
+
+        if(visible && !visible.firstChange) {
+            this.formModel.markAllAsTouched();
         }
     }
 
