@@ -9,9 +9,10 @@ import { WyLayerDefaultComponent } from './wy-layer-default/wy-layer-default.com
 import { WyLayerLoginComponent } from './wy-layer-login/wy-layer-login.component';
 import { WyLayerLikeComponent } from './wy-layer-like/wy-layer-like.component';
 import { WyLayerShareComponent } from './wy-layer-share/wy-layer-share.component';
+import { WyLayerRegisterComponent } from './wy-layer-register/wy-layer-register.component';
 
 @NgModule({
-    declarations: [WyLayerModalComponent, WyLayerDefaultComponent, WyLayerLoginComponent, WyLayerLikeComponent, WyLayerShareComponent],
+    declarations: [WyLayerModalComponent, WyLayerDefaultComponent, WyLayerLoginComponent, WyLayerLikeComponent, WyLayerShareComponent, WyLayerRegisterComponent],
     // angular cdk 的拖拽功能 https://material.angular.io/cdk/drag-drop/api
     imports: [
         CommonModule,
@@ -27,6 +28,6 @@ import { WyLayerShareComponent } from './wy-layer-share/wy-layer-share.component
         NzIconModule,
         NzFormModule
     ],
-    exports: [WyLayerModalComponent, WyLayerDefaultComponent, WyLayerLoginComponent, WyLayerLikeComponent, WyLayerShareComponent]
+    exports: [WyLayerModalComponent, WyLayerDefaultComponent, WyLayerLoginComponent, WyLayerLikeComponent, WyLayerShareComponent, WyLayerRegisterComponent]
 })
 export class WyLayerModule {}

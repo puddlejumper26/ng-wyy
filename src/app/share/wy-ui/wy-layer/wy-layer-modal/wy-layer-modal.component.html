@@ -25,9 +25,9 @@
             <ng-content select="[name=login]"></ng-content>
         </ng-container>
 
-        <!-- 如果currentModalType是register的时候 -->
+        <!-- 如果currentModalType是register的时候 这里已经准备好了-->
         <ng-container *ngSwitchCase="'register'">
-            <ng-content select="[name=reister]"></ng-content>
+            <ng-content select="[name=register]"></ng-content>
         </ng-container>
 
         <ng-container *ngSwitchCase="'like'">
