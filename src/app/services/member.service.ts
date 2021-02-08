@@ -133,4 +133,26 @@ export class MemberService {
         return this.http.get(this.uri + "artist/sub", { params })
             .pipe(map((res: SampleBack) => res.code))
     }
+
+    // 发送验证码
+    sendCode(phone: number): Observable<number> {
+        const params = new HttpParams({ fromString: queryString.stringify({ phone })});
+        return this.http.get(this.uri + "captcha/sent", { params })
+            .pipe(map((res: SampleBack) => res.code))
+    }
+
+    // 验证验证码
+    checkCode(phone: number, captcha: number): Observable<number> {
+        const params = new HttpParams({ fromString: queryString.stringify({ phone, captcha })});
+        return this.http.get(this.uri + "captcha/verify", { params })
+            .pipe(map((res: SampleBack) => res.code))
+    }
+
+    //检测手机号是否已经注册
+    //  exist 1 - 存在，  exist -1 - 不存在
+    checkExist(phone: number): Observable<number> {
+        const params = new HttpParams({ fromString: queryString.stringify({ phone })});
+        return this.http.get(this.uri + "cellphone/existence/check", { params })
+            .pipe(map((res: { exist: number }) => res.exist))
+    }
 }
