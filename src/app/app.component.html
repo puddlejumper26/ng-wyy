@@ -147,6 +147,7 @@
     <app-wy-layer-register
         name="register"
         [visible]="visible"
+        (onChangeModalType)="onChangeModalType($event)"
     ></app-wy-layer-register>
 
     <app-wy-layer-default (onChangeModalType)="onChangeModalType($event)"></app-wy-layer-default>

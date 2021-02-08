@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy, Input, EventEmitter, Output } from "@angular/core";
 
 @Component({
     selector: "app-wy-layer-register",
@@ -9,6 +9,8 @@ import { Component, OnInit, ChangeDetectionStrategy, Input } from "@angular/core
 export class WyLayerRegisterComponent implements OnInit {
 
     @Input() visible = false;
+
+    @Output() onChangeModalType = new EventEmitter<string | void>();
 
     constructor() {}
 

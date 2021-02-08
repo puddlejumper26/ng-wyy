@@ -29,6 +29,15 @@ import { WINDOW } from 'src/app/services/services.module';
  *      这里会有对ngrx member.selector, reducer and acitons 的监听，和player那里是一样的
  */
 export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
+
+    modalTitle = {
+        register: '注册',
+        loginByPhone: '手机登录',
+        share: '分享',
+        like: '收藏',
+        default: ''
+    }
+
     @Input() visible = false;
     @Input() currentModalType = ModalTypes.Default;
 
