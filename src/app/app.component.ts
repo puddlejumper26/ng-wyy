@@ -257,9 +257,14 @@ export class AppComponent {
         //这样这里就能够从sheet-info的 store$的数据中拿取那里dispatch的数据了
         // console.log('【AppComponent】- watchShareInfo - info -', info);
         if(info){
-            this.shareInfo = info;
-            //打开窗口
-            this.openModal(ModalTypes.Share);
+            // 这样在未登录的状态下，打开的就是default弹窗
+            if(this.user) {
+                this.shareInfo = info;
+                //打开窗口
+                this.openModal(ModalTypes.Share);
+            }else {
+                this.openModal(ModalTypes.Default);
+            }
         }
     }
 
