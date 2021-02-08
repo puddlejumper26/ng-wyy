@@ -12,6 +12,7 @@ import { SongService } from 'src/app/services/song.service';
 import { getCurrentSong, getPlayer } from 'src/app/store/selectors/player.selector';
 import { findIndex } from 'src/app/utils/array';
 import { SetShareInfo } from 'src/app/store/actions/member.actions';
+import { MemberService } from 'src/app/services/member.service';
 
 @Component({
     selector: "app-singer-detail",
@@ -31,12 +32,15 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
     currentSong: Song;
     currentIndex = -1;
 
+    hasLiked = false;
+
     constructor(
         private route: ActivatedRoute,
         private store$: Store<AppStoreModule>,
         private songServe: SongService,
         private batchActionServe: BatchActionsService,
         private nzMessageServe: NzMessageService,
+        private memberServe: MemberService,
         ) {
             this.route.data
               .pipe(map(res => res.singerDetail))
@@ -85,7 +89,7 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
                 if (list.length) {
                     this.batchActionServe.insertSong(list[0], isPlay);
                 }else {
-                    this.nzMessageServe.create('warning', 'Warning：API has no url for this song，request is denied!');
+                    this.alertMessage('warning', 'Warning：API has no url for this song，request is denied!');
                 }
             })
         }
@@ -113,6 +117,33 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
         }
     }
 
+     // 批量收藏歌曲
+    onLikeSongs(songs: Song[]) {
+        const ids = songs.map(item => item.id).join(',');
+        this.onLikeSong(ids);
+    }
+
+    // 收藏歌手
+    onLikeSinger(id: string) {
+        let typeInfo = {
+            type: 1,
+            msg: '收藏', //后面弹提示用的， 收藏成功还是取消
+        };
+        if(this.hasLiked) {
+            typeInfo = {
+                type: 2, // 这里只要不是1都可以， https://github.com/puddlejumper26/ng-wyy/issues/23#issuecomment-775183223
+                msg: '取消收藏',
+            }
+        }
+
+        this.memberServe.likeSinger(id, typeInfo.type).subscribe(() => {
+            this.hasLiked = !this.hasLiked;
+            this.alertMessage('success', typeInfo.msg + '成功');
+        }, error => {
+            this.alertMessage('error', error.msg || typeInfo.msg + '失败');
+        })
+    }
+
      // 分享 这里只是分享歌曲
      onShareSong(resource: Song, type = 'song') {
         const txt = this.makeTxt('歌曲', resource.name, resource.ar);
@@ -124,6 +155,10 @@ export class SingerDetailComponent implements OnInit, OnDestroy {
         const makeByStr = makeBy.map(item => item.name).join('/');;
 
         return `${type}:${name} - ${makeByStr}`;
+    }
+
+    private alertMessage(type: string, msg: string) {
+        this.nzMessageServe.create(type, msg)
     }
 
     // 这里发射一个值，在 listenCurrent 里的 takeUntil就能够接受到并且停止
