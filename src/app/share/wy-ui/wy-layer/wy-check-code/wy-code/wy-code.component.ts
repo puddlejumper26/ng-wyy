@@ -1,5 +1,5 @@
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Component, OnInit, ChangeDetectionStrategy, forwardRef, ViewChild, AfterViewInit, ElementRef, OnDestroy } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy, forwardRef, ViewChild, AfterViewInit, ElementRef, OnDestroy, ChangeDetectorRef } from "@angular/core";
 import { fromEvent, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/internal/operators';
 import { BACKSPACE } from '@angular/cdk/keycodes';
@@ -30,7 +30,7 @@ export class WyCodeComponent implements OnInit, ControlValueAccessor, AfterViewI
     private code: string;
     private destory$ = new Subject();
 
-    private result: string[] = [];
+    result: string[] = [];
     currentFocusIndex = 0;
 
     // 装4个输入框的dom
@@ -38,7 +38,9 @@ export class WyCodeComponent implements OnInit, ControlValueAccessor, AfterViewI
 
     @ViewChild('codeWrap', {static: true}) private codeWrap: ElementRef; //想拿到四个输入框的dom
 
-    constructor() {
+    constructor(
+        private cdr: ChangeDetectorRef,
+    ) {
         // 用空字符串填充一个长度为4 的数组
         this.inputArr = Array(CODELENGTH).fill('');
     }
@@ -92,20 +94,27 @@ export class WyCodeComponent implements OnInit, ControlValueAccessor, AfterViewI
             this.inputsEl[this.currentFocusIndex].focus();
         }
 
+        this.checkResult(this.result);
         // console.log('【WyCodeComponent】- listenKeyUp - this.result -', this.result);
     }
 
     private setValue(code: string) {
         this.code = code;
+        // 这里需要把值发射出去
+        this.onValueChange(code);
+        // 不然template上给 当前 i 加的样式就出不来
+        this.cdr.markForCheck();
     }
 
-    private onValueChange(value: string): void {
-
+    private checkResult(result: string[]) {
+        // 正常的验证码是一个四位的字符串， 下面是用 join 来转换成字符串
+        const codeStr = result.join('');
+        this.setValue(codeStr); // 这里就把 codeStr 赋值给了 this.code
     }
 
-    private onTouched(): void {
+    private onValueChange(value: string): void {}
 
-    }
+    private onTouched(): void {}
 
 /**
  *       和滑块里面一样，使用ControlValueAccessor 和 后面的三个接口
