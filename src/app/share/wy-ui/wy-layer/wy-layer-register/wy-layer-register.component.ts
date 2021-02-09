@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, EventEmitter, Output } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy, Input, EventEmitter, Output, ChangeDetectorRef } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { NzMessageService } from 'ng-zorro-antd';
 import { interval } from "rxjs";
@@ -28,6 +28,7 @@ export class WyLayerRegisterComponent implements OnInit {
         private fb: FormBuilder,
         private memberServe: MemberService,
         private nzMessageServe: NzMessageService,
+        private cdr: ChangeDetectorRef,
     ) {
         this.formModel = this.fb.group({
             phone: ['', [Validators.required, Validators.pattern(/^1\d{10}$/)]],
@@ -52,7 +53,12 @@ export class WyLayerRegisterComponent implements OnInit {
             this.timing = 60;
             if(!this.showCode) { this.showCode = true };
             // 接下来每一秒发送一个值，只取前面的60个，每一次都把timing 的值减一
-            interval(1000).pipe(take(60)).subscribe(() => this.timing--);
+            this.cdr.markForCheck();
+            interval(1000).pipe(take(60)).subscribe(() => {
+                this.timing--;
+                // console.log('【WyLayerRegisterComponent】- sendCode - this.timing - ', this.timing);
+                this.cdr.markForCheck();
+            });
 
         }, error => {
             this.alertMessage('error', error.message)

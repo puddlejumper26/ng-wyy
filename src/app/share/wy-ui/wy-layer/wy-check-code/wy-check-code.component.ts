@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, OnChanges, SimpleChanges } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
@@ -7,12 +7,13 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
     styleUrls: ["./wy-check-code.component.less"],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WyCheckCodeComponent implements OnInit {
+export class WyCheckCodeComponent implements OnInit, OnChanges {
     private phoneHideStr = '';
 
     formModel: FormGroup;
 
     @Input() codePass = false;
+    @Input() timing: number;
     //注意这里是用 Input 和 set 合用
     @Input()
     set phone(phone: string) { // 用set 赋值器来修饰 phone
@@ -36,6 +37,12 @@ export class WyCheckCodeComponent implements OnInit {
         this.formModel = this.fb.group({
             code: ['', [Validators.required, Validators.pattern(/\d{4}/)]], //4位数字
         })
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if(changes['timing']) {
+            // console.log('【WyCheckCodeComponent】- ngOnChanges - this.timing - ', this.timing);
+        }
     }
 
     ngOnInit() {}

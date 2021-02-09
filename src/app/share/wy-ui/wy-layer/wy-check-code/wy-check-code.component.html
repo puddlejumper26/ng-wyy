@@ -13,10 +13,10 @@
         <form nz-form nzLayout="vertical" [formGroup]="formModel" (ngSubmit)="onSubmit()">
             <nz-form-item>
                 <nz-form-control>
-                    <app-wy-code formControlName="formModel"></app-wy-code>
+                    <app-wy-code formControlName="code"></app-wy-code>
                     <div class="send clearfix">
                         <span class="err" [hidden]="!codePass">验证码不正确</span>
-                        <span class="txt">60s</span>
+                        <span class="txt">{{timing}}s</span>
                     </div>
                 </nz-form-control>
             </nz-form-item>
