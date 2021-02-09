@@ -73,7 +73,11 @@ export class WyCodeComponent implements OnInit, ControlValueAccessor, AfterViewI
         // 是否按的是删除退格键
         const isBackSpace = event.keyCode === BACKSPACE;
 
-        if(value) {
+        // 验证输入必须是数字,这里的条件是  如果输入的是 非数字
+        if(/\D/.test(value)) {
+            target.value = '';
+            this.result[this.currentFocusIndex] = '';
+        }else if(value) {
             /**
              *  下面是实现焦点切换的逻辑
              */
