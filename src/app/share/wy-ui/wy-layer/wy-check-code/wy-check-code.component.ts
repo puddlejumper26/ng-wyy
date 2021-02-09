@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
     selector: "app-wy-check-code",
@@ -9,6 +10,9 @@ import { Component, OnInit, ChangeDetectionStrategy, Input } from "@angular/core
 export class WyCheckCodeComponent implements OnInit {
     private phoneHideStr = '';
 
+    formModel: FormGroup;
+
+    @Input() codePass = false;
     //注意这里是用 Input 和 set 合用
     @Input()
     set phone(phone: string) { // 用set 赋值器来修饰 phone
@@ -19,12 +23,29 @@ export class WyCheckCodeComponent implements OnInit {
         this.phoneHideStr = arr.join('');
     }
 
+    @Output() onCheckCode = new EventEmitter<string>();
+
     // 用 get 来取值
     get phone() {
         return this.phoneHideStr;
     }
 
-    constructor() {}
+    constructor(
+        private fb: FormBuilder,
+    ) {
+        this.formModel = this.fb.group({
+            code: ['', [Validators.required, Validators.pattern(/\d{4}/)]], //4位数字
+        })
+    }
 
     ngOnInit() {}
+
+    onSubmit() {
+        // console.log('【WyCheckCodeComponent】- onSubmit - this.formModel - ', this.formModel);
+        // console.log('【WyCheckCodeComponent】- onSubmit - this.formModel.valid - ', this.formModel.valid);
+        if(this.formModel.valid) {
+            // 把这个发射到外面进行验证 - 验证码是否正确
+            this.onCheckCode.emit(this.formModel.value.code);
+        }
+    }
 }
