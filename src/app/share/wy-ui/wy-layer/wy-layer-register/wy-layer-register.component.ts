@@ -20,7 +20,7 @@ export class WyLayerRegisterComponent implements OnInit {
 
     formModel:FormGroup;
     timing: number;
-    showCode = false;
+    showCode = true; //暂时设置成 true 方便调试
 
     constructor(
         private fb: FormBuilder,
