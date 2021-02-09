@@ -15,7 +15,7 @@
                 <nz-form-control>
                     <app-wy-code formControlName="code"></app-wy-code>
                     <div class="send clearfix">
-                        <span class="err" [hidden]="!codePass">验证码不正确</span>
+                        <span class="err" [hidden]="codePass">验证码不正确</span>
                         <span class="txt">{{timing}}s</span>
                     </div>
                 </nz-form-control>

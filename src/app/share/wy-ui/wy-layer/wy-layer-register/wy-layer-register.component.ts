@@ -79,6 +79,10 @@ export class WyLayerRegisterComponent implements OnInit {
     onCheckCode(code: string) {
         this.memberServe.checkCode(this.formModel.get('phone').value, Number(code))
             // 这里用了两个，分别代表第一个参数和第二个参数
-            .subscribe(() => this.codePass = true, () => this.codePass = false)
+            .subscribe(
+                () => this.codePass = true,   // 如果验证码返回成功
+                () => this.codePass = false, // 如果验证码返回失败
+                () => this.cdr.markForCheck(), //这里的第三个参数是都会执行的
+            )
     }
 }
