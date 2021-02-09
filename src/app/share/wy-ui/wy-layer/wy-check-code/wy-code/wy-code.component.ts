@@ -82,8 +82,13 @@ export class WyCodeComponent implements OnInit, ControlValueAccessor, AfterViewI
             this.currentFocusIndex = (this.currentFocusIndex + 1) % CODELENGTH;
             // 切换焦点
             this.inputsEl[this.currentFocusIndex].focus();
+        }else if(isBackSpace) {
+            this.result[this.currentFocusIndex] = ''; //置空
+            this.currentFocusIndex = Math.max(this.currentFocusIndex - 1, 0); //回到上一个焦点
+            this.inputsEl[this.currentFocusIndex].focus();
         }
-        console.log('【WyCodeComponent】- listenKeyUp - this.result -', this.result);
+
+        // console.log('【WyCodeComponent】- listenKeyUp - this.result -', this.result);
     }
 
     private setValue(code: string) {
