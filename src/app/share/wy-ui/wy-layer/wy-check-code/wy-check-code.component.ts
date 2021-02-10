@@ -28,6 +28,7 @@ export class WyCheckCodeComponent implements OnInit, OnChanges {
 
     @Output() onCheckCode = new EventEmitter<string>();
     @Output() onRepeatSendCode = new EventEmitter<string>();
+    @Output() onCheckExist = new EventEmitter<string>();
 
     // 用 get 来取值
     get phone() {
@@ -66,12 +67,15 @@ export class WyCheckCodeComponent implements OnInit, OnChanges {
     onSubmit() {
         // console.log('【WyCheckCodeComponent】- onSubmit - this.formModel - ', this.formModel);
         // console.log('【WyCheckCodeComponent】- onSubmit - this.formModel.valid - ', this.formModel.valid);
+
+        // 这里用了codePass需要使用自己的手机号来进行验证，才会调出验证通过的窗口
         if(this.formModel.valid && this.codePass) {
             // 把这个发射到外面进行验证 - 验证码是否正确
             // 这一步应该移到 constructor 中去, 这样对验证码的验证在四位数字输入结束就会自动开始，而不需要点击下一步或者回车触发这个onSubmit方法
             // this.onCheckCode.emit(this.formModel.value.code);
 
             // 检测是否已经注册
+            this.onCheckExist.emit(this.phone)
         }
     }
 }

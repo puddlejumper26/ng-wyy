@@ -301,6 +301,11 @@ export class AppComponent {
         })
     }
 
+    // 调用注册的信息
+    onRegister(phone: string) {
+        this.alertMessage('success', phone + '注册成功！');
+    }
+
     // 关闭弹窗
     closeModal() {
         this.bachActionsServe.controlModal(false);

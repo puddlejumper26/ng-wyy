@@ -149,7 +149,7 @@ export class MemberService {
     }
 
     //检测手机号是否已经注册
-    //  exist 1 - 存在，  exist -1 - 不存在
+    // 返回就两个数字 exist 1 - 存在，  exist -1 - 不存在
     checkExist(phone: number): Observable<number> {
         const params = new HttpParams({ fromString: queryString.stringify({ phone })});
         return this.http.get(this.uri + "cellphone/existence/check", { params })
