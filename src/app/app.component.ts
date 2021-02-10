@@ -1,8 +1,8 @@
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Component } from "@angular/core";
-import { filter, map, mergeMap } from 'rxjs/internal/operators';
+import { filter, map, mergeMap, takeUntil } from 'rxjs/internal/operators';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { Observable } from 'rxjs';
+import { interval, Observable } from 'rxjs';
 import { select, Store } from "@ngrx/store";
 
 import { AppStoreModule } from "./store";
@@ -48,6 +48,7 @@ export class AppComponent {
     currentModalType = ModalTypes.Default;
     showSpin = false; //弹窗loading
     routeTitle = '';
+    loadPercent = 0;
 
     private navEnd: Observable<NavigationEnd>;
 
@@ -87,11 +88,36 @@ export class AppComponent {
 
             this.listenStates();
 
+            // 加上这一步，这样在所有的内部标签之间跳转的时候也需要加载进度条
+            this.router.events.pipe(filter(evt => evt instanceof NavigationStart)).subscribe(() => {
+                this.loadPercent = 0;
+                this.setTitle();
+            })
+
             // events 是路由的所有事件，会发射observable对象
             // navEnd就是路由事件
             this.navEnd = <Observable<NavigationEnd>>this.router.events.pipe(filter(evt => evt instanceof NavigationEnd));
-            this.setTitle();
+
+            this.setLoadingBar();
+
+            // this.setTitle();
         }
+
+    private setLoadingBar() {
+        // 用interval每100毫秒订阅一下
+        //这里有两种取消订阅的方式， 可以把下面的 interval 赋给一个变量，然后在 this.navEnd中这个变量.unsubscribe()就好了
+        // 另外一种方法更高级点
+
+        interval(100).pipe(takeUntil(this.navEnd)).subscribe(() => {
+            this.loadPercent = Math.max(this.loadPercent++, 95);
+        })
+
+        // 在NavigationEnd事件发生的时候，导航结束
+        this.navEnd.subscribe(() => {
+            this.loadPercent = 100;
+            // 到达100之后，进度条就可以消失掉了，在app.component.html中用ngIf来控制
+        })
+    }
 
     private setTitle() {
         this.navEnd.pipe(
