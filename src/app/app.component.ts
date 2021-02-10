@@ -1,5 +1,8 @@
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Component } from "@angular/core";
+import { filter, map, mergeMap } from 'rxjs/internal/operators';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { Observable } from 'rxjs';
 import { select, Store } from "@ngrx/store";
 
 import { AppStoreModule } from "./store";
@@ -15,6 +18,7 @@ import { SetModalType, SetModalVisible, SetUserId } from './store/actions/member
 import { StorageService } from './services/storage.service';
 import { User } from './services/data-types/member.type';
 import { getLikeId, getMember, getModalType, getModalVisible, getShareInfo } from "./store/selectors/member.selector";
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: "app-root",
@@ -43,6 +47,9 @@ export class AppComponent {
     visible = false;
     currentModalType = ModalTypes.Default;
     showSpin = false; //弹窗loading
+    routeTitle = '';
+
+    private navEnd: Observable<NavigationEnd>;
 
     constructor(
         private searchServe: SearchService,
@@ -50,7 +57,10 @@ export class AppComponent {
         private bachActionsServe: BatchActionsService,
         private memberServe: MemberService,
         private nzMessageServe: NzMessageService,
-        private storageServe: StorageService
+        private storageServe: StorageService,
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private titleServe: Title
         ) {
             // 添加一个自动登录的逻辑
 
@@ -76,7 +86,33 @@ export class AppComponent {
             }
 
             this.listenStates();
+
+            // events 是路由的所有事件，会发射observable对象
+            // navEnd就是路由事件
+            this.navEnd = <Observable<NavigationEnd>>this.router.events.pipe(filter(evt => evt instanceof NavigationEnd));
+            this.setTitle();
         }
+
+    private setTitle() {
+        this.navEnd.pipe(
+            // 转成下面的这个类型
+            map(() => this.activatedRoute),
+            map((route: ActivatedRoute) => {
+                while(route.firstChild) {
+                    // 当路由的第一个元素存在的话
+                    // 只取每一个路由中的子路由
+                    route = route.firstChild;
+                }
+                return route;
+            }),
+            mergeMap(route => route.data)
+        ).subscribe(data => {
+            // console.log('【AppComponent】- setTitle - data -', data);
+            this.routeTitle = data['title'];
+            this.titleServe.setTitle(this.routeTitle);
+        })
+    }
+
 
     onSearch(keywords: string) {
         // console.log('【AppComponent】 - onSearch - keywords -', keywords);
