@@ -47,4 +47,7 @@
     <!-- <ng-content></ng-content> -->
 
     <div class="zcls" title="关闭" (click)="hide()"></div>
+
+    <!-- 加入一个loading的图标 -->
+    <nz-spin nzTip="loading..." class="spin" *ngIf="showSpin"></nz-spin>
 </div>

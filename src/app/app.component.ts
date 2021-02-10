@@ -42,6 +42,7 @@ export class AppComponent {
     likeId: string; //被搜藏歌曲的id
     visible = false;
     currentModalType = ModalTypes.Default;
+    showSpin = false; //弹窗loading
 
     constructor(
         private searchServe: SearchService,
@@ -128,6 +129,9 @@ export class AppComponent {
 
     // 登录的方法
     onLogin(params: LoginParams) {
+        // 先要显示 loading的效果
+        this.showSpin = true;
+
         // 这里就可以获得 wy-layer-login 中输入的信息
         // console.log('【AppComponent】- onLogin - params - ', params);
         this.memberServe.login(params).subscribe(user => {
@@ -159,7 +163,9 @@ export class AppComponent {
                 // localStorage.removeItem('wyRememberLogin');
                 this.storageServe.removeStorage('wyRememberLogin');
             }
+            this.showSpin = false; // 关闭loading效果
         }, error => {
+            this.showSpin = false; // 关闭loading效果
             this.alertMessage('error', error.message ||'登录失败');
         })
     }

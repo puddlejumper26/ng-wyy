@@ -40,6 +40,7 @@ export class WyLayerModalComponent implements OnInit, AfterViewInit, OnChanges {
 
     @Input() visible = false;
     @Input() currentModalType = ModalTypes.Default;
+    @Input() showSpin = false;
 
     private overlayRef: OverlayRef;
     showModal = 'hide';
