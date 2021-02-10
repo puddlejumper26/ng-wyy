@@ -4,8 +4,11 @@ import { zip } from 'rxjs/internal/observable/zip';
 import { skip } from 'rxjs/internal/operators';
 import { Lyric } from './../../../../services/data-types/common.types';
 
-// 第三位可能2位或者3位数字  [00:00.000]
+// 第三位可能2位或者3位数字
+// 目前有这三种展示的方式[00:00.000] [00:34] [0:34]
+// 因此下面的正则需要改变
 const timeExp = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
+// const timeExp = /\[(\d{1, 2}):(\d{2})\.(?:\.(\d{2,3}))?\]/;
 
 // In TypeScript, an interface can create the new name that can be used everywhere.
 // Type does not have a functionality of extending.
