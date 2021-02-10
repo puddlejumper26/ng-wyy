@@ -50,7 +50,8 @@
                             </div>
                         </div>
 
-                        <div class="toggle-expand" (click)="toggleLyric()">
+                        <!-- 当歌词长度为0的时候，就不显示这个部分 -->
+                        <div class="toggle-expand" (click)="toggleLyric()" [hidden]="!lyric.length">
                             <span>{{controlLyric.label}}</span>
                             <i nz-icon [nzType]="controlLyric.iconCls" nzTheme="outline"></i>
                         </div>
