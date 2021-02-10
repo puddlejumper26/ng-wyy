@@ -120,7 +120,7 @@ export class AppComponent {
             // 到达100之后，进度条就可以消失掉了，在app.component.html中用ngIf来控制
 
             // 在导航结束的时候，设置滚动条到最上面
-            this.doc.documentElement.scrollTop = 0;
+            // this.doc.documentElement.scrollTop = 0;
         })
 
 
