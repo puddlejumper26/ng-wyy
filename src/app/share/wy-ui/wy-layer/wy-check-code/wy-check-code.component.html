@@ -19,7 +19,7 @@
                         <span class="txt" *ngIf="!showRepeatBtn else repeatBtn">{{timing}}s</span>
 
                         <ng-template #repeatBtn>
-                            <span class="txt repeat">重新发送</span>
+                            <span class="txt repeat" (click)="onRepeatSendCode.emit()">重新发送</span>
                         </ng-template>
 
                     </div>

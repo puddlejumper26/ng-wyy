@@ -47,7 +47,7 @@ export class WyLayerRegisterComponent implements OnInit {
         }
     }
 
-    private sendCode() {
+    sendCode() {
         this.memberServe.sendCode(this.formModel.get('phone').value).subscribe(() => {
             // 验证码发送成功之后
             this.timing = 60;

@@ -26,6 +26,7 @@ export class WyCheckCodeComponent implements OnInit, OnChanges {
     }
 
     @Output() onCheckCode = new EventEmitter<string>();
+    @Output() onRepeatSendCode = new EventEmitter<string>();
 
     // 用 get 来取值
     get phone() {
