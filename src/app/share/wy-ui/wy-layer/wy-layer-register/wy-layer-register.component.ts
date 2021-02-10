@@ -51,6 +51,11 @@ export class WyLayerRegisterComponent implements OnInit, OnChanges {
             // this.formModel.get('phone').markAsTouched();
             // this.formModel.get('password').markAsTouched();
             this.formModel.markAllAsTouched();
+
+            if(!this.visible) {
+                // 当visible为false的时候，就关闭掉验证的页面
+                this.showCode = false;
+            }
         }
     }
 
