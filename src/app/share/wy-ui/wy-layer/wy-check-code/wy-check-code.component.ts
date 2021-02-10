@@ -37,6 +37,14 @@ export class WyCheckCodeComponent implements OnInit, OnChanges {
         this.formModel = this.fb.group({
             code: ['', [Validators.required, Validators.pattern(/\d{4}/)]], //4位数字
         })
+
+        const codeControl = this.formModel.get('code');
+        // 有一个statusChanges 用来监听状态变化的情况
+        codeControl.statusChanges.subscribe(status => {
+            if(status === 'VALID') {
+                this.onCheckCode.emit(this.formModel.value.code);
+            }
+        })
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -48,11 +56,15 @@ export class WyCheckCodeComponent implements OnInit, OnChanges {
     ngOnInit() {}
 
     onSubmit() {
+
         // console.log('【WyCheckCodeComponent】- onSubmit - this.formModel - ', this.formModel);
         // console.log('【WyCheckCodeComponent】- onSubmit - this.formModel.valid - ', this.formModel.valid);
-        if(this.formModel.valid) {
+        if(this.formModel.valid && this.codePass) {
             // 把这个发射到外面进行验证 - 验证码是否正确
-            this.onCheckCode.emit(this.formModel.value.code);
+            // 这一步应该移到 constructor 中去, 这样对验证码的验证在四位数字输入结束就会自动开始，而不需要点击下一步或者回车触发这个onSubmit方法
+            // this.onCheckCode.emit(this.formModel.value.code);
+
+            // 检测是否已经注册
         }
     }
 }
