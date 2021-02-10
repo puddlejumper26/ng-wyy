@@ -11,6 +11,7 @@ export class WyCheckCodeComponent implements OnInit, OnChanges {
     private phoneHideStr = '';
 
     formModel: FormGroup;
+    showRepeatBtn = false;
 
     @Input() codePass = false;
     @Input() timing: number;
@@ -50,13 +51,13 @@ export class WyCheckCodeComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if(changes['timing']) {
             // console.log('【WyCheckCodeComponent】- ngOnChanges - this.timing - ', this.timing);
+            this.showRepeatBtn = this.timing <= 0;
         }
     }
 
     ngOnInit() {}
 
     onSubmit() {
-
         // console.log('【WyCheckCodeComponent】- onSubmit - this.formModel - ', this.formModel);
         // console.log('【WyCheckCodeComponent】- onSubmit - this.formModel.valid - ', this.formModel.valid);
         if(this.formModel.valid && this.codePass) {
