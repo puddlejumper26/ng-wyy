@@ -22,7 +22,9 @@ export class WyLayerRegisterComponent implements OnInit {
     timing: number;
     showCode = false; //暂时设置成 true 方便调试
 
-    codePass = false;
+    // 注意这里通过定义其为 string | boolean, 因为开始的赋值是'',但是使用的过程中主要都是boolean
+    // 也可以只定义字符串，使用枚举的方式进行定义，会更加清晰
+    codePass: string | boolean = '';
 
     constructor(
         private fb: FormBuilder,

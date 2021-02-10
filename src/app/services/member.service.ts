@@ -141,7 +141,7 @@ export class MemberService {
             .pipe(map((res: SampleBack) => res.code))
     }
 
-    // 验证验证码
+    // 验证验证码 https://github.com/puddlejumper26/ng-wyy/issues/25#issuecomment-775310269
     checkCode(phone: number, captcha: number): Observable<number> {
         const params = new HttpParams({ fromString: queryString.stringify({ phone, captcha })});
         return this.http.get(this.uri + "captcha/verify", { params })

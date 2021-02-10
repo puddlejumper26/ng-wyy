@@ -15,7 +15,7 @@
                 <nz-form-control>
                     <app-wy-code formControlName="code"></app-wy-code>
                     <div class="send clearfix">
-                        <span class="err" [hidden]="codePass">验证码不正确</span>
+                        <span class="err" [hidden]="!showErrorTip">验证码不正确</span>
                         <span class="txt" *ngIf="!showRepeatBtn else repeatBtn">{{timing}}s</span>
 
                         <ng-template #repeatBtn>
