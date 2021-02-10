@@ -6,7 +6,7 @@ import { HomeResolverService } from "./home-resolve.service";
 
 const routes: Routes = [
     {
-        path: "home",
+        path: "",
         component: HomeComponent,
         data: { title: "发现" },
         resolve: { homeDatas: HomeResolverService },

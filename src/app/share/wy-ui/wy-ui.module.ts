@@ -15,7 +15,6 @@ import { WySearchModule } from './wy-search/wy-search.module';
 @NgModule({
     declarations: [PlayCountPipe, SingleSheetComponent],
     imports: [
-        BrowserModule,
         CommonModule,
         WyLayerModule,
         WyPlayerModule,
