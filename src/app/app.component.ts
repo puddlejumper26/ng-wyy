@@ -1,5 +1,6 @@
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
-import { Component } from "@angular/core";
+import { Component, Inject } from "@angular/core";
+import { DOCUMENT } from '@angular/common';
 import { filter, map, mergeMap, takeUntil } from 'rxjs/internal/operators';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { interval, Observable } from 'rxjs';
@@ -61,7 +62,8 @@ export class AppComponent {
         private storageServe: StorageService,
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private titleServe: Title
+        private titleServe: Title,
+        @Inject(DOCUMENT) private doc: Document,
         ) {
             // 添加一个自动登录的逻辑
 
@@ -116,7 +118,13 @@ export class AppComponent {
         this.navEnd.subscribe(() => {
             this.loadPercent = 100;
             // 到达100之后，进度条就可以消失掉了，在app.component.html中用ngIf来控制
+
+            // 在导航结束的时候，设置滚动条到最上面
+            this.doc.documentElement.scrollTop = 0;
         })
+
+
+
     }
 
     private setTitle() {
