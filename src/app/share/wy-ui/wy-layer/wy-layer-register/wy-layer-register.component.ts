@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, EventEmitter, Output, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy, Input, EventEmitter, Output, ChangeDetectorRef, OnChanges, SimpleChanges } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { NzMessageService } from 'ng-zorro-antd';
 import { interval } from "rxjs";
@@ -18,7 +18,7 @@ enum Exist {
     styleUrls: ["./wy-layer-register.component.less"],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WyLayerRegisterComponent implements OnInit {
+export class WyLayerRegisterComponent implements OnInit, OnChanges {
 
     @Input() visible = false;
 
@@ -43,6 +43,15 @@ export class WyLayerRegisterComponent implements OnInit {
             phone: ['', [Validators.required, Validators.pattern(/^1\d{10}$/)]],
             password: ['', [Validators.required, Validators.minLength(6)]],
         });
+    }
+
+    // 和login，layer-share中一样，避免 ESC 退出的报错
+    ngOnChanges(changes: SimpleChanges): void {
+        if(changes['visible'] && !changes['visible'].firstChange) {
+            // this.formModel.get('phone').markAsTouched();
+            // this.formModel.get('password').markAsTouched();
+            this.formModel.markAllAsTouched();
+        }
     }
 
     ngOnInit() {}
