@@ -13,7 +13,7 @@
                     nz-carousel-content
                     *ngFor="let item of banners">
                     <a [href]="item.url" target="_blank" class="banner-item">
-                        <img [src]="item.imageUrl" />
+                        <img appImgDefault [src]="item.imageUrl" />
                     </a>
                 </div>
         </nz-carousel>
@@ -68,7 +68,8 @@
                             <div *ngFor="let singer of singers" [routerLink]="['/singer', singer.id]">
                                 <div class="pic">
                                     <!-- <img src="{{singer.picUrl}}" alt=""> -->
-                                    <img [src]="singer.picUrl"
+                                    <img appImgDefault
+                                        [src]="singer.picUrl"
                                         [alt]="singer.name"/>
                                 </div>
                                 <div class="txt">

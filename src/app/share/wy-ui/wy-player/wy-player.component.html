@@ -26,7 +26,7 @@
             </div>
 
             <div class="head">
-                <img [src]="picUrl" alt="" />
+                <img appImgDefault [src]="picUrl" alt="" />
                 <!-- 这里写成 currentSong && currentSong.id 是为了兼容，不然没有歌曲点击这里会console报错id不存在 -->
                 <i class="mask" (click)="toInfo(['/songInfo', currentSong && currentSong.id])" ></i>
             </div>
