@@ -19,8 +19,37 @@ export const WINDOW = new InjectionToken("WindowToken");
     imports: [CommonModule],
     providers: [
 
+        /**
+         *
+
+         这里是 “http://localhost:3000/” 是本地，但是一般情况下， 后端的资源都是其他主机，其他地方的，那么就会涉及到 跨域的问题
+
+         这里我们在本地建立一个新的文档 proxyconfig.json
+            这样在请求的时候，就会自动加上 前面的http://localhost:3000 而变成 http://localhost:3000/api
+         {
+            "/api": {
+                "target": "http://localhost:3000", 代理到 本地 3000 的端口，这个根据实际情况进行改写
+                "secure": false,  因为本地的不是 https, 所以这里是false， 默认是true，是代理到 https
+                "logLevel": "debug",  发射代理的时候需要打印出来的日志文档
+                "changeOrigin": true,
+                "pathRewrite": {
+                    这里的情况是有的接口中间没有 api 而直接是 http://localhost:3000/city
+                    那么这里重置一下 api 这一段 为空
+                    "^/api": ""
+                }
+            }
+
+        }
+
+        然后到 angular.json 中进行设置
+        */
+
+
         // 提供数据地址的 token 令牌
-        { provide: API_CONFIG, useValue: "http://localhost:3000/" },
+        // { provide: API_CONFIG, useValue: "http://localhost:3000/" },
+
+        // 浏览器会自动加载本地的 localhost: ****/api
+        { provide: API_CONFIG, useValue: "/api/" },
 
         // 封装window的token令牌 , 希望在浏览器环境下给一个window对象,在服务端的环境就不用window，只给一个空对象
         {
