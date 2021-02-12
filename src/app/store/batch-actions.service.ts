@@ -118,20 +118,36 @@ export class BatchActionsService {
     // 添加专辑 多首歌曲
     insertSongs(songs: Song[]) {
         // 因为要添加到playlist 和 songlist 中去
-        const songList = this.playerState.songList.slice();
-        const playList = this.playerState.playList.slice();
+        let songList = this.playerState.songList.slice();
+        let playList = this.playerState.playList.slice();
+        // 取出当前列表里没有的歌曲
+        let validSongs = songs.filter(item => findIndex(playList, item) === -1);
+        if(validSongs.length) {
+            songList = songList.concat(validSongs);
 
-        // 因为不确定现在的songs中的歌曲是否已经存在songList和playList中
-        songs.forEach( item => {
-            const pIndex = findIndex(playList, item);
-            if(pIndex === -1) {
-                songList.push(item);
-                playList.push(item);
+            let songPlayList = validSongs.slice();
+            if(this.playerState.playMode.type === 'random') {
+                songPlayList = shuffle(songList);
             }
-        })
+            playList = playList.concat(songPlayList);
 
-        this.store$.dispatch(SetSongList({ songList: songList }));
-        this.store$.dispatch(SetPlayList({ playList: playList }));
+            this.store$.dispatch(SetSongList({ songList: songList }));
+            this.store$.dispatch(SetPlayList({ playList: playList }));
+        }
+
+
+        // 因为这里仅仅是把歌曲直接添加进songList和playList，所以如果这时候模式是random就无法体现
+        // 因为不确定现在的songs中的歌曲是否已经存在songList和playList中
+        // songs.forEach( item => {
+        //     const pIndex = findIndex(playList, item);
+        //     if(pIndex === -1) {
+        //         songList.push(item);
+        //         playList.push(item);
+        //     }
+        // })
+
+        // this.store$.dispatch(SetSongList({ songList: songList }));
+        // this.store$.dispatch(SetPlayList({ playList: playList }));
         this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Add }));
     }
 
