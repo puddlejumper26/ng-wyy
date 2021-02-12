@@ -82,7 +82,7 @@ export class BatchActionsService {
     insertSong(song: Song, isPlay: boolean) {
         // 因为要添加到playlist 和 songlist 中去
         const songList = this.playerState.songList.slice();
-        const playList = this.playerState.playList.slice();
+        let playList = this.playerState.playList.slice();
         // 需要知道这首歌曲插入进去的位置
         let insertIndex = this.playerState.currentIndex;
         // 看我们插入的歌曲是否在playlist里面
@@ -96,11 +96,18 @@ export class BatchActionsService {
             }
         }else {
             songList.push(song);
-            playList.push(song);
+            // playList.push(song);
             if (isPlay) {
                 // 变成最后一周歌曲index
                 insertIndex = songList.length - 1;
             }
+
+            if(this.playerState.playMode.type === 'random') {
+                playList = shuffle(songList);
+            }else {
+                playList.push(song);
+            }
+
             this.store$.dispatch(SetSongList({ songList: songList }));
             this.store$.dispatch(SetPlayList({ playList: playList }));
         }
