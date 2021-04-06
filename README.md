@@ -310,13 +310,7 @@ This is an Angular App Simulation of Netease Cloud Music
     - `tools.ts`
     -
 
-# 6.0 Final Demo
-
-## 6.1 Homepage
-## 6.2 Login
-## 6.3
-
-# 7.0 Knowledge Note
+# 6.0 Knowledge Note
 - [Notes](https://github.com/puddlejumper26/ng-wyy/issues/1)
 
 - Observable in this APP Comparisons - [Click](https://github.com/puddlejumper26/ng-wyy/issues/11)
