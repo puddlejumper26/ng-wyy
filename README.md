@@ -2,7 +2,7 @@
 
 # 1.0 Description
 This is an Angular App Simulation of Netease Cloud Music
-- Original please click [here](https://music.163.com/).
+- Original and effects please click [here](https://music.163.com/).
 - This product is the same as the original one, but with less songs in database.
 - The purpose of this APP is only for learning and technical level communications. Not for any commercial reasons.
 - This APP could be only run locally
